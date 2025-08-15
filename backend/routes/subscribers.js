@@ -126,8 +126,8 @@ router.get('/', verifyToken, async (req, res) => {
     const offset = (page - 1) * limit;
 
     const [subscribers] = await db.execute(
-      'SELECT * FROM subscribers WHERE status = ? ORDER BY subscribed_at DESC LIMIT ? OFFSET ?',
-      [status, parseInt(limit), parseInt(offset)]
+      'SELECT * FROM subscribers WHERE status = ? ORDER BY subscribed_at DESC LIMIT ?, ?',
+      [status, parseInt(offset), parseInt(limit)]
     );
 
     // Get total count

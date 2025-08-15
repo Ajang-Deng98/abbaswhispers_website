@@ -1,6 +1,6 @@
 import axios from 'axios';
 
-const API_BASE_URL = process.env.REACT_APP_API_URL || 'http://localhost:5000/api';
+const API_BASE_URL = process.env.REACT_APP_API_URL || 'http://localhost:5003/api';
 
 // Create axios instance
 const api = axios.create({
@@ -52,6 +52,7 @@ export const volumeAPI = {
   getVolume: (id) => api.get(`/volumes/${id}`),
   createVolume: (data) => api.post('/volumes', data),
   updateVolume: (id, data) => api.put(`/volumes/${id}`, data),
+  updateStatus: (id, data) => api.put(`/volumes/${id}`, data),
   deleteVolume: (id) => api.delete(`/volumes/${id}`),
   trackDownload: (id) => api.post(`/volumes/${id}/download`),
   getAdminVolumes: () => api.get('/volumes/admin/all'),
@@ -68,6 +69,8 @@ export const prayerAPI = {
 
 export const contactAPI = {
   submitForm: (data) => api.post('/contact', data),
+  getAllContacts: () => api.get('/contact/admin/all'),
+  deleteContact: (id) => api.delete(`/contact/${id}`),
 };
 
 export const subscriberAPI = {
@@ -81,6 +84,13 @@ export const subscriberAPI = {
 export const authAPI = {
   login: (data) => api.post('/auth/login', data),
   verify: () => api.get('/auth/verify'),
+};
+
+export const commentAPI = {
+  getPostComments: (postId) => api.get(`/comments/post/${postId}`),
+  addComment: (data) => api.post('/comments', data),
+  getAllComments: () => api.get('/comments/admin/all'),
+  deleteComment: (id) => api.delete(`/comments/${id}`),
 };
 
 export default api;

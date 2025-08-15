@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { useParams, Link } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import { Helmet } from 'react-helmet';
+import { blogAPI, commentAPI } from '../utils/api';
 
 const BlogPost = () => {
   const { id } = useParams();
@@ -9,88 +10,67 @@ const BlogPost = () => {
   const [relatedPosts, setRelatedPosts] = useState([]);
   const [comment, setComment] = useState('');
   const [comments, setComments] = useState([]);
+  const [commentAuthor, setCommentAuthor] = useState('');
+  const [isAnonymous, setIsAnonymous] = useState(true);
 
   useEffect(() => {
-    // Mock data - replace with API call
-    const mockPost = {
-      id: parseInt(id),
-      title: "Finding Peace in Psalm 23",
-      content: `
-        <p>The Twenty-third Psalm stands as one of the most beloved and comforting passages in all of Scripture. In times of uncertainty, fear, and anxiety, these ancient words continue to speak peace into our modern hearts.</p>
-        
-        <h3>The Shepherd's Care</h3>
-        <p>"The Lord is my shepherd; I shall not want." These opening words establish a relationship of trust and dependence. When we acknowledge God as our shepherd, we position ourselves as His sheep - dependent, trusting, and under His care.</p>
-        
-        <blockquote>"He makes me lie down in green pastures. He leads me beside still waters. He restores my soul."</blockquote>
-        
-        <p>Notice the gentle nature of God's care. He doesn't drive us to rest; He makes us lie down. He doesn't push us toward refreshment; He leads us beside still waters. This is the tender care of a loving shepherd who knows exactly what His sheep need.</p>
-        
-        <h3>Walking Through Darkness</h3>
-        <p>The psalm doesn't promise that we'll never face dark valleys. Instead, it assures us that even in the darkest moments, we need not fear because our Shepherd walks with us.</p>
-        
-        <p>"Even though I walk through the valley of the shadow of death, I will fear no evil, for you are with me; your rod and your staff, they comfort me."</p>
-        
-        <p>The rod and staff were tools of protection and guidance. In our lives, God's word serves as our rod and staff, protecting us from spiritual danger and guiding us along the right path.</p>
-        
-        <h3>Abundant Provision</h3>
-        <p>The psalm concludes with images of abundance and eternal security. God doesn't just meet our basic needs; He prepares a feast for us, even in the presence of our enemies.</p>
-        
-        <p>As we meditate on these truths, may we find the peace that comes from knowing we are under the care of the Good Shepherd, who gave His life for His sheep.</p>
-      `,
-      category: "peace",
-      tags: ["psalm-23", "peace", "comfort", "shepherd"],
-      image: "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=800&h=400&fit=crop&crop=center",
-      date: "2024-01-15",
-      author: "Abba Whispers Team",
-      readTime: "5 min read"
-    };
-
-    setPost(mockPost);
-
-    // Mock related posts
-    setRelatedPosts([
-      {
-        id: 2,
-        title: "The Power of Gratitude in Psalm 100",
-        excerpt: "Learn how thanksgiving transforms our hearts...",
-        image: "https://images.unsplash.com/photo-1544027993-37dbfe43562a?w=300&h=200&fit=crop&crop=center"
-      },
-      {
-        id: 3,
-        title: "Strength in Times of Trouble - Psalm 46",
-        excerpt: "When life feels overwhelming, Psalm 46 reminds us...",
-        image: "https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=300&h=200&fit=crop&crop=center"
-      }
-    ]);
-
-    // Mock comments
-    setComments([
-      {
-        id: 1,
-        author: "Sarah M.",
-        content: "This reflection on Psalm 23 brought me such comfort during a difficult time. Thank you for these beautiful insights.",
-        date: "2024-01-16"
-      },
-      {
-        id: 2,
-        author: "David L.",
-        content: "The imagery of the shepherd's care really resonates with me. It's amazing how these ancient words still speak to us today.",
-        date: "2024-01-17"
-      }
-    ]);
+    loadPost();
+    loadRelatedPosts();
+    loadComments();
   }, [id]);
 
-  const handleCommentSubmit = (e) => {
+  const loadComments = async () => {
+    try {
+      const response = await commentAPI.getPostComments(id);
+      setComments(response.data || []);
+    } catch (error) {
+      console.error('Error loading comments:', error);
+      setComments([]);
+    }
+  };
+
+  const loadPost = async () => {
+    try {
+      const response = await blogAPI.getPost(id);
+      setPost(response.data);
+    } catch (error) {
+      console.error('Error loading post:', error);
+      setPost(null);
+    }
+  };
+
+  const loadRelatedPosts = async () => {
+    try {
+      const response = await blogAPI.getAllPosts({ limit: 2 });
+      const posts = response.data?.posts || response.data || [];
+      setRelatedPosts(posts.filter(p => p.id !== parseInt(id)).slice(0, 2));
+    } catch (error) {
+      console.error('Error loading related posts:', error);
+      setRelatedPosts([]);
+    }
+  };
+
+  const handleCommentSubmit = async (e) => {
     e.preventDefault();
     if (comment.trim()) {
-      const newComment = {
-        id: comments.length + 1,
-        author: "Anonymous",
-        content: comment,
-        date: new Date().toISOString().split('T')[0]
-      };
-      setComments([...comments, newComment]);
-      setComment('');
+      try {
+        console.log('Submitting comment:', { post_id: id, author: "Anonymous", content: comment });
+        const response = await commentAPI.addComment({
+          post_id: id,
+          author: isAnonymous ? "Anonymous" : (commentAuthor.trim() || "Anonymous"),
+          content: comment
+        });
+        console.log('Comment response:', response);
+        setComment('');
+        setCommentAuthor('');
+        setIsAnonymous(true);
+        loadComments(); // Reload comments
+        alert('Comment added successfully!');
+      } catch (error) {
+        console.error('Error adding comment:', error);
+        console.error('Error details:', error.response?.data);
+        alert('Error adding comment: ' + (error.response?.data?.message || error.message));
+      }
     }
   };
 
@@ -129,7 +109,7 @@ const BlogPost = () => {
                 marginBottom: '1rem',
                 flexWrap: 'wrap'
               }}>
-                {post.tags.map(tag => (
+                {(typeof post.tags === 'string' ? post.tags.split(',') : post.tags || []).map(tag => (
                   <span 
                     key={tag}
                     style={{
@@ -140,7 +120,7 @@ const BlogPost = () => {
                       fontSize: '0.8rem'
                     }}
                   >
-                    #{tag}
+                    #{tag.trim()}
                   </span>
                 ))}
               </div>
@@ -153,27 +133,30 @@ const BlogPost = () => {
                 gap: '1rem',
                 flexWrap: 'wrap'
               }}>
-                <span>By {post.author}</span>
+                <span>By {post.author || 'Admin'}</span>
                 <span>•</span>
-                <span>{post.date}</span>
+                <span>{new Date(post.created_at).toLocaleDateString()}</span>
                 <span>•</span>
-                <span>{post.readTime}</span>
+                <span>Category: {post.category}</span>
               </div>
             </header>
 
             {/* Featured Image */}
-            <img 
-              src={post.image} 
-              alt={post.title}
-              style={{ 
-                width: '100%', 
-                height: '400px', 
-                objectFit: 'cover', 
-                borderRadius: '10px',
-                marginBottom: '3rem',
-                boxShadow: '0 8px 25px var(--shadow)'
-              }}
-            />
+            {post.image && (
+              <img 
+                src={post.image.startsWith('http') ? post.image : `http://localhost:5003${post.image}`} 
+                alt={post.title}
+                style={{ 
+                  width: '100%', 
+                  height: '400px', 
+                  objectFit: 'cover', 
+                  borderRadius: '10px',
+                  marginBottom: '3rem',
+                  boxShadow: '0 8px 25px var(--shadow)'
+                }}
+                onError={(e) => e.target.style.display = 'none'}
+              />
+            )}
 
             {/* Post Content */}
             <div 
@@ -225,17 +208,20 @@ const BlogPost = () => {
                   transition={{ duration: 0.6, delay: index * 0.2 }}
                   viewport={{ once: true }}
                 >
-                  <img 
-                    src={relatedPost.image} 
-                    alt={relatedPost.title}
-                    style={{ 
-                      width: '100%', 
-                      height: '150px', 
-                      objectFit: 'cover', 
-                      borderRadius: '5px', 
-                      marginBottom: '1rem' 
-                    }}
-                  />
+                  {relatedPost.image && (
+                    <img 
+                      src={relatedPost.image.startsWith('http') ? relatedPost.image : `http://localhost:5003${relatedPost.image}`} 
+                      alt={relatedPost.title}
+                      style={{ 
+                        width: '100%', 
+                        height: '150px', 
+                        objectFit: 'cover', 
+                        borderRadius: '5px', 
+                        marginBottom: '1rem' 
+                      }}
+                      onError={(e) => e.target.style.display = 'none'}
+                    />
+                  )}
                   <h3>
                     <Link to={`/blog/${relatedPost.id}`} style={{ color: 'inherit' }}>
                       {relatedPost.title}
@@ -264,6 +250,56 @@ const BlogPost = () => {
             
             {/* Comment Form */}
             <form onSubmit={handleCommentSubmit} style={{ marginBottom: '3rem' }}>
+              <div style={{ marginBottom: '1rem' }}>
+                <div style={{ display: 'flex', gap: '1rem', marginBottom: '1rem' }}>
+                  <button
+                    type="button"
+                    onClick={() => setIsAnonymous(true)}
+                    style={{
+                      padding: '8px 16px',
+                      border: '2px solid var(--primary-gold)',
+                      borderRadius: '5px',
+                      background: isAnonymous ? 'var(--primary-gold)' : 'transparent',
+                      color: isAnonymous ? 'white' : 'var(--primary-gold)',
+                      cursor: 'pointer',
+                      fontSize: '0.9rem'
+                    }}
+                  >
+                    Anonymous
+                  </button>
+                  <button
+                    type="button"
+                    onClick={() => setIsAnonymous(false)}
+                    style={{
+                      padding: '8px 16px',
+                      border: '2px solid var(--primary-gold)',
+                      borderRadius: '5px',
+                      background: !isAnonymous ? 'var(--primary-gold)' : 'transparent',
+                      color: !isAnonymous ? 'white' : 'var(--primary-gold)',
+                      cursor: 'pointer',
+                      fontSize: '0.9rem'
+                    }}
+                  >
+                    Add Your Name
+                  </button>
+                </div>
+                {!isAnonymous && (
+                  <input
+                    type="text"
+                    value={commentAuthor}
+                    onChange={(e) => setCommentAuthor(e.target.value)}
+                    placeholder="Enter your name"
+                    style={{
+                      width: '100%',
+                      padding: '0.75rem',
+                      border: '2px solid var(--cream)',
+                      borderRadius: '5px',
+                      fontSize: '1rem',
+                      marginBottom: '1rem'
+                    }}
+                  />
+                )}
+              </div>
               <textarea
                 value={comment}
                 onChange={(e) => setComment(e.target.value)}
@@ -303,7 +339,7 @@ const BlogPost = () => {
                     color: 'var(--text-light)'
                   }}>
                     <strong>{comment.author}</strong>
-                    <span>{comment.date}</span>
+                    <span>{new Date(comment.created_at).toLocaleDateString()}</span>
                   </div>
                   <p style={{ margin: 0 }}>{comment.content}</p>
                 </div>

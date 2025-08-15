@@ -1,5 +1,6 @@
 const multer = require('multer');
 const path = require('path');
+const crypto = require('crypto');
 
 // Configure storage
 const storage = multer.diskStorage({
@@ -7,16 +8,17 @@ const storage = multer.diskStorage({
     cb(null, 'uploads/');
   },
   filename: (req, file, cb) => {
-    const uniqueSuffix = Date.now() + '-' + Math.round(Math.random() * 1E9);
-    cb(null, file.fieldname + '-' + uniqueSuffix + path.extname(file.originalname));
+    const ext = path.extname(file.originalname).toLowerCase();
+    const safeName = file.fieldname + '-' + Date.now() + '-' + crypto.randomBytes(6).toString('hex') + ext;
+    cb(null, safeName);
   }
 });
 
 // File filter
 const fileFilter = (req, file, cb) => {
-  const allowedTypes = /jpeg|jpg|png|gif|pdf|doc|docx/;
+  const allowedTypes = /jpeg|jpg|png|gif|pdf|doc|docx|mp3|wav|m4a|ogg/;
   const extname = allowedTypes.test(path.extname(file.originalname).toLowerCase());
-  const mimetype = allowedTypes.test(file.mimetype);
+  const mimetype = /^(image|application|audio)\//i.test(file.mimetype);
 
   if (mimetype && extname) {
     return cb(null, true);

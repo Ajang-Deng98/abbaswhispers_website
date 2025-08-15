@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { motion } from 'framer-motion';
 import { Helmet } from 'react-helmet';
+import { contactAPI } from '../utils/api';
 
 const Contact = () => {
   const [formData, setFormData] = useState({
@@ -24,12 +25,12 @@ const Contact = () => {
     setIsSubmitting(true);
     
     try {
-      // Replace with actual API call
-      await new Promise(resolve => setTimeout(resolve, 1000));
+      await contactAPI.submitForm(formData);
       setSubmitMessage('Thank you for your message! We\'ll get back to you soon.');
       setFormData({ name: '', email: '', subject: '', message: '' });
     } catch (error) {
       setSubmitMessage('Sorry, there was an error sending your message. Please try again.');
+      console.error('Contact form error:', error);
     }
     
     setIsSubmitting(false);
@@ -246,13 +247,13 @@ const Contact = () => {
                 <h2 style={{ fontSize: '1.5rem', marginBottom: '1.5rem', color: 'var(--primary-gold)' }}>Get in Touch</h2>
                 
                 <div style={{ marginBottom: '1.5rem', padding: '1rem', backgroundColor: 'var(--warm-cream)', borderRadius: '8px' }}>
-                  <h3 style={{ color: 'var(--primary-gold)', marginBottom: '0.5rem', fontSize: '1rem' }}>📧 Email</h3>
+                  <h3 style={{ color: 'var(--primary-gold)', marginBottom: '0.5rem', fontSize: '1rem' }}>Email</h3>
                   <p style={{ margin: '0.25rem 0', fontSize: '0.95rem' }}>info@abbawhispers.com</p>
                   <p style={{ margin: '0.25rem 0', fontSize: '0.95rem' }}>prayer@abbawhispers.com</p>
                 </div>
 
                 <div style={{ marginBottom: '1.5rem', padding: '1rem', backgroundColor: 'var(--warm-cream)', borderRadius: '8px' }}>
-                  <h3 style={{ color: 'var(--primary-gold)', marginBottom: '0.5rem', fontSize: '1rem' }}>📱 Phone</h3>
+                  <h3 style={{ color: 'var(--primary-gold)', marginBottom: '0.5rem', fontSize: '1rem' }}>Phone</h3>
                   <p style={{ margin: '0.25rem 0', fontSize: '0.95rem' }}>+1 (555) 123-4567</p>
                   <p style={{ fontSize: '0.85rem', color: 'var(--text-light)', margin: '0.25rem 0' }}>
                     Available Monday - Friday, 9 AM - 5 PM EST
@@ -260,76 +261,72 @@ const Contact = () => {
                 </div>
 
                 <div style={{ marginBottom: '1.5rem', padding: '1rem', backgroundColor: 'var(--warm-cream)', borderRadius: '8px' }}>
-                  <h3 style={{ color: 'var(--primary-gold)', marginBottom: '0.5rem', fontSize: '1rem' }}>🌐 Social Media</h3>
+                  <h3 style={{ color: 'var(--primary-gold)', marginBottom: '0.5rem', fontSize: '1rem' }}>Social Media</h3>
                   <div style={{ display: 'flex', gap: '0.75rem' }}>
                     <a href="https://facebook.com/abbawhispers" target="_blank" rel="noopener noreferrer" style={{ 
-                      display: 'inline-flex',
-                      alignItems: 'center',
-                      justifyContent: 'center',
-                      width: '35px',
-                      height: '35px',
+                      display: 'inline-block',
+                      padding: '8px 12px',
                       background: '#1877F2',
-                      borderRadius: '50%',
-                      color: 'white',
-                      textDecoration: 'none',
-                      fontSize: '16px',
-                      fontWeight: 'bold',
-                      transition: 'transform 0.3s ease'
-                    }} onMouseEnter={(e) => e.target.style.transform = 'scale(1.1)'} onMouseLeave={(e) => e.target.style.transform = 'scale(1)'}>f</a>
-                    <a href="https://twitter.com/abbawhispers" target="_blank" rel="noopener noreferrer" style={{ 
-                      display: 'inline-flex',
-                      alignItems: 'center',
-                      justifyContent: 'center',
-                      width: '35px',
-                      height: '35px',
-                      background: '#1DA1F2',
-                      borderRadius: '50%',
+                      borderRadius: '6px',
                       color: 'white',
                       textDecoration: 'none',
                       fontSize: '14px',
-                      fontWeight: 'bold',
-                      transition: 'transform 0.3s ease'
-                    }} onMouseEnter={(e) => e.target.style.transform = 'scale(1.1)'} onMouseLeave={(e) => e.target.style.transform = 'scale(1)'}>𝕏</a>
+                      fontWeight: '500',
+                      transition: 'transform 0.3s ease',
+                      marginRight: '8px',
+                      marginBottom: '8px'
+                    }} onMouseEnter={(e) => e.target.style.transform = 'scale(1.05)'} onMouseLeave={(e) => e.target.style.transform = 'scale(1)'}>Facebook</a>
+                    <a href="https://twitter.com/abbawhispers" target="_blank" rel="noopener noreferrer" style={{ 
+                      display: 'inline-block',
+                      padding: '8px 12px',
+                      background: '#1DA1F2',
+                      borderRadius: '6px',
+                      color: 'white',
+                      textDecoration: 'none',
+                      fontSize: '14px',
+                      fontWeight: '500',
+                      transition: 'transform 0.3s ease',
+                      marginRight: '8px',
+                      marginBottom: '8px'
+                    }} onMouseEnter={(e) => e.target.style.transform = 'scale(1.05)'} onMouseLeave={(e) => e.target.style.transform = 'scale(1)'}>Twitter</a>
                     <a href="https://instagram.com/abbawhispers" target="_blank" rel="noopener noreferrer" style={{ 
-                      display: 'inline-flex',
-                      alignItems: 'center',
-                      justifyContent: 'center',
-                      width: '35px',
-                      height: '35px',
+                      display: 'inline-block',
+                      padding: '8px 12px',
                       background: 'linear-gradient(45deg, #F56040, #E1306C, #C13584)',
-                      borderRadius: '50%',
+                      borderRadius: '6px',
                       color: 'white',
                       textDecoration: 'none',
-                      fontSize: '16px',
-                      fontWeight: 'bold',
-                      transition: 'transform 0.3s ease'
-                    }} onMouseEnter={(e) => e.target.style.transform = 'scale(1.1)'} onMouseLeave={(e) => e.target.style.transform = 'scale(1)'}>📷</a>
+                      fontSize: '14px',
+                      fontWeight: '500',
+                      transition: 'transform 0.3s ease',
+                      marginRight: '8px',
+                      marginBottom: '8px'
+                    }} onMouseEnter={(e) => e.target.style.transform = 'scale(1.05)'} onMouseLeave={(e) => e.target.style.transform = 'scale(1)'}>Instagram</a>
                     <a href="https://youtube.com/@abbawhispers" target="_blank" rel="noopener noreferrer" style={{ 
-                      display: 'inline-flex',
-                      alignItems: 'center',
-                      justifyContent: 'center',
-                      width: '35px',
-                      height: '35px',
+                      display: 'inline-block',
+                      padding: '8px 12px',
                       background: '#FF0000',
-                      borderRadius: '50%',
+                      borderRadius: '6px',
                       color: 'white',
                       textDecoration: 'none',
-                      fontSize: '12px',
-                      fontWeight: 'bold',
-                      transition: 'transform 0.3s ease'
-                    }} onMouseEnter={(e) => e.target.style.transform = 'scale(1.1)'} onMouseLeave={(e) => e.target.style.transform = 'scale(1)'}>▶</a>
+                      fontSize: '14px',
+                      fontWeight: '500',
+                      transition: 'transform 0.3s ease',
+                      marginRight: '8px',
+                      marginBottom: '8px'
+                    }} onMouseEnter={(e) => e.target.style.transform = 'scale(1.05)'} onMouseLeave={(e) => e.target.style.transform = 'scale(1)'}>YouTube</a>
                   </div>
                 </div>
 
                 <div style={{ padding: '1rem', backgroundColor: 'var(--warm-cream)', borderRadius: '8px' }}>
-                  <h3 style={{ color: 'var(--primary-gold)', marginBottom: '0.5rem', fontSize: '1rem' }}>⏰ Response Time</h3>
+                  <h3 style={{ color: 'var(--primary-gold)', marginBottom: '0.5rem', fontSize: '1rem' }}>Response Time</h3>
                   <p style={{ margin: 0, fontSize: '0.9rem' }}>We typically respond within 24-48 hours during business days.</p>
                 </div>
               </div>
 
               {/* Newsletter Signup */}
               <div className="card" style={{ marginTop: '1.5rem', background: 'linear-gradient(135deg, var(--warm-cream) 0%, var(--cream) 100%)', padding: '1.5rem' }}>
-                <h3 style={{ fontSize: '1.1rem', marginBottom: '0.75rem', color: 'var(--primary-gold)' }}>📬 Newsletter</h3>
+                <h3 style={{ fontSize: '1.1rem', marginBottom: '0.75rem', color: 'var(--primary-gold)' }}>Newsletter</h3>
                 <p style={{ fontSize: '0.9rem', marginBottom: '1rem' }}>Receive weekly inspirations and updates.</p>
                 <form style={{ display: 'flex', gap: '0.5rem' }}>
                   <input

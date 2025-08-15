@@ -45,7 +45,7 @@ const Header = () => {
             className="mobile-menu-toggle"
             onClick={() => setIsMenuOpen(!isMenuOpen)}
           >
-            ☰
+            {isMenuOpen ? '✕' : '☰'}
           </button>
         </div>
       </div>

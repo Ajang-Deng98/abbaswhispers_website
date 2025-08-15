@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { motion } from 'framer-motion';
 import { Helmet } from 'react-helmet';
+import { prayerAPI } from '../utils/api';
 
 const PrayerRequest = () => {
   const [formData, setFormData] = useState({
@@ -27,8 +28,7 @@ const PrayerRequest = () => {
     setIsSubmitting(true);
     
     try {
-      // Replace with actual API call
-      await new Promise(resolve => setTimeout(resolve, 1000));
+      await prayerAPI.submitRequest(formData);
       setSubmitMessage('Your prayer request has been received. We are praying for you!');
       setFormData({
         name: '',
@@ -40,6 +40,7 @@ const PrayerRequest = () => {
       });
     } catch (error) {
       setSubmitMessage('Sorry, there was an error submitting your request. Please try again.');
+      console.error('Prayer request error:', error);
     }
     
     setIsSubmitting(false);
@@ -250,7 +251,7 @@ const PrayerRequest = () => {
               <div className="card">
                 <h2>Our Prayer Commitment</h2>
                 <div style={{ marginBottom: '2rem' }}>
-                  <h3 style={{ color: 'var(--primary-gold)', marginBottom: '0.5rem' }}>🙏 Dedicated Prayer Team</h3>
+                  <h3 style={{ color: 'var(--primary-gold)', marginBottom: '0.5rem' }}>Dedicated Prayer Team</h3>
                   <p>
                     Our prayer team meets regularly to lift up every request we receive. 
                     Your needs become our prayers.
@@ -258,7 +259,7 @@ const PrayerRequest = () => {
                 </div>
 
                 <div style={{ marginBottom: '2rem' }}>
-                  <h3 style={{ color: 'var(--primary-gold)', marginBottom: '0.5rem' }}>🔒 Complete Confidentiality</h3>
+                  <h3 style={{ color: 'var(--primary-gold)', marginBottom: '0.5rem' }}>Complete Confidentiality</h3>
                   <p>
                     All prayer requests are kept strictly confidential. Only our prayer 
                     team has access to your requests.
@@ -266,7 +267,7 @@ const PrayerRequest = () => {
                 </div>
 
                 <div style={{ marginBottom: '2rem' }}>
-                  <h3 style={{ color: 'var(--primary-gold)', marginBottom: '0.5rem' }}>⏰ Immediate Prayer</h3>
+                  <h3 style={{ color: 'var(--primary-gold)', marginBottom: '0.5rem' }}>Immediate Prayer</h3>
                   <p>
                     We begin praying for your request as soon as we receive it. 
                     God hears every prayer immediately.
@@ -274,7 +275,7 @@ const PrayerRequest = () => {
                 </div>
 
                 <div>
-                  <h3 style={{ color: 'var(--primary-gold)', marginBottom: '0.5rem' }}>💌 Follow-up (Optional)</h3>
+                  <h3 style={{ color: 'var(--primary-gold)', marginBottom: '0.5rem' }}>Follow-up (Optional)</h3>
                   <p>
                     If you provide your email, we may send encouraging messages 
                     or prayer updates, but this is completely optional.

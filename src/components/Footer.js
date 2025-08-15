@@ -1,7 +1,30 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
+import { subscriberAPI } from '../utils/api';
 
 const Footer = () => {
+  const [email, setEmail] = useState('');
+  const [message, setMessage] = useState('');
+  const [isSubmitting, setIsSubmitting] = useState(false);
+
+  const handleNewsletterSubmit = async (e) => {
+    e.preventDefault();
+    if (!email.trim()) return;
+    
+    setIsSubmitting(true);
+    setMessage('');
+    
+    try {
+      await subscriberAPI.subscribe({ email });
+      setMessage('Successfully subscribed!');
+      setEmail('');
+    } catch (error) {
+      setMessage('Error subscribing. Please try again.');
+    } finally {
+      setIsSubmitting(false);
+    }
+  };
+
   return (
     <footer className="footer">
       <div className="container">
@@ -17,10 +40,10 @@ const Footer = () => {
             </div>
             <p>An online space for poetry and reflective conversations. The SELAH series - a journey from grief to grace.</p>
             <div className="social-links">
-              <a href="https://facebook.com/abbawhispers" target="_blank" rel="noopener noreferrer" aria-label="Facebook">f</a>
-              <a href="https://twitter.com/abbawhispers" target="_blank" rel="noopener noreferrer" aria-label="Twitter">𝕏</a>
-              <a href="https://instagram.com/abbawhispers" target="_blank" rel="noopener noreferrer" aria-label="Instagram">📷</a>
-              <a href="https://youtube.com/@abbawhispers" target="_blank" rel="noopener noreferrer" aria-label="YouTube">▶</a>
+              <a href="https://facebook.com/abbawhispers" target="_blank" rel="noopener noreferrer" aria-label="Facebook">Facebook</a>
+              <a href="https://twitter.com/abbawhispers" target="_blank" rel="noopener noreferrer" aria-label="Twitter">Twitter</a>
+              <a href="https://instagram.com/abbawhispers" target="_blank" rel="noopener noreferrer" aria-label="Instagram">Instagram</a>
+              <a href="https://youtube.com/@abbawhispers" target="_blank" rel="noopener noreferrer" aria-label="YouTube">YouTube</a>
             </div>
           </div>
           
@@ -42,10 +65,13 @@ const Footer = () => {
           <div>
             <h3>Newsletter</h3>
             <p>Subscribe to receive our latest inspirational content.</p>
-            <form className="newsletter-form">
+            <form className="newsletter-form" onSubmit={handleNewsletterSubmit}>
               <input 
                 type="email" 
                 placeholder="Your email address"
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
+                required
                 style={{
                   padding: '10px',
                   border: 'none',
@@ -54,7 +80,18 @@ const Footer = () => {
                   width: '100%'
                 }}
               />
-              <button type="submit" className="btn">Subscribe</button>
+              <button type="submit" className="btn" disabled={isSubmitting}>
+                {isSubmitting ? 'Subscribing...' : 'Subscribe'}
+              </button>
+              {message && (
+                <div style={{ 
+                  marginTop: '10px', 
+                  fontSize: '0.8rem',
+                  color: message.includes('Error') ? '#ff4444' : '#44ff44'
+                }}>
+                  {message}
+                </div>
+              )}
             </form>
           </div>
         </div>

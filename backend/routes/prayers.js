@@ -105,56 +105,30 @@ router.post('/', [
 // Get all prayer requests (admin only)
 router.get('/', verifyToken, async (req, res) => {
   try {
-    const { status, category, page = 1, limit = 20 } = req.query;
-    const offset = (page - 1) * limit;
-
-    let query = 'SELECT * FROM prayer_requests';
-    let params = [];
-    let conditions = [];
-
-    if (status) {
-      conditions.push('status = ?');
-      params.push(status);
-    }
-
-    if (category) {
-      conditions.push('category = ?');
-      params.push(category);
-    }
-
-    if (conditions.length > 0) {
-      query += ' WHERE ' + conditions.join(' AND ');
-    }
-
-    query += ' ORDER BY created_at DESC LIMIT ? OFFSET ?';
-    params.push(parseInt(limit), parseInt(offset));
-
-    const [requests] = await db.execute(query, params);
-
+    console.log('Getting prayer requests...');
+    
+    // Simple query first
+    const [requests] = await db.execute('SELECT * FROM prayer_requests ORDER BY created_at DESC LIMIT 50');
+    console.log('Found requests:', requests.length);
+    
     // Get total count
-    let countQuery = 'SELECT COUNT(*) as total FROM prayer_requests';
-    let countParams = [];
-
-    if (conditions.length > 0) {
-      countQuery += ' WHERE ' + conditions.join(' AND ');
-      countParams = params.slice(0, -2); // Remove limit and offset
-    }
-
-    const [countResult] = await db.execute(countQuery, countParams);
+    const [countResult] = await db.execute('SELECT COUNT(*) as total FROM prayer_requests');
     const total = countResult[0].total;
+    console.log('Total requests:', total);
 
     res.json({
       requests,
       pagination: {
-        page: parseInt(page),
-        limit: parseInt(limit),
+        page: 1,
+        limit: 50,
         total,
-        pages: Math.ceil(total / limit)
+        pages: Math.ceil(total / 50)
       }
     });
   } catch (error) {
     console.error('Get prayer requests error:', error);
-    res.status(500).json({ message: 'Server error' });
+    console.error('Error stack:', error.stack);
+    res.status(500).json({ message: 'Server error', error: error.message });
   }
 });
 
@@ -184,19 +158,26 @@ router.put('/:id/status', verifyToken, [
   body('status').isIn(['new', 'praying', 'prayed', 'answered']).withMessage('Invalid status')
 ], async (req, res) => {
   try {
+    console.log('Updating prayer status for ID:', req.params.id);
+    console.log('New status:', req.body.status);
+    
     const errors = validationResult(req);
     if (!errors.isEmpty()) {
+      console.log('Validation errors:', errors.array());
       return res.status(400).json({ errors: errors.array() });
     }
 
     const { id } = req.params;
-    const { status, notes } = req.body;
+    const { status, notes = null } = req.body;
 
+    console.log('Executing update query...');
     const [result] = await db.execute(
       'UPDATE prayer_requests SET status = ?, notes = ?, updated_at = NOW() WHERE id = ?',
-      [status, notes, id]
+      [status, notes, parseInt(id)]
     );
 
+    console.log('Update result:', result);
+    
     if (result.affectedRows === 0) {
       return res.status(404).json({ message: 'Prayer request not found' });
     }
@@ -204,7 +185,8 @@ router.put('/:id/status', verifyToken, [
     res.json({ message: 'Prayer request status updated successfully' });
   } catch (error) {
     console.error('Update prayer request status error:', error);
-    res.status(500).json({ message: 'Server error' });
+    console.error('Error stack:', error.stack);
+    res.status(500).json({ message: 'Server error', error: error.message });
   }
 });
 

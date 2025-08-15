@@ -2,6 +2,7 @@ const express = require('express');
 const { body, validationResult } = require('express-validator');
 const nodemailer = require('nodemailer');
 const db = require('../config/database');
+const { verifyToken } = require('./auth');
 
 const router = express.Router();
 
@@ -82,6 +83,34 @@ router.post('/', [
     });
   } catch (error) {
     console.error('Contact form error:', error);
+    res.status(500).json({ message: 'Server error' });
+  }
+});
+
+// Get all contacts (admin only)
+router.get('/admin/all', verifyToken, async (req, res) => {
+  try {
+    const [contacts] = await db.execute(
+      'SELECT * FROM contact_messages ORDER BY created_at DESC'
+    );
+    res.json(contacts);
+  } catch (error) {
+    console.error('Get contacts error:', error);
+    res.status(500).json({ message: 'Server error' });
+  }
+});
+
+// Delete contact (admin only)
+router.delete('/:id', verifyToken, async (req, res) => {
+  try {
+    const { id } = req.params;
+    const [result] = await db.execute('DELETE FROM contact_messages WHERE id = ?', [id]);
+    if (result.affectedRows === 0) {
+      return res.status(404).json({ message: 'Contact not found' });
+    }
+    res.json({ message: 'Contact deleted successfully' });
+  } catch (error) {
+    console.error('Delete contact error:', error);
     res.status(500).json({ message: 'Server error' });
   }
 });

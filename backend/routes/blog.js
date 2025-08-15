@@ -2,64 +2,25 @@ const express = require('express');
 const { body, validationResult } = require('express-validator');
 const db = require('../config/database');
 const { verifyToken } = require('./auth');
+const upload = require('../middleware/upload');
 
 const router = express.Router();
 
 // Get all posts (public)
 router.get('/', async (req, res) => {
   try {
-    const { category, search, page = 1, limit = 10 } = req.query;
-    const offset = (page - 1) * limit;
-
-    let query = 'SELECT * FROM blog_posts WHERE status = "published"';
-    let params = [];
-
-    if (category && category !== 'all') {
-      query += ' AND category = ?';
-      params.push(category);
-    }
-
-    if (search) {
-      query += ' AND (title LIKE ? OR content LIKE ? OR tags LIKE ?)';
-      const searchTerm = `%${search}%`;
-      params.push(searchTerm, searchTerm, searchTerm);
-    }
-
-    query += ' ORDER BY created_at DESC LIMIT ? OFFSET ?';
-    params.push(parseInt(limit), parseInt(offset));
-
-    const [posts] = await db.execute(query, params);
-
-    // Get total count for pagination
-    let countQuery = 'SELECT COUNT(*) as total FROM blog_posts WHERE status = "published"';
-    let countParams = [];
-
-    if (category && category !== 'all') {
-      countQuery += ' AND category = ?';
-      countParams.push(category);
-    }
-
-    if (search) {
-      countQuery += ' AND (title LIKE ? OR content LIKE ? OR tags LIKE ?)';
-      const searchTerm = `%${search}%`;
-      countParams.push(searchTerm, searchTerm, searchTerm);
-    }
-
-    const [countResult] = await db.execute(countQuery, countParams);
-    const total = countResult[0].total;
-
-    res.json({
-      posts,
-      pagination: {
-        page: parseInt(page),
-        limit: parseInt(limit),
-        total,
-        pages: Math.ceil(total / limit)
-      }
-    });
+    console.log('Blog GET request received');
+    
+    const [posts] = await db.execute(
+      'SELECT * FROM blog_posts WHERE status = ? ORDER BY created_at DESC',
+      ['published']
+    );
+    
+    console.log('Found posts:', posts.length);
+    res.json(posts);
   } catch (error) {
     console.error('Get posts error:', error);
-    res.status(500).json({ message: 'Server error' });
+    res.status(500).json({ message: 'Server error', error: error.message });
   }
 });
 
@@ -69,8 +30,8 @@ router.get('/:id', async (req, res) => {
     const { id } = req.params;
 
     const [posts] = await db.execute(
-      'SELECT * FROM blog_posts WHERE id = ? AND status = "published"',
-      [id]
+      'SELECT * FROM blog_posts WHERE id = ? AND status = ?',
+      [id, 'published']
     );
 
     if (posts.length === 0) {
@@ -91,23 +52,15 @@ router.get('/:id', async (req, res) => {
 });
 
 // Create post (admin only)
-router.post('/', verifyToken, [
-  body('title').notEmpty().withMessage('Title is required'),
-  body('content').notEmpty().withMessage('Content is required'),
-  body('category').notEmpty().withMessage('Category is required')
-], async (req, res) => {
+router.post('/', verifyToken, async (req, res) => {
   try {
-    const errors = validationResult(req);
-    if (!errors.isEmpty()) {
-      return res.status(400).json({ errors: errors.array() });
-    }
 
-    const { title, content, excerpt, category, tags, image, status = 'draft' } = req.body;
+    const { title, content, excerpt, category, tags, image, author, status = 'draft' } = req.body;
 
     const [result] = await db.execute(
-      `INSERT INTO blog_posts (title, content, excerpt, category, tags, image, status, author_id, created_at, updated_at) 
-       VALUES (?, ?, ?, ?, ?, ?, ?, ?, NOW(), NOW())`,
-      [title, content, excerpt, category, tags, image, status, req.user.userId]
+      `INSERT INTO blog_posts (title, content, excerpt, category, tags, image, author, status, author_id, created_at, updated_at) 
+       VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, NOW(), NOW())`,
+      [title, content, excerpt, category, tags, image, author || 'Admin', status, req.user.userId]
     );
 
     res.status(201).json({
@@ -121,25 +74,17 @@ router.post('/', verifyToken, [
 });
 
 // Update post (admin only)
-router.put('/:id', verifyToken, [
-  body('title').notEmpty().withMessage('Title is required'),
-  body('content').notEmpty().withMessage('Content is required'),
-  body('category').notEmpty().withMessage('Category is required')
-], async (req, res) => {
+router.put('/:id', verifyToken, async (req, res) => {
   try {
-    const errors = validationResult(req);
-    if (!errors.isEmpty()) {
-      return res.status(400).json({ errors: errors.array() });
-    }
 
     const { id } = req.params;
-    const { title, content, excerpt, category, tags, image, status } = req.body;
+    const { title, content, excerpt, category, tags, image, author, status } = req.body;
 
     const [result] = await db.execute(
       `UPDATE blog_posts 
-       SET title = ?, content = ?, excerpt = ?, category = ?, tags = ?, image = ?, status = ?, updated_at = NOW()
+       SET title = ?, content = ?, excerpt = ?, category = ?, tags = ?, image = ?, author = ?, status = ?, updated_at = NOW()
        WHERE id = ?`,
-      [title, content, excerpt, category, tags, image, status, id]
+      [title, content, excerpt, category, tags, image, author || 'Admin', status, id]
     );
 
     if (result.affectedRows === 0) {
@@ -167,6 +112,21 @@ router.delete('/:id', verifyToken, async (req, res) => {
     res.json({ message: 'Post deleted successfully' });
   } catch (error) {
     console.error('Delete post error:', error);
+    res.status(500).json({ message: 'Server error' });
+  }
+});
+
+// Upload image for blog post
+router.post('/upload-image', verifyToken, upload.single('image'), (req, res) => {
+  try {
+    if (!req.file) {
+      return res.status(400).json({ message: 'No image file uploaded' });
+    }
+
+    const imageUrl = `/uploads/${req.file.filename}`;
+    res.json({ imageUrl, message: 'Image uploaded successfully' });
+  } catch (error) {
+    console.error('Image upload error:', error);
     res.status(500).json({ message: 'Server error' });
   }
 });

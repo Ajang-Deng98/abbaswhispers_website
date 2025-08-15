@@ -1,150 +1,25 @@
 import React, { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
 import { Helmet } from 'react-helmet';
+import { volumeAPI } from '../utils/api';
 
 const Volumes = () => {
   const [volumes, setVolumes] = useState([]);
   const [selectedCategory, setSelectedCategory] = useState('all');
 
   useEffect(() => {
-    // Mock data - replace with API call
-    setVolumes([
-      {
-        id: 1,
-        title: "YOU ARE MY HIDING PLACE",
-        description: "A powerful poem about finding refuge in God during troubled times.",
-        category: "healing",
-        image: "https://images.unsplash.com/photo-1481627834876-b7833e8f5570?w=300&h=400&fit=crop&crop=center",
-        excerpt: "When my heart is troubled, Heavy from the weight of my sins, I turn to You Lord God...",
-        price: "Preview",
-        downloadLink: "#",
-        type: "poem",
-        fullText: `When my heart is troubled 
-Heavy from the weight of my sins
-I turn to You Lord God
-For Your unending peace of mind
-(selah)
-When I am troubled by the evils of the world 
-From hurt and pain, deceit and betrayal
-I turn to You O Lord
-For You are my hiding place
-My Deliverer, My Fortress I trust in You
-(selah)
-I will call upon You Abba and I know You will save me 
-In the evening I explain my need to You
-And in the morning I move my soul towards You
-In my waking hour I worship You... 
-You alone You are my hiding place, Yahweh, my place of refuge
-I will trust in You completely and forever
-Amen.`,
-        audioUrl: "/audio/hiding-place.mp3"
-      },
-      {
-        id: 2,
-        title: "HIS UNFAILING LOVE",
-        description: "A celebration of God's miraculous power and unfailing love.",
-        category: "worship",
-        image: "https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=300&h=400&fit=crop&crop=center",
-        excerpt: "You are the God of miracles, The God of my ancestors, The Lord God of power and might...",
-        price: "Preview",
-        downloadLink: "#",
-        type: "poem",
-        fullText: `You are the God of miracles 
-The God of my ancestors 
-The Lord God of power and might
-The God of grace full of mercy
-All nations bow to Your immense glory 
-See the display of His radiant presence
-Shining through
-(selah)
-You are my God, my King You are victorious
-Your name is Awesome Your name is Glorious
-All-Powerful and Majestic
-I can boast that God is God Almighty!
-(selah)
-My path is clear and I stand upright in Your presence
-I am claimed and held in Your embrace
-I stand unashamed before my King 
-Cleansed and forgiven of all my sins I am looked upon with a loving gaze
-Oh!!!
-See how He watches over me
-My steps remain firmly rooted in His righteousness I am not alone
-His unfailing love saves me. Amen.`,
-        audioUrl: "/audio/unfailing-love.mp3"
-      },
-      {
-        id: 3,
-        title: "I AM NO LONGER AFRAID",
-        description: "A declaration of fearlessness and abundance in God's love.",
-        category: "empowerment",
-        image: "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=300&h=400&fit=crop&crop=center",
-        excerpt: "I am the Lord's Beloved, He is my Shepherd and I am His flock, I lack for nothing...",
-        price: "Preview",
-        downloadLink: "#",
-        type: "poem",
-        fullText: `I am the Lord's Beloved
-He is my Shepherd and I am His flock
-I lack for nothing
-He takes care of all my needs
-All of them? 
-Yes, every last one
-I am led to rest near quiet waters and I am at peace
-I am revived and restored
-My life is refreshed 
-I am guided down the path of righteousness
-My life is a living testimony to His honour 
-I stand fearless, yes, fearless as I walk through valleys of fear
-of anxiety
-of phobias 
-and of procrastination 
-(selah)
-I am a conqueror
-I am an overcomer
-I rest under the Lord's authority 
-I have His strength and peace
-I am comforted by Yahweh's love 
-I am no longer afraid
-I am abundance 
-My soul is focused on the Lord
-I am filled with good things
-I lack for nothing
-I am filled by the fragrance of the Holy Spirit
-I am truly His anointed one
-I live in the overflow of Yahweh's mercy
-My soul is awash with joy and I dance in His presence
-For I am unafraid 
-I am in the presence of Yahweh's kindness and mercy to me for all of my days
-I declare myself the Lord's own 
-Forever and ever
-Amen.`,
-        audioUrl: "/audio/no-longer-afraid.mp3"
-      },
-      {
-        id: 4,
-        title: "THE THING ABOUT FAITH IS...",
-        description: "A profound reflection on the nature of faith and choosing the unseen.",
-        category: "faith",
-        image: "https://images.unsplash.com/photo-1544027993-37dbfe43562a?w=300&h=400&fit=crop&crop=center",
-        excerpt: "Faith does not live in the House of Certainty, It dwells in the nooks and crannies of the unseen...",
-        price: "Preview",
-        downloadLink: "#",
-        type: "poem",
-        fullText: `Faith does not live in the House of Certainty
-It dwells in the nooks and crannies of the unseen 
-Things hoped for... 
-(selah) 
-When we choose faith we are saying
-That we are okay to face whatever the outcome 
-success or failure 
-When we choose faith
-we choose to log out of the pre-destined path of the Matrix 
-To the road that leads to Abba, the perfect source
-Choose faith and see your outcome unfold with lessons worth a lifetime. 
-Amen.`,
-        audioUrl: "/audio/faith.mp3"
-      }
-    ]);
-  }, []);
+    loadVolumes();
+  }, [selectedCategory]);
+
+  const loadVolumes = async () => {
+    try {
+      const response = await volumeAPI.getAllVolumes({ category: selectedCategory });
+      setVolumes(response.data || []);
+    } catch (error) {
+      console.error('Error loading volumes:', error);
+      setVolumes([]);
+    }
+  };
 
   const categories = [
     { value: 'all', label: 'All Poems' },
@@ -232,6 +107,14 @@ Amen.`,
                   flexDirection: 'column'
                 }}
               >
+                {volume.image && (
+                  <img 
+                    src={volume.image.startsWith('http') ? volume.image : `http://localhost:5003${volume.image}`} 
+                    alt={volume.title}
+                    style={{ width: '100%', height: '200px', objectFit: 'cover', borderRadius: '10px', marginBottom: '1rem' }}
+                    onError={(e) => e.target.style.display = 'none'}
+                  />
+                )}
                 <h3 style={{ 
                   color: 'var(--primary-gold)', 
                   marginBottom: '1rem',
@@ -255,7 +138,10 @@ Amen.`,
                   maxHeight: '200px',
                   overflowY: 'auto'
                 }}>
-                  {volume.fullText.split('\n').slice(0, 8).join('\n')}...
+                  {volume.content ? 
+                    volume.content.replace(/<[^>]*>/g, '').split('\n').slice(0, 8).join('\n') + '...' :
+                    (volume.fullText || volume.description || '').split('\n').slice(0, 8).join('\n') + '...'
+                  }
                 </div>
 
                 <div style={{ 
@@ -291,13 +177,20 @@ Amen.`,
                       e.target.style.boxShadow = '0 4px 15px rgba(212, 175, 55, 0.3)';
                     }}
                   >
-                    📖 Read Full Poem
+                    Read Full Poem
                   </button>
                   
                   <button 
                     onClick={(e) => {
                       const audio = document.getElementById(`audio-${volume.id}`);
                       const button = e.target;
+                      const audioUrl = volume.audio_url || volume.audioUrl;
+                      
+                      if (!audioUrl) {
+                        alert('No audio file available for this volume.');
+                        return;
+                      }
+                      
                       if (audio) {
                         if (audio.paused) {
                           document.querySelectorAll('audio').forEach(a => {
@@ -312,11 +205,26 @@ Amen.`,
                             }
                           });
                           
-                          audio.play().then(() => {
-                            button.textContent = '⏸️ Pause Audio';
-                          }).catch(() => {
-                            alert('Audio file not available yet');
-                          });
+                          // Load the audio first
+                          audio.load();
+                          
+                          // Wait a moment for loading then play
+                          setTimeout(() => {
+                            audio.play().then(() => {
+                              button.textContent = '⏸️ Pause Audio';
+                            }).catch((error) => {
+                              console.error('Audio play error:', error);
+                              console.log('Audio URL:', audioUrl);
+                              console.log('Audio readyState:', audio.readyState);
+                              console.log('Audio networkState:', audio.networkState);
+                              
+                              // Try direct browser navigation to test
+                              const testUrl = volume.audio_url ? `http://localhost:5003${volume.audio_url}` : audioUrl;
+                              console.log('Test this URL directly in browser:', testUrl);
+                              
+                              alert(`Audio playback failed. Try opening this URL directly: ${testUrl}`);
+                            });
+                          }, 100);
                         } else {
                           audio.pause();
                           audio.currentTime = 0;
@@ -347,20 +255,35 @@ Amen.`,
                       e.target.style.transform = 'translateY(0)';
                     }}
                   >
-                    🎵 Listen to Audio
+                    Listen to Audio
                   </button>
                 </div>
 
                 <audio 
                   id={`audio-${volume.id}`}
-                  preload="metadata"
+                  preload="none"
                   style={{ display: 'none' }}
+                  crossOrigin="anonymous"
                   onEnded={() => {
-                    const button = document.querySelector(`[onclick*="audio-${volume.id}"]`);
-                    if (button) button.textContent = '🎵 Listen';
+                    const buttons = document.querySelectorAll('button');
+                    buttons.forEach(btn => {
+                      if (btn.textContent.includes('⏸️')) {
+                        btn.textContent = '🎵 Listen to Audio';
+                      }
+                    });
+                  }}
+                  onError={(e) => {
+                    console.error('Audio element error:', e);
+                  }}
+                  onLoadStart={() => {
+                    console.log('Audio loading started');
                   }}
                 >
-                  <source src={volume.audioUrl} type="audio/mpeg" />
+                  <source src={
+                    volume.audio_url ? `http://localhost:5003${volume.audio_url}` : 
+                    volume.audioUrl ? (volume.audioUrl.startsWith('http') ? volume.audioUrl : `http://localhost:5003${volume.audioUrl}`) :
+                    null
+                  } type="audio/mpeg" />
                 </audio>
 
                 {/* Modal */}
@@ -426,7 +349,10 @@ Amen.`,
                       maxWidth: '600px',
                       margin: '0 auto'
                     }}>
-                      {volume.fullText}
+                      {volume.content ? 
+                        <div dangerouslySetInnerHTML={{ __html: volume.content }} /> :
+                        (volume.fullText || volume.description || 'Content not available')
+                      }
                     </div>
                   </div>
                 </div>

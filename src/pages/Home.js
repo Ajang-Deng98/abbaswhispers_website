@@ -2,45 +2,33 @@ import React, { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import { Helmet } from 'react-helmet';
+import Testimonials from '../components/Testimonials';
+import { blogAPI, volumeAPI } from '../utils/api';
 
 const Home = () => {
   const [featuredPosts, setFeaturedPosts] = useState([]);
   const [featuredVolumes, setFeaturedVolumes] = useState([]);
 
   useEffect(() => {
-    // Fetch featured content
-    setFeaturedPosts([
-      {
-        id: 1,
-        title: "Finding Peace in Psalm 23",
-        excerpt: "Discover the profound comfort and guidance found in the shepherd's psalm...",
-        image: "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=300&h=200&fit=crop&crop=center",
-        date: "2024-01-15"
-      },
-      {
-        id: 2,
-        title: "The Power of Gratitude in Psalm 100",
-        excerpt: "Learn how thanksgiving transforms our hearts and minds...",
-        image: "https://images.unsplash.com/photo-1544027993-37dbfe43562a?w=300&h=200&fit=crop&crop=center",
-        date: "2024-01-10"
-      }
-    ]);
-
-    setFeaturedVolumes([
-      {
-        id: 1,
-        title: "SELAH: Sample Poems",
-        description: "Experience Uzo's heartfelt poetry with audio - preview of the full collection",
-        image: "https://images.unsplash.com/photo-1481627834876-b7833e8f5570?w=250&h=300&fit=crop&crop=center"
-      },
-      {
-        id: 2,
-        title: "Audio Poetry Experience",
-        description: "Listen to Uzo's voice bringing the SELAH poems to life",
-        image: "https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=250&h=300&fit=crop&crop=center"
-      }
-    ]);
+    loadFeaturedContent();
   }, []);
+
+  const loadFeaturedContent = async () => {
+    try {
+      // Load featured posts
+      const postsResponse = await blogAPI.getAllPosts({ limit: 3 });
+      setFeaturedPosts(postsResponse.data?.posts || postsResponse.data || []);
+
+      // Load featured volumes
+      const volumesResponse = await volumeAPI.getAllVolumes({ limit: 3 });
+      setFeaturedVolumes(volumesResponse.data || []);
+    } catch (error) {
+      console.error('Error loading featured content:', error);
+      // Fallback to empty arrays
+      setFeaturedPosts([]);
+      setFeaturedVolumes([]);
+    }
+  };
 
   return (
     <>
@@ -105,8 +93,8 @@ const Home = () => {
             <p>Inspirational collections that speak to the heart and soul</p>
           </motion.div>
 
-          <div className="grid grid-2">
-            {featuredVolumes.map((volume, index) => (
+          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))', gap: '2rem' }}>
+            {featuredVolumes.slice(0, 3).map((volume, index) => (
               <motion.div
                 key={volume.id}
                 className="card"
@@ -115,11 +103,14 @@ const Home = () => {
                 transition={{ duration: 0.6, delay: index * 0.2 }}
                 viewport={{ once: true }}
               >
-                <img 
-                  src={volume.image} 
-                  alt={volume.title}
-                  style={{ width: '100%', height: '200px', objectFit: 'cover', borderRadius: '5px', marginBottom: '1rem' }}
-                />
+                {volume.image && (
+                  <img 
+                    src={volume.image.startsWith('http') ? volume.image : `http://localhost:5003${volume.image}`} 
+                    alt={volume.title}
+                    style={{ width: '100%', height: '200px', objectFit: 'cover', borderRadius: '5px', marginBottom: '1rem' }}
+                    onError={(e) => e.target.style.display = 'none'}
+                  />
+                )}
                 <h3>{volume.title}</h3>
                 <p>{volume.description}</p>
                 <Link to="/volumes" className="btn">Read More</Link>
@@ -143,8 +134,8 @@ const Home = () => {
             <p>Fresh insights and reflections from our recent writings</p>
           </motion.div>
 
-          <div className="grid grid-2">
-            {featuredPosts.map((post, index) => (
+          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))', gap: '2rem' }}>
+            {featuredPosts.slice(0, 3).map((post, index) => (
               <motion.div
                 key={post.id}
                 className="card"
@@ -153,15 +144,18 @@ const Home = () => {
                 transition={{ duration: 0.6, delay: index * 0.2 }}
                 viewport={{ once: true }}
               >
-                <img 
-                  src={post.image} 
-                  alt={post.title}
-                  style={{ width: '100%', height: '200px', objectFit: 'cover', borderRadius: '5px', marginBottom: '1rem' }}
-                />
+                {post.image && (
+                  <img 
+                    src={post.image.startsWith('http') ? post.image : `http://localhost:5003${post.image}`} 
+                    alt={post.title}
+                    style={{ width: '100%', height: '200px', objectFit: 'cover', borderRadius: '5px', marginBottom: '1rem' }}
+                    onError={(e) => e.target.style.display = 'none'}
+                  />
+                )}
                 <h3>{post.title}</h3>
                 <p>{post.excerpt}</p>
                 <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginTop: '1rem' }}>
-                  <span style={{ color: 'var(--text-light)', fontSize: '0.9rem' }}>{post.date}</span>
+                  <span style={{ color: 'var(--text-light)', fontSize: '0.9rem' }}>{new Date(post.created_at).toLocaleDateString()}</span>
                   <Link to={`/blog/${post.id}`} className="btn">Read More</Link>
                 </div>
               </motion.div>
@@ -174,6 +168,9 @@ const Home = () => {
         </div>
       </section>
 
+      {/* Testimonials */}
+      <Testimonials />
+
       {/* Call to Action */}
       <section className="section">
         <div className="container text-center">
@@ -185,11 +182,18 @@ const Home = () => {
           >
             <h2>Join Our Community of Faith</h2>
             <p>
-              Subscribe to receive weekly inspirations and be part of a community 
+              Subscribe to our Substack newsletter for weekly inspirations and be part of a community 
               dedicated to spiritual growth and healing.
             </p>
             <div style={{ display: 'flex', gap: '1rem', justifyContent: 'center', marginTop: '2rem', flexWrap: 'wrap' }}>
-              <Link to="/contact" className="btn">Subscribe Now</Link>
+              <a 
+                href="https://abbawhispers.substack.com" 
+                target="_blank" 
+                rel="noopener noreferrer"
+                className="btn"
+              >
+                Subscribe on Substack
+              </a>
               <Link to="/prayer-request" className="btn btn-secondary">Submit Prayer Request</Link>
             </div>
           </motion.div>

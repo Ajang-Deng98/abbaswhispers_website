@@ -2,6 +2,7 @@ const express = require('express');
 const { body, validationResult } = require('express-validator');
 const db = require('../config/database');
 const { verifyToken } = require('./auth');
+const upload = require('../middleware/upload');
 
 const router = express.Router();
 
@@ -51,17 +52,8 @@ router.get('/:id', async (req, res) => {
 });
 
 // Create volume (admin only)
-router.post('/', verifyToken, [
-  body('title').notEmpty().withMessage('Title is required'),
-  body('description').notEmpty().withMessage('Description is required'),
-  body('category').notEmpty().withMessage('Category is required'),
-  body('price').notEmpty().withMessage('Price is required')
-], async (req, res) => {
+router.post('/', verifyToken, async (req, res) => {
   try {
-    const errors = validationResult(req);
-    if (!errors.isEmpty()) {
-      return res.status(400).json({ errors: errors.array() });
-    }
 
     const { 
       title, 
@@ -71,13 +63,21 @@ router.post('/', verifyToken, [
       price, 
       image, 
       downloadLink, 
+      content,
+      audioUrl,
       status = 'published' 
     } = req.body;
 
+    console.log('Creating volume with data:', {
+      title: encodeURIComponent(title || ''),
+      category: encodeURIComponent(category || ''),
+      status: encodeURIComponent(status || '')
+    });
+
     const [result] = await db.execute(
-      `INSERT INTO volumes (title, description, excerpt, category, price, image, download_link, status, created_at, updated_at) 
-       VALUES (?, ?, ?, ?, ?, ?, ?, ?, NOW(), NOW())`,
-      [title, description, excerpt, category, price, image, downloadLink, status]
+      `INSERT INTO volumes (title, description, excerpt, category, price, image, download_link, content, audio_url, status, created_at, updated_at) 
+       VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, NOW(), NOW())`,
+      [title, description, excerpt || '', category, price, image || '', downloadLink || '', content || '', audioUrl || '', status]
     );
 
     res.status(201).json({
@@ -86,41 +86,52 @@ router.post('/', verifyToken, [
     });
   } catch (error) {
     console.error('Create volume error:', error);
-    res.status(500).json({ message: 'Server error' });
+    console.error('Error message:', error.message);
+    console.error('Error code:', error.code);
+    console.error('SQL State:', error.sqlState);
+    console.error('Request body:', req.body);
+    res.status(500).json({ 
+      message: 'Server error',
+      error: error.message,
+      code: error.code
+    });
   }
 });
 
 // Update volume (admin only)
-router.put('/:id', verifyToken, [
-  body('title').notEmpty().withMessage('Title is required'),
-  body('description').notEmpty().withMessage('Description is required'),
-  body('category').notEmpty().withMessage('Category is required'),
-  body('price').notEmpty().withMessage('Price is required')
-], async (req, res) => {
+router.put('/:id', verifyToken, async (req, res) => {
   try {
-    const errors = validationResult(req);
-    if (!errors.isEmpty()) {
-      return res.status(400).json({ errors: errors.array() });
-    }
 
     const { id } = req.params;
-    const { 
-      title, 
-      description, 
-      excerpt, 
-      category, 
-      price, 
-      image, 
-      downloadLink, 
-      status 
-    } = req.body;
-
-    const [result] = await db.execute(
-      `UPDATE volumes 
-       SET title = ?, description = ?, excerpt = ?, category = ?, price = ?, image = ?, download_link = ?, status = ?, updated_at = NOW()
-       WHERE id = ?`,
-      [title, description, excerpt, category, price, image, downloadLink, status, id]
-    );
+    const updateData = req.body;
+    
+    console.log('Updating volume ID:', encodeURIComponent(id), 'with sanitized data');
+    
+    // Build dynamic update query
+    const fields = [];
+    const values = [];
+    
+    Object.keys(updateData).forEach(key => {
+      if (key === 'downloadLink') {
+        fields.push('download_link = ?');
+        values.push(updateData[key]);
+      } else if (key === 'audioUrl') {
+        fields.push('audio_url = ?');
+        values.push(updateData[key]);
+      } else {
+        fields.push(`${key} = ?`);
+        values.push(updateData[key]);
+      }
+    });
+    
+    fields.push('updated_at = NOW()');
+    values.push(id);
+    
+    const query = `UPDATE volumes SET ${fields.join(', ')} WHERE id = ?`;
+    console.log('Update query:', query);
+    console.log('Update values:', values);
+    
+    const [result] = await db.execute(query, values);
 
     if (result.affectedRows === 0) {
       return res.status(404).json({ message: 'Volume not found' });
@@ -165,6 +176,21 @@ router.post('/:id/download', async (req, res) => {
     res.json({ message: 'Download tracked successfully' });
   } catch (error) {
     console.error('Track download error:', error);
+    res.status(500).json({ message: 'Server error' });
+  }
+});
+
+// Upload audio file
+router.post('/upload-audio', verifyToken, upload.single('audio'), (req, res) => {
+  try {
+    if (!req.file) {
+      return res.status(400).json({ message: 'No audio file uploaded' });
+    }
+
+    const audioUrl = `/uploads/${req.file.filename}`;
+    res.json({ audioUrl, message: 'Audio uploaded successfully' });
+  } catch (error) {
+    console.error('Audio upload error:', error);
     res.status(500).json({ message: 'Server error' });
   }
 });

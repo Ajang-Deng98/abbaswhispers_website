@@ -31,12 +31,176 @@ const About = () => {
               whileInView={{ opacity: 1, x: 0 }}
               transition={{ duration: 0.8 }}
               viewport={{ once: true }}
+              style={{ 
+                position: 'relative',
+                height: 'fit-content',
+                display: 'flex',
+                alignItems: 'center'
+              }}
             >
-              <img 
-                src="/aboutimage.jpg" 
-                alt="Uzo - Founder of Abba Whispers"
-                style={{ width: '100%', borderRadius: '10px', boxShadow: '0 8px 25px var(--shadow)' }}
-              />
+              <div style={{
+                position: 'relative',
+                width: '100%',
+                background: 'linear-gradient(135deg, rgba(255,255,255,0.9) 0%, rgba(249,247,244,0.9) 100%)',
+                borderRadius: '25px',
+                padding: '30px',
+                minHeight: '220px',
+                boxShadow: '0 25px 50px rgba(139, 115, 85, 0.2), 0 0 0 1px rgba(212, 175, 55, 0.1)',
+                backdropFilter: 'blur(20px)',
+                border: '2px solid rgba(212, 175, 55, 0.15)'
+              }}>
+                {/* Floating decorative elements */}
+                <div style={{
+                  position: 'absolute',
+                  top: '-15px',
+                  right: '30px',
+                  width: '40px',
+                  height: '40px',
+                  background: 'linear-gradient(135deg, var(--primary-gold) 0%, var(--warm-gold) 100%)',
+                  borderRadius: '50%',
+                  boxShadow: '0 8px 20px rgba(212, 175, 55, 0.3)',
+                  animation: 'float 3s ease-in-out infinite'
+                }} />
+                
+                <div style={{
+                  position: 'absolute',
+                  bottom: '-10px',
+                  left: '20px',
+                  width: '30px',
+                  height: '30px',
+                  background: 'linear-gradient(135deg, var(--sage-green) 0%, var(--light-olive) 100%)',
+                  borderRadius: '50%',
+                  boxShadow: '0 6px 15px rgba(168, 184, 154, 0.3)',
+                  animation: 'float 4s ease-in-out infinite reverse'
+                }} />
+                
+                {/* Main content container */}
+                <div style={{
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  gap: '30px',
+                  position: 'relative',
+                  zIndex: 1,
+                  minHeight: '180px'
+                }}>
+                  {/* Image container */}
+                  <div style={{
+                    flex: '0 0 180px',
+                    position: 'relative',
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'center'
+                  }}>
+                    <div style={{
+                      width: '180px',
+                      height: '180px',
+                      borderRadius: '50%',
+                      overflow: 'hidden',
+                      border: '4px solid rgba(212, 175, 55, 0.3)',
+                      boxShadow: '0 15px 30px rgba(139, 115, 85, 0.3), inset 0 0 0 2px rgba(255,255,255,0.5)',
+                      position: 'relative'
+                    }}>
+                      <img 
+                        src="/aboutimage.jpg" 
+                        alt="Uzo - Founder of Abba Whispers"
+                        style={{ 
+                          width: '100%',
+                          height: '100%',
+                          objectFit: 'cover',
+                          transition: 'transform 0.4s ease, filter 0.4s ease'
+                        }}
+                        onMouseEnter={(e) => {
+                          e.target.style.transform = 'scale(1.1)';
+                          e.target.style.filter = 'brightness(1.1) contrast(1.1)';
+                        }}
+                        onMouseLeave={(e) => {
+                          e.target.style.transform = 'scale(1)';
+                          e.target.style.filter = 'brightness(1) contrast(1)';
+                        }}
+                      />
+                      
+                      {/* Overlay ring */}
+                      <div style={{
+                        position: 'absolute',
+                        top: '-2px',
+                        left: '-2px',
+                        right: '-2px',
+                        bottom: '-2px',
+                        borderRadius: '50%',
+                        background: 'conic-gradient(from 0deg, var(--primary-gold), var(--warm-gold), var(--sage-green), var(--primary-gold))',
+                        zIndex: -1,
+                        animation: 'rotate 8s linear infinite'
+                      }} />
+                    </div>
+                  </div>
+                  
+                  {/* Text content */}
+                  <div style={{ 
+                    flex: 1,
+                    display: 'flex',
+                    flexDirection: 'column',
+                    justifyContent: 'center',
+                    alignItems: 'flex-start'
+                  }}>
+                    <h4 style={{
+                      color: 'var(--primary-gold)',
+                      fontSize: '1.3rem',
+                      marginBottom: '8px',
+                      fontWeight: '700',
+                      fontFamily: 'Playfair Display, serif'
+                    }}>
+                      Uzo
+                    </h4>
+                    <p style={{
+                      fontSize: '0.95rem',
+                      color: 'var(--text-medium)',
+                      marginBottom: '12px',
+                      fontWeight: '500'
+                    }}>
+                      Founder, Poet & Dean
+                    </p>
+                    <p style={{
+                      fontSize: '0.9rem',
+                      color: 'var(--text-light)',
+                      fontStyle: 'italic',
+                      margin: 0,
+                      lineHeight: '1.4'
+                    }}>
+                      "From grief to grace through the SELAH journey"
+                    </p>
+                    
+                    {/* Achievement badges */}
+                    <div style={{
+                      display: 'flex',
+                      gap: '8px',
+                      marginTop: '15px',
+                      flexWrap: 'wrap'
+                    }}>
+                      <span style={{
+                        fontSize: '0.75rem',
+                        padding: '4px 10px',
+                        background: 'rgba(212, 175, 55, 0.15)',
+                        color: 'var(--primary-gold)',
+                        borderRadius: '12px',
+                        fontWeight: '500'
+                      }}>
+                        30+ Years Experience
+                      </span>
+                      <span style={{
+                        fontSize: '0.75rem',
+                        padding: '4px 10px',
+                        background: 'rgba(168, 184, 154, 0.15)',
+                        color: 'var(--sage-green)',
+                        borderRadius: '12px',
+                        fontWeight: '500'
+                      }}>
+                        African Leadership Academy
+                      </span>
+                    </div>
+                  </div>
+                </div>
+              </div>
             </motion.div>
 
             <motion.div
@@ -128,18 +292,15 @@ const About = () => {
             {[
               {
                 title: "Poetry & Reflection",
-                description: "SELAH series - writings born from moments of despair transformed into expressions of hope.",
-                icon: "✍️"
+                description: "SELAH series - writings born from moments of despair transformed into expressions of hope."
               },
               {
                 title: "Authentic Journey",
-                description: "Real experiences of grief, healing, and finding purpose through relationship with Abba.",
-                icon: "💝"
+                description: "Real experiences of grief, healing, and finding purpose through relationship with Abba."
               },
               {
                 title: "Grace-Filled Encounters",
-                description: "Creating moments for readers to experience God's presence in their everyday lives.",
-                icon: "🕊️"
+                description: "Creating moments for readers to experience God's presence in their everyday lives."
               }
             ].map((value, index) => (
               <motion.div
@@ -150,7 +311,7 @@ const About = () => {
                 transition={{ duration: 0.6, delay: index * 0.1 }}
                 viewport={{ once: true }}
               >
-                <div style={{ fontSize: '3rem', marginBottom: '1rem' }}>{value.icon}</div>
+
                 <h3>{value.title}</h3>
                 <p>{value.description}</p>
               </motion.div>

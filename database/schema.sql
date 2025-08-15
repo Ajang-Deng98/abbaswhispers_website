@@ -45,6 +45,8 @@ CREATE TABLE volumes (
     price VARCHAR(20) NOT NULL,
     image VARCHAR(255),
     download_link VARCHAR(255),
+    content LONGTEXT,
+    audio_url VARCHAR(255),
     downloads INT DEFAULT 0,
     status ENUM('draft', 'published', 'archived') DEFAULT 'published',
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
