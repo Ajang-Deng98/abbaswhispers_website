@@ -58,15 +58,16 @@ const Contact = () => {
             </p>
           </motion.div>
 
-          <div className="grid grid-2" style={{ marginTop: '4rem', gap: '4rem' }}>
+          <div className="contact-grid">
             {/* Contact Form */}
             <motion.div
+              className="contact-form-section"
               initial={{ opacity: 0, x: -50 }}
               animate={{ opacity: 1, x: 0 }}
               transition={{ duration: 0.8, delay: 0.2 }}
             >
-              <div className="card">
-                <h2>Send Us a Message</h2>
+              <div className="contact-card">
+                <h2>Send Message</h2>
                 <form onSubmit={handleSubmit}>
                   <div style={{ marginBottom: '1.5rem' }}>
                     <label style={{ display: 'block', marginBottom: '0.5rem', fontWeight: '500', fontSize: '0.9rem', color: 'var(--text-dark)' }}>
@@ -239,29 +240,28 @@ const Contact = () => {
 
             {/* Contact Information */}
             <motion.div
+              className="contact-info-section"
               initial={{ opacity: 0, x: 50 }}
               animate={{ opacity: 1, x: 0 }}
               transition={{ duration: 0.8, delay: 0.4 }}
             >
-              <div className="card" style={{ padding: '2rem' }}>
-                <h2 style={{ fontSize: '1.5rem', marginBottom: '1.5rem', color: 'var(--primary-gold)' }}>Get in Touch</h2>
+              <div className="contact-card">
+                <h2>Contact Information</h2>
                 
-                <div style={{ marginBottom: '1.5rem', padding: '1rem', backgroundColor: 'var(--warm-cream)', borderRadius: '8px' }}>
-                  <h3 style={{ color: 'var(--primary-gold)', marginBottom: '0.5rem', fontSize: '1rem' }}>Email</h3>
-                  <p style={{ margin: '0.25rem 0', fontSize: '0.95rem' }}>info@abbaswhispers.com</p>
-                  <p style={{ margin: '0.25rem 0', fontSize: '0.95rem' }}>prayer@abbaswhispers.com</p>
+                <div className="contact-info-item">
+                  <h3>Email</h3>
+                  <p>info@abbaswhispers.com</p>
+                  <p>prayer@abbaswhispers.com</p>
                 </div>
 
-                <div style={{ marginBottom: '1.5rem', padding: '1rem', backgroundColor: 'var(--warm-cream)', borderRadius: '8px' }}>
-                  <h3 style={{ color: 'var(--primary-gold)', marginBottom: '0.5rem', fontSize: '1rem' }}>Phone</h3>
-                  <p style={{ margin: '0.25rem 0', fontSize: '0.95rem' }}>+1 (555) 123-4567</p>
-                  <p style={{ fontSize: '0.85rem', color: 'var(--text-light)', margin: '0.25rem 0' }}>
-                    Available Monday - Friday, 9 AM - 5 PM EST
-                  </p>
+                <div className="contact-info-item">
+                  <h3>Phone</h3>
+                  <p>+1 (555) 123-4567</p>
+                  <p className="contact-hours">Mon-Fri, 9 AM - 5 PM EST</p>
                 </div>
 
-                <div style={{ marginBottom: '1.5rem', padding: '1rem', backgroundColor: 'var(--warm-cream)', borderRadius: '8px' }}>
-                  <h3 style={{ color: 'var(--primary-gold)', marginBottom: '0.5rem', fontSize: '1rem' }}>Social Media</h3>
+                <div className="contact-info-item">
+                  <h3>Follow Us</h3>
                   <div style={{ display: 'flex', gap: '0.75rem' }}>
                     <a href="https://facebook.com/abbaswhispers" target="_blank" rel="noopener noreferrer" style={{ 
                       display: 'inline-block',
@@ -318,9 +318,9 @@ const Contact = () => {
                   </div>
                 </div>
 
-                <div style={{ padding: '1rem', backgroundColor: 'var(--warm-cream)', borderRadius: '8px' }}>
-                  <h3 style={{ color: 'var(--primary-gold)', marginBottom: '0.5rem', fontSize: '1rem' }}>Response Time</h3>
-                  <p style={{ margin: 0, fontSize: '0.9rem' }}>We typically respond within 24-48 hours during business days.</p>
+                <div className="contact-info-item">
+                  <h3>Response Time</h3>
+                  <p>We respond within 24-48 hours on business days.</p>
                 </div>
               </div>
 

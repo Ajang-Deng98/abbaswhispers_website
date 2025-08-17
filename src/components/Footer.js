@@ -28,67 +28,59 @@ const Footer = () => {
   return (
     <footer className="footer">
       <div className="container">
-        <div className="footer-content">
-          <div>
-            <div style={{ display: 'flex', alignItems: 'center', gap: '10px', marginBottom: '1rem' }}>
-              <img 
-                src="/logo.png" 
-                alt="Abbaswhispers Logo" 
-                style={{ height: '30px', width: 'auto' }}
-              />
-              <h3 style={{ margin: 0 }}>Abbaswhispers</h3>
+        <div className="footer-main">
+          {/* Brand Section */}
+          <div className="footer-brand">
+            <div className="footer-logo">
+              <img src="/logo.png" alt="Abbaswhispers Logo" />
+              <h3>Abbaswhispers</h3>
             </div>
-            <p>An online space for poetry and reflective conversations. The SELAH series - a journey from grief to grace.</p>
-            <div className="social-links">
-              <a href="https://facebook.com/abbaswhispers" target="_blank" rel="noopener noreferrer" aria-label="Facebook">Facebook</a>
-              <a href="https://twitter.com/abbaswhispers" target="_blank" rel="noopener noreferrer" aria-label="Twitter">Twitter</a>
-              <a href="https://instagram.com/abbaswhispers" target="_blank" rel="noopener noreferrer" aria-label="Instagram">Instagram</a>
-              <a href="https://youtube.com/@abbaswhispers" target="_blank" rel="noopener noreferrer" aria-label="YouTube">YouTube</a>
+            <p>Poetry and reflective conversations inspired by faith. The SELAH series - a journey from grief to grace.</p>
+            <div className="footer-social">
+              <a href="https://facebook.com/abbaswhispers" target="_blank" rel="noopener noreferrer">Facebook</a>
+              <a href="https://twitter.com/abbaswhispers" target="_blank" rel="noopener noreferrer">Twitter</a>
+              <a href="https://instagram.com/abbaswhispers" target="_blank" rel="noopener noreferrer">Instagram</a>
+              <a href="https://youtube.com/@abbaswhispers" target="_blank" rel="noopener noreferrer">YouTube</a>
             </div>
           </div>
-          
-          <div>
-            <h3>Quick Links</h3>
-            <Link to="/about">About Us</Link>
+
+          {/* Navigation Links */}
+          <div className="footer-links">
+            <h4>Navigation</h4>
+            <Link to="/">Home</Link>
+            <Link to="/about">About</Link>
             <Link to="/volumes">Volumes</Link>
             <Link to="/blog">Blog</Link>
             <Link to="/contact">Contact</Link>
           </div>
-          
-          <div>
-            <h3>Support</h3>
+
+          {/* Support Links */}
+          <div className="footer-links">
+            <h4>Support</h4>
             <Link to="/prayer-request">Prayer Request</Link>
-            <a href="mailto:info@abbaswhispers.com">Email Us</a>
-            <a href="tel:+1234567890">Call Us</a>
+            <a href="mailto:info@abbaswhispers.com">info@abbaswhispers.com</a>
+            <a href="mailto:prayer@abbaswhispers.com">prayer@abbaswhispers.com</a>
           </div>
-          
-          <div>
-            <h3>Newsletter</h3>
-            <p>Subscribe to receive our latest inspirational content.</p>
-            <form className="newsletter-form" onSubmit={handleNewsletterSubmit}>
-              <input 
-                type="email" 
-                placeholder="Your email address"
-                value={email}
-                onChange={(e) => setEmail(e.target.value)}
-                required
-                style={{
-                  padding: '10px',
-                  border: 'none',
-                  borderRadius: '5px',
-                  marginBottom: '10px',
-                  width: '100%'
-                }}
-              />
-              <button type="submit" className="btn" disabled={isSubmitting}>
-                {isSubmitting ? 'Subscribing...' : 'Subscribe'}
-              </button>
+
+          {/* Newsletter */}
+          <div className="footer-newsletter">
+            <h4>Stay Connected</h4>
+            <p>Get weekly inspirations delivered to your inbox.</p>
+            <form onSubmit={handleNewsletterSubmit}>
+              <div className="newsletter-input">
+                <input 
+                  type="email" 
+                  placeholder="Enter your email"
+                  value={email}
+                  onChange={(e) => setEmail(e.target.value)}
+                  required
+                />
+                <button type="submit" disabled={isSubmitting}>
+                  {isSubmitting ? '...' : 'Subscribe'}
+                </button>
+              </div>
               {message && (
-                <div style={{ 
-                  marginTop: '10px', 
-                  fontSize: '0.8rem',
-                  color: message.includes('Error') ? '#ff4444' : '#44ff44'
-                }}>
+                <div className={`newsletter-message ${message.includes('Error') ? 'error' : 'success'}`}>
                   {message}
                 </div>
               )}
@@ -97,7 +89,13 @@ const Footer = () => {
         </div>
         
         <div className="footer-bottom">
-          <p>&copy; 2024 Abbaswhispers. All rights reserved. | Privacy Policy | Terms of Service</p>
+          <div className="footer-bottom-content">
+            <p>&copy; 2024 Abbaswhispers. All rights reserved.</p>
+            <div className="footer-legal">
+              <a href="/privacy">Privacy Policy</a>
+              <a href="/terms">Terms of Service</a>
+            </div>
+          </div>
         </div>
       </div>
     </footer>

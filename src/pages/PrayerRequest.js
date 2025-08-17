@@ -68,15 +68,16 @@ const PrayerRequest = () => {
             </p>
           </motion.div>
 
-          <div className="grid grid-2" style={{ marginTop: '4rem', gap: '4rem' }}>
+          <div className="prayer-grid">
             {/* Prayer Request Form */}
             <motion.div
+              className="prayer-form-section"
               initial={{ opacity: 0, x: -50 }}
               animate={{ opacity: 1, x: 0 }}
               transition={{ duration: 0.8, delay: 0.2 }}
             >
-              <div className="card">
-                <h2>Submit Your Prayer Request</h2>
+              <div className="prayer-card">
+                <h2>Prayer Request</h2>
                 <p style={{ marginBottom: '2rem', color: 'var(--text-light)' }}>
                   We believe in the power of prayer and would be honored to pray for you. 
                   All requests are kept confidential and handled with care.
@@ -244,12 +245,13 @@ const PrayerRequest = () => {
 
             {/* Prayer Information */}
             <motion.div
+              className="prayer-info-section"
               initial={{ opacity: 0, x: 50 }}
               animate={{ opacity: 1, x: 0 }}
               transition={{ duration: 0.8, delay: 0.4 }}
             >
-              <div className="card">
-                <h2>Our Prayer Commitment</h2>
+              <div className="prayer-card">
+                <h2>Our Commitment</h2>
                 <div style={{ marginBottom: '2rem' }}>
                   <h3 style={{ color: 'var(--primary-gold)', marginBottom: '0.5rem' }}>Dedicated Prayer Team</h3>
                   <p>
@@ -284,8 +286,8 @@ const PrayerRequest = () => {
               </div>
 
               {/* Scripture Encouragement */}
-              <div className="card" style={{ marginTop: '2rem', background: 'var(--cream)' }}>
-                <h3>Scripture Encouragement</h3>
+              <div className="prayer-card scripture-card">
+                <h3>Scripture</h3>
                 <blockquote style={{ 
                   fontStyle: 'italic', 
                   fontSize: '1.1rem',
@@ -303,8 +305,8 @@ const PrayerRequest = () => {
               </div>
 
               {/* Emergency Prayer */}
-              <div className="card" style={{ marginTop: '2rem', background: 'var(--light-olive)', color: 'white' }}>
-                <h3>Urgent Prayer Needs?</h3>
+              <div className="prayer-card urgent-card">
+                <h3>Urgent Needs?</h3>
                 <p>
                   For urgent prayer requests, you can also call our prayer line at 
                   <strong> +1 (555) PRAY-NOW</strong> or email us directly at 
