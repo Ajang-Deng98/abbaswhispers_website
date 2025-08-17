@@ -125,45 +125,10 @@ const Volumes = () => {
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.6, delay: index * 0.1 }}
               >
-                <div className="volume-image">
-                  {(volume.image || volume.image_url) ? (
-                    <img 
-                      src={
-                        volume.image ? 
-                          (volume.image.startsWith('http') ? volume.image : `http://localhost:5003${volume.image}`) :
-                        volume.image_url ?
-                          (volume.image_url.startsWith('http') ? volume.image_url : `http://localhost:5003${volume.image_url}`) :
-                        ''
-                      }
-                      alt={volume.title}
-                      onError={(e) => {
-                        console.log('Image failed to load:', e.target.src);
-                        e.target.style.display = 'none';
-                        const placeholder = e.target.parentNode.querySelector('.volume-placeholder');
-                        if (placeholder) placeholder.style.display = 'flex';
-                      }}
-                      onLoad={(e) => {
-                        console.log('Image loaded successfully:', e.target.src);
-                      }}
-                    />
-                  ) : null}
-                  <div className="volume-placeholder" style={{ display: (volume.image || volume.image_url) ? 'none' : 'flex' }}>
-                    <span>No Image</span>
-                  </div>
-                  <div className="volume-overlay">
-                    <button className="preview-btn" onClick={() => setSelectedVolume(volume)}>
-                      Preview
-                    </button>
-                  </div>
-                </div>
-
                 <div className="volume-content">
                   <h3 className="volume-title">{volume.title}</h3>
-                  <div className="volume-excerpt">
-                    {volume.content ? 
-                      volume.content.replace(/<[^>]*>/g, '').split('\n').slice(0, 4).join('\n') + '...' :
-                      (volume.fullText || volume.description || 'A beautiful piece from the SELAH collection...').split('\n').slice(0, 4).join('\n') + '...'
-                    }
+                  <div className="volume-description">
+                    {volume.description || 'A beautiful piece from the SELAH collection exploring themes of faith, healing, and spiritual growth.'}
                   </div>
                   <div className="volume-actions">
                     <button 
@@ -259,7 +224,7 @@ const Volumes = () => {
             <div className="modal-poem">
               {selectedVolume.content ? 
                 <div dangerouslySetInnerHTML={{ __html: selectedVolume.content }} /> :
-                (selectedVolume.fullText || selectedVolume.description || 'Content not available')
+                (selectedVolume.fullText || selectedVolume.full_text || 'Full poem content not available')
               }
             </div>
           </div>

@@ -542,7 +542,7 @@ main {
 .volume-card {
   background: white;
   border-radius: 16px;
-  overflow: hidden;
+  padding: 1.5rem;
   box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
   transition: all 0.3s ease;
   border: 1px solid rgba(212, 175, 55, 0.1);
@@ -613,7 +613,9 @@ main {
 }
 
 .volume-content {
-  padding: 1.5rem;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
 }
 
 .volume-title {
@@ -623,13 +625,15 @@ main {
   font-weight: 600;
 }
 
-.volume-excerpt {
-  font-style: italic;
+.volume-description {
   color: var(--text-medium);
   font-size: 0.85rem;
   line-height: 1.6;
   margin-bottom: 1.5rem;
-  font-family: 'Georgia', serif;
+  padding: 1rem;
+  background: var(--warm-cream);
+  border-radius: 8px;
+  border-left: 3px solid var(--primary-gold);
 }
 
 .volume-actions {
