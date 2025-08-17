@@ -16,7 +16,17 @@ const Volumes = () => {
   const loadVolumes = async () => {
     try {
       const response = await volumeAPI.getAllVolumes({ category: selectedCategory });
-      setVolumes(response.data || []);
+      const volumesData = response.data || [];
+      console.log('Loaded volumes:', volumesData);
+      volumesData.forEach(volume => {
+        console.log(`Volume ${volume.id}:`, {
+          title: volume.title,
+          image: volume.image,
+          image_url: volume.image_url,
+          audio_url: volume.audio_url
+        });
+      });
+      setVolumes(volumesData);
     } catch (error) {
       console.error('Error loading volumes:', error);
       setVolumes([]);
@@ -116,17 +126,28 @@ const Volumes = () => {
                 transition={{ duration: 0.6, delay: index * 0.1 }}
               >
                 <div className="volume-image">
-                  {volume.image ? (
+                  {(volume.image || volume.image_url) ? (
                     <img 
-                      src={volume.image.startsWith('http') ? volume.image : `http://localhost:5003${volume.image}`} 
+                      src={
+                        volume.image ? 
+                          (volume.image.startsWith('http') ? volume.image : `http://localhost:5003${volume.image}`) :
+                        volume.image_url ?
+                          (volume.image_url.startsWith('http') ? volume.image_url : `http://localhost:5003${volume.image_url}`) :
+                        ''
+                      }
                       alt={volume.title}
                       onError={(e) => {
+                        console.log('Image failed to load:', e.target.src);
                         e.target.style.display = 'none';
-                        e.target.nextSibling.style.display = 'flex';
+                        const placeholder = e.target.parentNode.querySelector('.volume-placeholder');
+                        if (placeholder) placeholder.style.display = 'flex';
+                      }}
+                      onLoad={(e) => {
+                        console.log('Image loaded successfully:', e.target.src);
                       }}
                     />
                   ) : null}
-                  <div className="volume-placeholder" style={{ display: volume.image ? 'none' : 'flex' }}>
+                  <div className="volume-placeholder" style={{ display: (volume.image || volume.image_url) ? 'none' : 'flex' }}>
                     <span>No Image</span>
                   </div>
                   <div className="volume-overlay">
