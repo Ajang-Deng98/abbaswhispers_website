@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { Helmet } from 'react-helmet';
-import { blogAPI, volumeAPI, prayerAPI } from '../utils/api';
+import { blogAPI, volumeAPI, prayerAPI, contactAPI, subscriberAPI } from '../utils/api';
+import '../styles/Admin.css';
 
 const Admin = () => {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
@@ -10,34 +11,67 @@ const Admin = () => {
   const [blogs, setBlogs] = useState([]);
   const [volumes, setVolumes] = useState([]);
   const [prayers, setPrayers] = useState([]);
+  const [contacts, setContacts] = useState([]);
+  const [subscribers, setSubscribers] = useState([]);
+  const [showAddModal, setShowAddModal] = useState(false);
+  const [modalType, setModalType] = useState('');
+  const [selectedItem, setSelectedItem] = useState(null);
+  const [loading, setLoading] = useState(false);
+  const [formData, setFormData] = useState({});
+  const [uploadingFiles, setUploadingFiles] = useState({});
 
   useEffect(() => {
     const token = localStorage.getItem('adminToken');
     if (token) {
       setIsAuthenticated(true);
       loadDashboardData();
+      const interval = setInterval(loadDashboardData, 30000);
+      return () => clearInterval(interval);
     }
   }, []);
 
   const loadDashboardData = async () => {
+    setLoading(true);
     try {
-      const [blogsRes, volumesRes, prayersRes] = await Promise.all([
-        blogAPI.getAllPosts(),
-        volumeAPI.getAllVolumes(),
-        prayerAPI.getAllRequests()
+      const [blogsRes, volumesRes, prayersRes, contactsRes, subscribersRes] = await Promise.all([
+        blogAPI.getAllPosts().catch(() => ({ data: [] })),
+        volumeAPI.getAllVolumes().catch(() => ({ data: [] })),
+        prayerAPI.getAllRequests().catch(() => ({ data: [] })),
+        contactAPI.getAllContacts().catch(() => ({ data: [] })),
+        subscriberAPI.getAll().catch(() => ({ data: [] }))
       ]);
       
-      setBlogs(blogsRes.data?.posts || blogsRes.data || []);
-      setVolumes(volumesRes.data || []);
-      setPrayers(prayersRes.data || []);
+      const blogsData = Array.isArray(blogsRes.data?.posts) ? blogsRes.data.posts : 
+                       Array.isArray(blogsRes.data) ? blogsRes.data : [];
+      const volumesData = Array.isArray(volumesRes.data) ? volumesRes.data : [];
+      const prayersData = Array.isArray(prayersRes.data?.requests) ? prayersRes.data.requests : 
+                         Array.isArray(prayersRes.data) ? prayersRes.data : [];
+      const contactsData = Array.isArray(contactsRes.data) ? contactsRes.data : [];
+      const subscribersData = Array.isArray(subscribersRes.data?.subscribers) ? subscribersRes.data.subscribers : 
+                             Array.isArray(subscribersRes.data) ? subscribersRes.data : [];
+      
+      setBlogs(blogsData);
+      setVolumes(volumesData);
+      setPrayers(prayersData);
+      setContacts(contactsData);
+      setSubscribers(subscribersData);
       
       setStats({
-        blogs: (blogsRes.data?.posts || blogsRes.data || []).length,
-        volumes: (volumesRes.data || []).length,
-        prayers: (prayersRes.data || []).length
+        blogs: blogsData.length,
+        volumes: volumesData.length,
+        prayers: prayersData.length,
+        contacts: contactsData.length,
+        subscribers: subscribersData.length
       });
     } catch (error) {
       console.error('Error loading dashboard data:', error);
+      setBlogs([]);
+      setVolumes([]);
+      setPrayers([]);
+      setContacts([]);
+      setSubscribers([]);
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -58,39 +92,148 @@ const Admin = () => {
     setActiveTab('dashboard');
   };
 
+  const openAddModal = (type) => {
+    setModalType(type);
+    setShowAddModal(true);
+  };
+
+  const closeModal = () => {
+    setShowAddModal(false);
+    setSelectedItem(null);
+    setModalType('');
+    setFormData({});
+    setUploadingFiles({});
+  };
+
+  const handleFormChange = (field, value) => {
+    setFormData(prev => ({ ...prev, [field]: value }));
+  };
+
+  const handleFileUpload = async (file, fieldName) => {
+    setUploadingFiles(prev => ({ ...prev, [fieldName]: true }));
+    try {
+      const formData = new FormData();
+      formData.append('file', file);
+      
+      const response = await fetch(`${process.env.REACT_APP_API_URL || 'http://localhost:5003/api'}/upload`, {
+        method: 'POST',
+        headers: {
+          'Authorization': `Bearer ${localStorage.getItem('adminToken')}`
+        },
+        body: formData
+      });
+      
+      if (!response.ok) throw new Error('Upload failed');
+      
+      const result = await response.json();
+      handleFormChange(fieldName, result.url);
+    } catch (error) {
+      console.error('File upload error:', error);
+      alert('File upload failed. Please try again.');
+    } finally {
+      setUploadingFiles(prev => ({ ...prev, [fieldName]: false }));
+    }
+  };
+
+  const handleFormSubmit = async (e) => {
+    e.preventDefault();
+    setLoading(true);
+    try {
+      if (modalType === 'blog') {
+        if (selectedItem) {
+          await blogAPI.updatePost(selectedItem.id, formData);
+        } else {
+          await blogAPI.createPost(formData);
+        }
+      } else if (modalType === 'volume') {
+        await volumeAPI.createVolume(formData);
+      }
+      closeModal();
+      loadDashboardData();
+      alert(`${modalType === 'blog' ? 'Blog post' : 'Volume'} ${selectedItem ? 'updated' : 'created'} successfully!`);
+    } catch (error) {
+      console.error('Form submission error:', error);
+      alert('Error saving content. Please try again.');
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const editBlog = (blog) => {
+    setSelectedItem(blog);
+    setFormData({
+      title: blog.title || '',
+      content: blog.content || '',
+      excerpt: blog.excerpt || '',
+      category: blog.category || '',
+      tags: blog.tags || '',
+      image: blog.image || '',
+      status: blog.status || 'draft'
+    });
+    setModalType('blog');
+    setShowAddModal(true);
+  };
+
+  const deleteBlog = async (blogId) => {
+    if (window.confirm('Are you sure you want to delete this blog post?')) {
+      try {
+        await blogAPI.deletePost(blogId);
+        loadDashboardData();
+        alert('Blog post deleted successfully!');
+      } catch (error) {
+        console.error('Delete error:', error);
+        alert('Error deleting blog post. Please try again.');
+      }
+    }
+  };
+
+  const viewItem = (item, type) => {
+    setSelectedItem(item);
+    setModalType(type);
+    setShowAddModal(true);
+  };
+
   if (!isAuthenticated) {
     return (
-      <div className="admin-app">
+      <div className="admin-login-page">
         <Helmet>
           <title>Admin Login - Abbaswhispers</title>
           <meta name="robots" content="noindex, nofollow" />
         </Helmet>
-        <div className="admin-login">
-          <div className="login-container">
+        <div className="login-container">
+          <div className="login-card">
             <div className="login-header">
-              <h1>Admin Panel</h1>
-              <p>Abbaswhispers Content Management</p>
+              <div className="brand-logo">
+                <img src="/logo.png" alt="Abbaswhispers" className="logo-image" />
+                <h1>Abbaswhispers</h1>
+              </div>
+              <p>Content Management System</p>
             </div>
             <form onSubmit={handleLogin} className="login-form">
-              <div className="form-group">
-                <label>Username</label>
+              <div className="input-group">
                 <input
                   type="text"
+                  placeholder="Username"
                   value={loginData.username}
                   onChange={(e) => setLoginData({...loginData, username: e.target.value})}
                   required
                 />
               </div>
-              <div className="form-group">
-                <label>Password</label>
+              <div className="input-group">
                 <input
                   type="password"
+                  placeholder="Password"
                   value={loginData.password}
                   onChange={(e) => setLoginData({...loginData, password: e.target.value})}
                   required
                 />
               </div>
-              <button type="submit" className="login-btn">Sign In</button>
+              <button type="submit" className="login-btn">
+                <span>Sign In</span>
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none">
+                  <path d="M5 12h14m-7-7l7 7-7 7" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+                </svg>
+              </button>
             </form>
           </div>
         </div>
@@ -99,119 +242,302 @@ const Admin = () => {
   }
 
   return (
-    <div className="admin-app">
+    <div className="admin-dashboard">
       <Helmet>
         <title>Admin Dashboard - Abbaswhispers</title>
         <meta name="robots" content="noindex, nofollow" />
       </Helmet>
-      <div className="admin-panel">
+      
+      {/* Top Bar */}
+      <div className="admin-topbar">
+        <div className="topbar-left">
+          <div className="brand">
+            <img src="/logo.png" alt="Abbaswhispers" className="brand-logo-img" />
+            <span className="brand-name">Abbaswhispers</span>
+            <span className="brand-subtitle">CMS</span>
+          </div>
+        </div>
+        <div className="topbar-right">
+          <div className="admin-profile">
+            <div className="profile-avatar">A</div>
+            <span className="profile-name">Admin</span>
+          </div>
+          <button onClick={handleLogout} className="logout-button">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none">
+              <path d="M9 21H5a2 2 0 01-2-2V5a2 2 0 012-2h4M16 17l5-5-5-5M21 12H9" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+            </svg>
+          </button>
+        </div>
+      </div>
+
+      <div className="admin-layout">
         {/* Sidebar */}
         <div className="admin-sidebar">
-          <div className="sidebar-header">
-            <h2>Admin Panel</h2>
-            <p>Abbaswhispers CMS</p>
-          </div>
           <nav className="sidebar-nav">
             <button 
-              className={activeTab === 'dashboard' ? 'nav-item active' : 'nav-item'}
+              className={`nav-item ${activeTab === 'dashboard' ? 'active' : ''}`}
               onClick={() => setActiveTab('dashboard')}
             >
-              📊 Dashboard
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none">
+                <rect x="3" y="3" width="7" height="9" rx="1" stroke="currentColor" strokeWidth="2"/>
+                <rect x="14" y="3" width="7" height="5" rx="1" stroke="currentColor" strokeWidth="2"/>
+                <rect x="14" y="12" width="7" height="9" rx="1" stroke="currentColor" strokeWidth="2"/>
+                <rect x="3" y="16" width="7" height="5" rx="1" stroke="currentColor" strokeWidth="2"/>
+              </svg>
+              <span>Dashboard</span>
             </button>
             <button 
-              className={activeTab === 'blogs' ? 'nav-item active' : 'nav-item'}
+              className={`nav-item ${activeTab === 'blogs' ? 'active' : ''}`}
               onClick={() => setActiveTab('blogs')}
             >
-              📝 Blog Posts
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none">
+                <path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z" stroke="currentColor" strokeWidth="2"/>
+                <polyline points="14,2 14,8 20,8" stroke="currentColor" strokeWidth="2"/>
+                <line x1="16" y1="13" x2="8" y2="13" stroke="currentColor" strokeWidth="2"/>
+                <line x1="16" y1="17" x2="8" y2="17" stroke="currentColor" strokeWidth="2"/>
+                <polyline points="10,9 9,9 8,9" stroke="currentColor" strokeWidth="2"/>
+              </svg>
+              <span>Blog Posts</span>
             </button>
             <button 
-              className={activeTab === 'volumes' ? 'nav-item active' : 'nav-item'}
+              className={`nav-item ${activeTab === 'volumes' ? 'active' : ''}`}
               onClick={() => setActiveTab('volumes')}
             >
-              📚 Volumes
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none">
+                <path d="M4 19.5A2.5 2.5 0 016.5 17H20" stroke="currentColor" strokeWidth="2"/>
+                <path d="M6.5 2H20v20H6.5A2.5 2.5 0 014 19.5v-15A2.5 2.5 0 016.5 2z" stroke="currentColor" strokeWidth="2"/>
+              </svg>
+              <span>Volumes</span>
             </button>
             <button 
-              className={activeTab === 'prayers' ? 'nav-item active' : 'nav-item'}
+              className={`nav-item ${activeTab === 'prayers' ? 'active' : ''}`}
               onClick={() => setActiveTab('prayers')}
             >
-              🙏 Prayer Requests
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none">
+                <path d="M20 6L9 17l-5-5" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+              </svg>
+              <span>Prayer Requests</span>
+            </button>
+            <button 
+              className={`nav-item ${activeTab === 'contacts' ? 'active' : ''}`}
+              onClick={() => setActiveTab('contacts')}
+            >
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none">
+                <path d="M22 16.92v3a2 2 0 01-2.18 2 19.79 19.79 0 01-8.63-3.07 19.5 19.5 0 01-6-6 19.79 19.79 0 01-3.07-8.67A2 2 0 014.11 2h3a2 2 0 012 1.72 12.84 12.84 0 00.7 2.81 2 2 0 01-.45 2.11L8.09 9.91a16 16 0 006 6l1.27-1.27a2 2 0 012.11-.45 12.84 12.84 0 002.81.7A2 2 0 0122 16.92z" stroke="currentColor" strokeWidth="2"/>
+              </svg>
+              <span>Contacts</span>
+            </button>
+            <button 
+              className={`nav-item ${activeTab === 'subscribers' ? 'active' : ''}`}
+              onClick={() => setActiveTab('subscribers')}
+            >
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none">
+                <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z" stroke="currentColor" strokeWidth="2"/>
+                <polyline points="22,6 12,13 2,6" stroke="currentColor" strokeWidth="2"/>
+              </svg>
+              <span>Subscribers</span>
             </button>
           </nav>
-          <div className="sidebar-footer">
-            <button onClick={handleLogout} className="logout-btn">
-              🚪 Logout
-            </button>
-          </div>
         </div>
 
         {/* Main Content */}
-        <div className="admin-main">
-          <div className="admin-header">
-            <h1>
-              {activeTab === 'dashboard' && 'Dashboard'}
-              {activeTab === 'blogs' && 'Blog Posts'}
-              {activeTab === 'volumes' && 'Volumes'}
-              {activeTab === 'prayers' && 'Prayer Requests'}
-            </h1>
-            <div className="header-actions">
-              <span className="welcome">Welcome, Admin</span>
-            </div>
-          </div>
+        <div className="admin-content">
 
-          <div className="admin-content">
+          <div className="content-area">
             {activeTab === 'dashboard' && (
-              <div className="dashboard">
-                <div className="stats-grid">
+              <div className="dashboard-view">
+                <div className="page-header">
+                  <div>
+                    <h1>Dashboard Overview</h1>
+                    <p>Manage your content and monitor activity</p>
+                  </div>
+                  <div className="refresh-indicator">
+                    {loading && (
+                      <div className="loading-spinner">
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none">
+                          <path d="M12 2v4M12 18v4M4.93 4.93l2.83 2.83M16.24 16.24l2.83 2.83M2 12h4M18 12h4M4.93 19.07l2.83-2.83M16.24 7.76l2.83-2.83" stroke="currentColor" strokeWidth="2" strokeLinecap="round"/>
+                        </svg>
+                        <span>Updating...</span>
+                      </div>
+                    )}
+                    <button className="refresh-btn" onClick={loadDashboardData} disabled={loading}>
+                      <svg width="16" height="16" viewBox="0 0 24 24" fill="none">
+                        <path d="M1 4v6h6M23 20v-6h-6" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+                        <path d="M20.49 9A9 9 0 005.64 5.64L1 10m22 4l-4.64 4.36A9 9 0 013.51 15" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+                      </svg>
+                      Refresh
+                    </button>
+                  </div>
+                </div>
+                
+                <div className={`stats-grid ${loading ? 'loading' : ''}`}>
                   <div className="stat-card">
-                    <div className="stat-icon">📝</div>
-                    <div className="stat-info">
-                      <h3>{stats.blogs}</h3>
-                      <p>Blog Posts</p>
+                    <div className="stat-content">
+                      <div className="stat-number">{stats.blogs}</div>
+                      <div className="stat-label">Blog Posts</div>
+                    </div>
+                    <div className="stat-icon blog">
+                      <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
+                        <path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z" stroke="currentColor" strokeWidth="2"/>
+                        <polyline points="14,2 14,8 20,8" stroke="currentColor" strokeWidth="2"/>
+                      </svg>
                     </div>
                   </div>
                   <div className="stat-card">
-                    <div className="stat-icon">📚</div>
-                    <div className="stat-info">
-                      <h3>{stats.volumes}</h3>
-                      <p>Volumes</p>
+                    <div className="stat-content">
+                      <div className="stat-number">{stats.volumes}</div>
+                      <div className="stat-label">Volumes</div>
+                    </div>
+                    <div className="stat-icon volume">
+                      <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
+                        <path d="M4 19.5A2.5 2.5 0 016.5 17H20" stroke="currentColor" strokeWidth="2"/>
+                        <path d="M6.5 2H20v20H6.5A2.5 2.5 0 014 19.5v-15A2.5 2.5 0 016.5 2z" stroke="currentColor" strokeWidth="2"/>
+                      </svg>
                     </div>
                   </div>
                   <div className="stat-card">
-                    <div className="stat-icon">🙏</div>
-                    <div className="stat-info">
-                      <h3>{stats.prayers}</h3>
-                      <p>Prayer Requests</p>
+                    <div className="stat-content">
+                      <div className="stat-number">{stats.prayers}</div>
+                      <div className="stat-label">Prayer Requests</div>
+                    </div>
+                    <div className="stat-icon prayer">
+                      <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
+                        <path d="M20 6L9 17l-5-5" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+                      </svg>
+                    </div>
+                  </div>
+                  <div className="stat-card">
+                    <div className="stat-content">
+                      <div className="stat-number">{stats.contacts}</div>
+                      <div className="stat-label">Contact Messages</div>
+                    </div>
+                    <div className="stat-icon contact">
+                      <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
+                        <path d="M22 16.92v3a2 2 0 01-2.18 2 19.79 19.79 0 01-8.63-3.07 19.5 19.5 0 01-6-6 19.79 19.79 0 01-3.07-8.67A2 2 0 014.11 2h3a2 2 0 012 1.72 12.84 12.84 0 00.7 2.81 2 2 0 01-.45 2.11L8.09 9.91a16 16 0 006 6l1.27-1.27a2 2 0 012.11-.45 12.84 12.84 0 002.81.7A2 2 0 0122 16.92z" stroke="currentColor" strokeWidth="2"/>
+                      </svg>
+                    </div>
+                  </div>
+                  <div className="stat-card">
+                    <div className="stat-content">
+                      <div className="stat-number">{stats.subscribers}</div>
+                      <div className="stat-label">Newsletter Subscribers</div>
+                    </div>
+                    <div className="stat-icon subscriber">
+                      <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
+                        <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z" stroke="currentColor" strokeWidth="2"/>
+                        <polyline points="22,6 12,13 2,6" stroke="currentColor" strokeWidth="2"/>
+                      </svg>
                     </div>
                   </div>
                 </div>
 
-                <div className="recent-activity">
-                  <h2>Recent Activity</h2>
-                  <div className="activity-list">
-                    <div className="activity-item">
-                      <span className="activity-icon">📝</span>
-                      <span>Latest blog posts and content updates</span>
+                <div className="activity-section">
+                  <div className="section-header-with-data">
+                    <h2>Recent Activity</h2>
+                    <span className="last-updated">Last updated: {new Date().toLocaleTimeString()}</span>
+                  </div>
+                  <div className="recent-data-grid">
+                    <div className="recent-card">
+                      <h3>Latest Blog Posts</h3>
+                      <div className="recent-items">
+                        {blogs.slice(0, 3).map(blog => (
+                          <div key={blog.id} className="recent-item">
+                            <span className="item-title">{blog.title}</span>
+                            <span className="item-date">{new Date(blog.created_at).toLocaleDateString()}</span>
+                          </div>
+                        ))}
+                        {blogs.length === 0 && <p className="no-data">No blog posts yet</p>}
+                      </div>
                     </div>
-                    <div className="activity-item">
-                      <span className="activity-icon">🙏</span>
-                      <span>New prayer requests received</span>
+                    <div className="recent-card">
+                      <h3>Recent Prayer Requests</h3>
+                      <div className="recent-items">
+                        {prayers.slice(0, 3).map(prayer => (
+                          <div key={prayer.id} className="recent-item">
+                            <span className="item-title">{prayer.name || 'Anonymous'} - {prayer.category}</span>
+                            <span className="item-date">{new Date(prayer.created_at).toLocaleDateString()}</span>
+                          </div>
+                        ))}
+                        {prayers.length === 0 && <p className="no-data">No prayer requests yet</p>}
+                      </div>
                     </div>
-                    <div className="activity-item">
-                      <span className="activity-icon">📚</span>
-                      <span>Volume collections managed</span>
+                    <div className="recent-card">
+                      <h3>New Contacts</h3>
+                      <div className="recent-items">
+                        {contacts.slice(0, 3).map(contact => (
+                          <div key={contact.id} className="recent-item">
+                            <span className="item-title">{contact.name}</span>
+                            <span className="item-date">{new Date(contact.created_at).toLocaleDateString()}</span>
+                          </div>
+                        ))}
+                        {contacts.length === 0 && <p className="no-data">No contacts yet</p>}
+                      </div>
                     </div>
+                  </div>
+                  
+                  <h2>Quick Actions</h2>
+                  <div className="quick-actions">
+                    <button className="action-card" onClick={() => setActiveTab('blogs')}>
+                      <div className="action-icon">
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none">
+                          <path d="M12 5v14M5 12h14" stroke="currentColor" strokeWidth="2" strokeLinecap="round"/>
+                        </svg>
+                      </div>
+                      <span>New Blog Post</span>
+                    </button>
+                    <button className="action-card" onClick={() => setActiveTab('volumes')}>
+                      <div className="action-icon">
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none">
+                          <path d="M12 5v14M5 12h14" stroke="currentColor" strokeWidth="2" strokeLinecap="round"/>
+                        </svg>
+                      </div>
+                      <span>Add Volume</span>
+                    </button>
+                    <button className="action-card" onClick={() => setActiveTab('prayers')}>
+                      <div className="action-icon">
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none">
+                          <path d="M15 3h4a2 2 0 012 2v14a2 2 0 01-2 2h-4M10 17l5-5-5-5M21 12H9" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+                        </svg>
+                      </div>
+                      <span>View Prayers</span>
+                    </button>
+                    <button className="action-card" onClick={() => setActiveTab('contacts')}>
+                      <div className="action-icon">
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none">
+                          <path d="M22 16.92v3a2 2 0 01-2.18 2 19.79 19.79 0 01-8.63-3.07 19.5 19.5 0 01-6-6 19.79 19.79 0 01-3.07-8.67A2 2 0 014.11 2h3a2 2 0 012 1.72 12.84 12.84 0 00.7 2.81 2 2 0 01-.45 2.11L8.09 9.91a16 16 0 006 6l1.27-1.27a2 2 0 012.11-.45 12.84 12.84 0 002.81.7A2 2 0 0122 16.92z" stroke="currentColor" strokeWidth="2"/>
+                        </svg>
+                      </div>
+                      <span>View Contacts</span>
+                    </button>
+                    <button className="action-card" onClick={() => setActiveTab('subscribers')}>
+                      <div className="action-icon">
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none">
+                          <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z" stroke="currentColor" strokeWidth="2"/>
+                          <polyline points="22,6 12,13 2,6" stroke="currentColor" strokeWidth="2"/>
+                        </svg>
+                      </div>
+                      <span>Manage Subscribers</span>
+                    </button>
                   </div>
                 </div>
               </div>
             )}
 
             {activeTab === 'blogs' && (
-              <div className="content-section">
-                <div className="section-header">
-                  <h2>Blog Posts Management</h2>
-                  <button className="add-btn">+ Add New Post</button>
+              <div className="content-view">
+                <div className="page-header">
+                  <div>
+                    <h1>Blog Posts</h1>
+                    <p>Manage your blog content and articles</p>
+                  </div>
+                  <button className="primary-btn" onClick={() => openAddModal('blog')}>
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none">
+                      <path d="M12 5v14M5 12h14" stroke="currentColor" strokeWidth="2" strokeLinecap="round"/>
+                    </svg>
+                    New Post
+                  </button>
                 </div>
-                <div className="content-table">
+                <div className="data-table">
                   <table>
                     <thead>
                       <tr>
@@ -222,14 +548,30 @@ const Admin = () => {
                       </tr>
                     </thead>
                     <tbody>
-                      {blogs.slice(0, 10).map(blog => (
+                      {Array.isArray(blogs) && blogs.slice(0, 10).map(blog => (
                         <tr key={blog.id}>
-                          <td>{blog.title}</td>
-                          <td>{new Date(blog.created_at).toLocaleDateString()}</td>
-                          <td><span className="status published">Published</span></td>
-                          <td>
-                            <button className="action-btn edit">Edit</button>
-                            <button className="action-btn delete">Delete</button>
+                          <td className="title-cell">{blog.title}</td>
+                          <td className="date-cell">{new Date(blog.created_at).toLocaleDateString()}</td>
+                          <td><span className="status-badge published">Published</span></td>
+                          <td className="actions-cell">
+                            <button className="icon-btn view" onClick={() => viewItem(blog, 'blog')}>
+                              <svg width="16" height="16" viewBox="0 0 24 24" fill="none">
+                                <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z" stroke="currentColor" strokeWidth="2"/>
+                                <circle cx="12" cy="12" r="3" stroke="currentColor" strokeWidth="2"/>
+                              </svg>
+                            </button>
+                            <button className="icon-btn edit" onClick={() => editBlog(blog)}>
+                              <svg width="16" height="16" viewBox="0 0 24 24" fill="none">
+                                <path d="M11 4H4a2 2 0 00-2 2v14a2 2 0 002 2h14a2 2 0 002-2v-7" stroke="currentColor" strokeWidth="2"/>
+                                <path d="M18.5 2.5a2.121 2.121 0 013 3L12 15l-4 1 1-4 9.5-9.5z" stroke="currentColor" strokeWidth="2"/>
+                              </svg>
+                            </button>
+                            <button className="icon-btn delete" onClick={() => deleteBlog(blog.id)}>
+                              <svg width="16" height="16" viewBox="0 0 24 24" fill="none">
+                                <polyline points="3,6 5,6 21,6" stroke="currentColor" strokeWidth="2"/>
+                                <path d="M19 6v14a2 2 0 01-2 2H7a2 2 0 01-2-2V6M8 6V4a2 2 0 012-2h4a2 2 0 012 2v2" stroke="currentColor" strokeWidth="2"/>
+                              </svg>
+                            </button>
                           </td>
                         </tr>
                       ))}
@@ -240,12 +582,20 @@ const Admin = () => {
             )}
 
             {activeTab === 'volumes' && (
-              <div className="content-section">
-                <div className="section-header">
-                  <h2>Volumes Management</h2>
-                  <button className="add-btn">+ Add New Volume</button>
+              <div className="content-view">
+                <div className="page-header">
+                  <div>
+                    <h1>Volumes</h1>
+                    <p>Manage your inspirational volume collections</p>
+                  </div>
+                  <button className="primary-btn" onClick={() => openAddModal('volume')}>
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none">
+                      <path d="M12 5v14M5 12h14" stroke="currentColor" strokeWidth="2" strokeLinecap="round"/>
+                    </svg>
+                    New Volume
+                  </button>
                 </div>
-                <div className="content-table">
+                <div className="data-table">
                   <table>
                     <thead>
                       <tr>
@@ -256,14 +606,24 @@ const Admin = () => {
                       </tr>
                     </thead>
                     <tbody>
-                      {volumes.slice(0, 10).map(volume => (
+                      {Array.isArray(volumes) && volumes.slice(0, 10).map(volume => (
                         <tr key={volume.id}>
-                          <td>{volume.title}</td>
-                          <td>{volume.category || 'General'}</td>
-                          <td>{new Date(volume.created_at || Date.now()).toLocaleDateString()}</td>
-                          <td>
-                            <button className="action-btn edit">Edit</button>
-                            <button className="action-btn delete">Delete</button>
+                          <td className="title-cell">{volume.title}</td>
+                          <td className="category-cell">{volume.category || 'General'}</td>
+                          <td className="date-cell">{new Date(volume.created_at || Date.now()).toLocaleDateString()}</td>
+                          <td className="actions-cell">
+                            <button className="icon-btn edit">
+                              <svg width="16" height="16" viewBox="0 0 24 24" fill="none">
+                                <path d="M11 4H4a2 2 0 00-2 2v14a2 2 0 002 2h14a2 2 0 002-2v-7" stroke="currentColor" strokeWidth="2"/>
+                                <path d="M18.5 2.5a2.121 2.121 0 013 3L12 15l-4 1 1-4 9.5-9.5z" stroke="currentColor" strokeWidth="2"/>
+                              </svg>
+                            </button>
+                            <button className="icon-btn delete">
+                              <svg width="16" height="16" viewBox="0 0 24 24" fill="none">
+                                <polyline points="3,6 5,6 21,6" stroke="currentColor" strokeWidth="2"/>
+                                <path d="M19 6v14a2 2 0 01-2 2H7a2 2 0 01-2-2V6M8 6V4a2 2 0 012-2h4a2 2 0 012 2v2" stroke="currentColor" strokeWidth="2"/>
+                              </svg>
+                            </button>
                           </td>
                         </tr>
                       ))}
@@ -274,11 +634,14 @@ const Admin = () => {
             )}
 
             {activeTab === 'prayers' && (
-              <div className="content-section">
-                <div className="section-header">
-                  <h2>Prayer Requests</h2>
+              <div className="content-view">
+                <div className="page-header">
+                  <div>
+                    <h1>Prayer Requests</h1>
+                    <p>Review and manage prayer submissions</p>
+                  </div>
                 </div>
-                <div className="content-table">
+                <div className="data-table">
                   <table>
                     <thead>
                       <tr>
@@ -290,15 +653,120 @@ const Admin = () => {
                       </tr>
                     </thead>
                     <tbody>
-                      {prayers.slice(0, 10).map(prayer => (
+                      {Array.isArray(prayers) && prayers.slice(0, 10).map(prayer => (
                         <tr key={prayer.id}>
-                          <td>{prayer.name || 'Anonymous'}</td>
-                          <td>{prayer.category}</td>
-                          <td>{new Date(prayer.created_at).toLocaleDateString()}</td>
-                          <td><span className="status pending">Pending</span></td>
-                          <td>
-                            <button className="action-btn view">View</button>
-                            <button className="action-btn edit">Update</button>
+                          <td className="name-cell">{prayer.name || 'Anonymous'}</td>
+                          <td className="category-cell">{prayer.category}</td>
+                          <td className="date-cell">{new Date(prayer.created_at).toLocaleDateString()}</td>
+                          <td><span className={`status-badge ${prayer.status || 'new'}`}>{(prayer.status || 'new').charAt(0).toUpperCase() + (prayer.status || 'new').slice(1)}</span></td>
+                          <td className="actions-cell">
+                            <button className="icon-btn view" onClick={() => viewItem(prayer, 'prayer')}>
+                              <svg width="16" height="16" viewBox="0 0 24 24" fill="none">
+                                <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z" stroke="currentColor" strokeWidth="2"/>
+                                <circle cx="12" cy="12" r="3" stroke="currentColor" strokeWidth="2"/>
+                              </svg>
+                            </button>
+                            <button className="icon-btn edit">
+                              <svg width="16" height="16" viewBox="0 0 24 24" fill="none">
+                                <path d="M11 4H4a2 2 0 00-2 2v14a2 2 0 002 2h14a2 2 0 002-2v-7" stroke="currentColor" strokeWidth="2"/>
+                                <path d="M18.5 2.5a2.121 2.121 0 013 3L12 15l-4 1 1-4 9.5-9.5z" stroke="currentColor" strokeWidth="2"/>
+                              </svg>
+                            </button>
+                          </td>
+                        </tr>
+                      ))}
+                    </tbody>
+                  </table>
+                </div>
+              </div>
+            )}
+
+            {activeTab === 'contacts' && (
+              <div className="content-view">
+                <div className="page-header">
+                  <div>
+                    <h1>Contact Messages</h1>
+                    <p>Review and manage contact form submissions</p>
+                  </div>
+                </div>
+                <div className="data-table">
+                  <table>
+                    <thead>
+                      <tr>
+                        <th>Name</th>
+                        <th>Email</th>
+                        <th>Subject</th>
+                        <th>Date</th>
+                        <th>Actions</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      {Array.isArray(contacts) && contacts.slice(0, 10).map(contact => (
+                        <tr key={contact.id}>
+                          <td className="name-cell">{contact.name}</td>
+                          <td className="email-cell">{contact.email}</td>
+                          <td className="subject-cell">{contact.subject}</td>
+                          <td className="date-cell">{new Date(contact.created_at).toLocaleDateString()}</td>
+                          <td className="actions-cell">
+                            <button className="icon-btn view" onClick={() => viewItem(contact, 'contact')}>
+                              <svg width="16" height="16" viewBox="0 0 24 24" fill="none">
+                                <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z" stroke="currentColor" strokeWidth="2"/>
+                                <circle cx="12" cy="12" r="3" stroke="currentColor" strokeWidth="2"/>
+                              </svg>
+                            </button>
+                            <button className="icon-btn delete">
+                              <svg width="16" height="16" viewBox="0 0 24 24" fill="none">
+                                <polyline points="3,6 5,6 21,6" stroke="currentColor" strokeWidth="2"/>
+                                <path d="M19 6v14a2 2 0 01-2 2H7a2 2 0 01-2-2V6M8 6V4a2 2 0 012-2h4a2 2 0 012 2v2" stroke="currentColor" strokeWidth="2"/>
+                              </svg>
+                            </button>
+                          </td>
+                        </tr>
+                      ))}
+                    </tbody>
+                  </table>
+                </div>
+              </div>
+            )}
+
+            {activeTab === 'subscribers' && (
+              <div className="content-view">
+                <div className="page-header">
+                  <div>
+                    <h1>Newsletter Subscribers</h1>
+                    <p>Manage your newsletter subscriber list</p>
+                  </div>
+                  <button className="primary-btn">
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none">
+                      <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z" stroke="currentColor" strokeWidth="2"/>
+                      <polyline points="22,6 12,13 2,6" stroke="currentColor" strokeWidth="2"/>
+                    </svg>
+                    Send Newsletter
+                  </button>
+                </div>
+                <div className="data-table">
+                  <table>
+                    <thead>
+                      <tr>
+                        <th>Email</th>
+                        <th>Subscribed Date</th>
+                        <th>Status</th>
+                        <th>Actions</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      {Array.isArray(subscribers) && subscribers.slice(0, 10).map(subscriber => (
+                        <tr key={subscriber.id}>
+                          <td className="email-cell">{subscriber.email}</td>
+                          <td className="date-cell">{new Date(subscriber.created_at).toLocaleDateString()}</td>
+                          <td><span className="status-badge published">Active</span></td>
+                          <td className="actions-cell">
+                            <button className="icon-btn delete">
+                              <svg width="16" height="16" viewBox="0 0 24 24" fill="none">
+                                <polyline points="3,6 5,6 21,6" stroke="currentColor" strokeWidth="2"/>
+                                <path d="M19 6v14a2 2 0 01-2 2H7a2 2 0 01-2-2V6M8 6V4a2 2 0 012-2h4a2 2 0 012 2v2" stroke="currentColor" strokeWidth="2"/>
+                              </svg>
+                            </button>
                           </td>
                         </tr>
                       ))}
@@ -310,6 +778,351 @@ const Admin = () => {
           </div>
         </div>
       </div>
+      
+      {/* Modal Component */}
+      {showAddModal && (
+        <div className="modal-overlay" onClick={closeModal}>
+          <div className="modal-content" onClick={(e) => e.stopPropagation()}>
+            <div className="modal-header">
+              <h2>
+                {modalType === 'blog' && selectedItem && !formData.title ? 'View Blog Post' : ''}
+                {modalType === 'blog' && (selectedItem && formData.title ? 'Edit Blog Post' : (!selectedItem ? 'Add New Blog Post' : ''))}
+                {modalType === 'volume' && 'Add New Volume'}
+                {modalType === 'prayer' && 'Prayer Request Details'}
+                {modalType === 'contact' && 'Contact Message Details'}
+              </h2>
+              <button className="modal-close" onClick={closeModal}>
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
+                  <path d="M18 6L6 18M6 6l12 12" stroke="currentColor" strokeWidth="2" strokeLinecap="round"/>
+                </svg>
+              </button>
+            </div>
+            <div className="modal-body">
+              {modalType === 'blog' && (
+                <form className="add-form" onSubmit={handleFormSubmit}>
+                  <div className="form-group">
+                    <label>Title *</label>
+                    <input 
+                      type="text" 
+                      placeholder="Enter blog post title" 
+                      value={formData.title || ''}
+                      onChange={(e) => handleFormChange('title', e.target.value)}
+                      required 
+                    />
+                  </div>
+                  <div className="form-group">
+                    <label>Content *</label>
+                    <textarea 
+                      rows="8" 
+                      placeholder="Enter blog post content" 
+                      value={formData.content || ''}
+                      onChange={(e) => handleFormChange('content', e.target.value)}
+                      required
+                    ></textarea>
+                  </div>
+                  <div className="form-group">
+                    <label>Excerpt</label>
+                    <textarea 
+                      rows="3" 
+                      placeholder="Brief description of the post"
+                      value={formData.excerpt || ''}
+                      onChange={(e) => handleFormChange('excerpt', e.target.value)}
+                    ></textarea>
+                  </div>
+                  <div className="form-group">
+                    <label>Category *</label>
+                    <select 
+                      value={formData.category || ''}
+                      onChange={(e) => handleFormChange('category', e.target.value)}
+                      required
+                    >
+                      <option value="">Select category</option>
+                      <option value="peace">Peace</option>
+                      <option value="gratitude">Gratitude</option>
+                      <option value="healing">Healing</option>
+                      <option value="faith">Faith</option>
+                      <option value="prayer">Prayer</option>
+                      <option value="inspiration">Inspiration</option>
+                    </select>
+                  </div>
+                  <div className="form-group">
+                    <label>Tags</label>
+                    <input 
+                      type="text" 
+                      placeholder="Enter tags separated by commas"
+                      value={formData.tags || ''}
+                      onChange={(e) => handleFormChange('tags', e.target.value)}
+                    />
+                  </div>
+                  <div className="form-group">
+                    <label>Image</label>
+                    <div className="file-upload-group">
+                      <input 
+                        type="file" 
+                        accept="image/*"
+                        onChange={(e) => e.target.files[0] && handleFileUpload(e.target.files[0], 'image')}
+                        disabled={uploadingFiles.image}
+                      />
+                      {uploadingFiles.image && <span className="upload-status">Uploading...</span>}
+                      {formData.image && (
+                        <div className="file-preview">
+                          <img src={formData.image} alt="Preview" className="image-preview" />
+                          <button type="button" onClick={() => handleFormChange('image', '')} className="remove-file">×</button>
+                        </div>
+                      )}
+                    </div>
+                  </div>
+                  <div className="form-group">
+                    <label>Status</label>
+                    <select 
+                      value={formData.status || 'draft'}
+                      onChange={(e) => handleFormChange('status', e.target.value)}
+                    >
+                      <option value="draft">Draft</option>
+                      <option value="published">Published</option>
+                      <option value="archived">Archived</option>
+                    </select>
+                  </div>
+                  <div className="form-actions">
+                    <button type="button" className="btn-secondary" onClick={closeModal}>Cancel</button>
+                    <button type="submit" className="btn-primary" disabled={loading}>
+                      {loading ? (selectedItem ? 'Updating...' : 'Creating...') : (selectedItem ? 'Update Post' : 'Create Post')}
+                    </button>
+                  </div>
+                </form>
+              )}
+              
+              {modalType === 'volume' && !selectedItem && (
+                <form className="add-form" onSubmit={handleFormSubmit}>
+                  <div className="form-group">
+                    <label>Title *</label>
+                    <input 
+                      type="text" 
+                      placeholder="Enter volume title" 
+                      value={formData.title || ''}
+                      onChange={(e) => handleFormChange('title', e.target.value)}
+                      required 
+                    />
+                  </div>
+                  <div className="form-group">
+                    <label>Description *</label>
+                    <textarea 
+                      rows="4" 
+                      placeholder="Enter volume description" 
+                      value={formData.description || ''}
+                      onChange={(e) => handleFormChange('description', e.target.value)}
+                      required
+                    ></textarea>
+                  </div>
+                  <div className="form-group">
+                    <label>Excerpt</label>
+                    <textarea 
+                      rows="2" 
+                      placeholder="Brief excerpt for preview"
+                      value={formData.excerpt || ''}
+                      onChange={(e) => handleFormChange('excerpt', e.target.value)}
+                    ></textarea>
+                  </div>
+                  <div className="form-group">
+                    <label>Category *</label>
+                    <select 
+                      value={formData.category || ''}
+                      onChange={(e) => handleFormChange('category', e.target.value)}
+                      required
+                    >
+                      <option value="">Select category</option>
+                      <option value="healing">Healing</option>
+                      <option value="empowerment">Empowerment</option>
+                      <option value="peace">Peace</option>
+                      <option value="gratitude">Gratitude</option>
+                      <option value="faith">Faith</option>
+                      <option value="devotions">Devotions</option>
+                    </select>
+                  </div>
+                  <div className="form-group">
+                    <label>Price *</label>
+                    <input 
+                      type="text" 
+                      placeholder="e.g., Free, $9.99, $19.99" 
+                      value={formData.price || ''}
+                      onChange={(e) => handleFormChange('price', e.target.value)}
+                      required 
+                    />
+                  </div>
+                  <div className="form-group">
+                    <label>Content</label>
+                    <textarea 
+                      rows="8" 
+                      placeholder="Enter volume content (optional)"
+                      value={formData.content || ''}
+                      onChange={(e) => handleFormChange('content', e.target.value)}
+                    ></textarea>
+                  </div>
+                  <div className="form-group">
+                    <label>Cover Image</label>
+                    <div className="file-upload-group">
+                      <input 
+                        type="file" 
+                        accept="image/*"
+                        onChange={(e) => e.target.files[0] && handleFileUpload(e.target.files[0], 'image')}
+                        disabled={uploadingFiles.image}
+                      />
+                      {uploadingFiles.image && <span className="upload-status">Uploading...</span>}
+                      {formData.image && (
+                        <div className="file-preview">
+                          <img src={formData.image} alt="Preview" className="image-preview" />
+                          <button type="button" onClick={() => handleFormChange('image', '')} className="remove-file">×</button>
+                        </div>
+                      )}
+                    </div>
+                  </div>
+                  <div className="form-group">
+                    <label>Download Link</label>
+                    <input 
+                      type="url" 
+                      placeholder="Enter download link (optional)"
+                      value={formData.download_link || ''}
+                      onChange={(e) => handleFormChange('download_link', e.target.value)}
+                    />
+                  </div>
+                  <div className="form-group">
+                    <label>Audio File</label>
+                    <div className="file-upload-group">
+                      <input 
+                        type="file" 
+                        accept="audio/*"
+                        onChange={(e) => e.target.files[0] && handleFileUpload(e.target.files[0], 'audio_url')}
+                        disabled={uploadingFiles.audio_url}
+                      />
+                      {uploadingFiles.audio_url && <span className="upload-status">Uploading...</span>}
+                      {formData.audio_url && (
+                        <div className="file-preview">
+                          <audio controls className="audio-preview">
+                            <source src={formData.audio_url} />
+                          </audio>
+                          <button type="button" onClick={() => handleFormChange('audio_url', '')} className="remove-file">×</button>
+                        </div>
+                      )}
+                    </div>
+                  </div>
+                  <div className="form-group">
+                    <label>Status</label>
+                    <select 
+                      value={formData.status || 'published'}
+                      onChange={(e) => handleFormChange('status', e.target.value)}
+                    >
+                      <option value="published">Published</option>
+                      <option value="draft">Draft</option>
+                      <option value="archived">Archived</option>
+                    </select>
+                  </div>
+                  <div className="form-actions">
+                    <button type="button" className="btn-secondary" onClick={closeModal}>Cancel</button>
+                    <button type="submit" className="btn-primary" disabled={loading}>
+                      {loading ? 'Creating...' : 'Create Volume'}
+                    </button>
+                  </div>
+                </form>
+              )}
+              
+              {modalType === 'prayer' && selectedItem && (
+                <div className="view-details">
+                  <div className="detail-group">
+                    <label>Name:</label>
+                    <p>{selectedItem.name || 'Anonymous'}</p>
+                  </div>
+                  <div className="detail-group">
+                    <label>Email:</label>
+                    <p>{selectedItem.email || 'Not provided'}</p>
+                  </div>
+                  <div className="detail-group">
+                    <label>Category:</label>
+                    <p>{selectedItem.category}</p>
+                  </div>
+                  <div className="detail-group">
+                    <label>Prayer Request:</label>
+                    <p>{selectedItem.message || selectedItem.prayer_text}</p>
+                  </div>
+                  <div className="detail-group">
+                    <label>Date:</label>
+                    <p>{new Date(selectedItem.created_at).toLocaleString()}</p>
+                  </div>
+                </div>
+              )}
+              
+              {modalType === 'blog' && selectedItem && !showAddModal && (
+                <div className="view-details">
+                  <div className="detail-group">
+                    <label>Title:</label>
+                    <p>{selectedItem.title}</p>
+                  </div>
+                  <div className="detail-group">
+                    <label>Category:</label>
+                    <p>{selectedItem.category}</p>
+                  </div>
+                  <div className="detail-group">
+                    <label>Status:</label>
+                    <p>{selectedItem.status}</p>
+                  </div>
+                  {selectedItem.excerpt && (
+                    <div className="detail-group">
+                      <label>Excerpt:</label>
+                      <p>{selectedItem.excerpt}</p>
+                    </div>
+                  )}
+                  <div className="detail-group">
+                    <label>Content:</label>
+                    <div className="blog-content-preview">
+                      {selectedItem.content}
+                    </div>
+                  </div>
+                  {selectedItem.image && (
+                    <div className="detail-group">
+                      <label>Image:</label>
+                      <img src={selectedItem.image} alt="Blog" className="blog-image-preview" />
+                    </div>
+                  )}
+                  {selectedItem.tags && (
+                    <div className="detail-group">
+                      <label>Tags:</label>
+                      <p>{selectedItem.tags}</p>
+                    </div>
+                  )}
+                  <div className="detail-group">
+                    <label>Created:</label>
+                    <p>{new Date(selectedItem.created_at).toLocaleString()}</p>
+                  </div>
+                </div>
+              )}
+              
+              {modalType === 'contact' && selectedItem && (
+                <div className="view-details">
+                  <div className="detail-group">
+                    <label>Name:</label>
+                    <p>{selectedItem.name}</p>
+                  </div>
+                  <div className="detail-group">
+                    <label>Email:</label>
+                    <p>{selectedItem.email}</p>
+                  </div>
+                  <div className="detail-group">
+                    <label>Subject:</label>
+                    <p>{selectedItem.subject}</p>
+                  </div>
+                  <div className="detail-group">
+                    <label>Message:</label>
+                    <p>{selectedItem.message}</p>
+                  </div>
+                  <div className="detail-group">
+                    <label>Date:</label>
+                    <p>{new Date(selectedItem.created_at).toLocaleString()}</p>
+                  </div>
+                </div>
+              )}
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 };

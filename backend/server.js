@@ -12,6 +12,7 @@ const prayerRoutes = require('./routes/prayers');
 const contactRoutes = require('./routes/contact');
 const subscriberRoutes = require('./routes/subscribers');
 const commentRoutes = require('./routes/comments');
+const uploadRoutes = require('./routes/upload');
 
 const app = express();
 const PORT = process.env.PORT || 5003;
@@ -69,6 +70,7 @@ app.use('/api/prayers', prayerRoutes);
 app.use('/api/contact', contactRoutes);
 app.use('/api/subscribers', subscriberRoutes);
 app.use('/api/comments', commentRoutes);
+app.use('/api/upload', uploadRoutes);
 
 // Health check
 app.get('/api/health', (req, res) => {

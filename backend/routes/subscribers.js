@@ -123,11 +123,12 @@ router.post('/unsubscribe', [
 router.get('/', verifyToken, async (req, res) => {
   try {
     const { status = 'active', page = 1, limit = 50 } = req.query;
-    const offset = (page - 1) * limit;
+    const limitNum = parseInt(limit);
+    const offsetNum = (parseInt(page) - 1) * limitNum;
 
     const [subscribers] = await db.execute(
-      'SELECT * FROM subscribers WHERE status = ? ORDER BY subscribed_at DESC LIMIT ? OFFSET ?',
-      [status, parseInt(limit), parseInt(offset)]
+      `SELECT * FROM subscribers WHERE status = ? ORDER BY subscribed_at DESC LIMIT ${limitNum} OFFSET ${offsetNum}`,
+      [status]
     );
 
     // Get total count
@@ -140,9 +141,9 @@ router.get('/', verifyToken, async (req, res) => {
       subscribers,
       pagination: {
         page: parseInt(page),
-        limit: parseInt(limit),
+        limit: limitNum,
         total: countResult[0].total,
-        pages: Math.ceil(countResult[0].total / limit)
+        pages: Math.ceil(countResult[0].total / limitNum)
       }
     });
   } catch (error) {
