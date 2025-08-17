@@ -45,7 +45,6 @@ const Home = () => {
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.8 }}
             >
-              <div className="hero-badge">Premium Poetry Collection</div>
               <h1>Welcome to Abbaswhispers</h1>
               <p>Poetry and reflective conversations inspired by faith. The SELAH series - writings born from a journey through grief into grace, inspired by the Psalms.</p>
               <div className="hero-actions">
