@@ -426,28 +426,20 @@ main {
   margin: 0 auto;
 }
 
-.volumes-hero-badge {
-  display: inline-block;
-  background: rgba(212, 175, 55, 0.2);
-  color: var(--primary-gold);
-  padding: 0.5rem 1rem;
-  border-radius: 20px;
-  font-size: 0.8rem;
-  font-weight: 500;
-  margin-bottom: 1rem;
-  border: 1px solid rgba(212, 175, 55, 0.3);
-}
+
 
 .volumes-hero h1 {
   font-size: 2.5rem;
   margin-bottom: 1rem;
   color: white;
+  text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
 }
 
 .volumes-hero p {
   font-size: 1rem;
   margin-bottom: 2rem;
-  opacity: 0.9;
+  color: white;
+  text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.5);
 }
 
 .volumes-stats {
@@ -470,7 +462,7 @@ main {
 
 .stat-label {
   font-size: 0.8rem;
-  opacity: 0.8;
+  color: white;
 }
 
 .volumes-filter {

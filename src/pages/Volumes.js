@@ -66,7 +66,6 @@ const Volumes = () => {
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.8 }}
           >
-            <div className="volumes-hero-badge">Premium Poetry Collection</div>
             <h1>The SELAH Series</h1>
             <p>A curated collection of inspirational poetry born from a journey through grief into grace. Each piece includes professional audio narration by the author.</p>
             <div className="volumes-stats">
