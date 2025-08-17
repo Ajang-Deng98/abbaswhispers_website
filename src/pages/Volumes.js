@@ -7,6 +7,7 @@ const Volumes = () => {
   const [volumes, setVolumes] = useState([]);
   const [selectedCategory, setSelectedCategory] = useState('all');
   const [selectedVolume, setSelectedVolume] = useState(null);
+  const [playingAudio, setPlayingAudio] = useState(null);
 
   useEffect(() => {
     loadVolumes();
@@ -154,18 +155,74 @@ const Volumes = () => {
                       className="btn-secondary audio-btn"
                       onClick={(e) => {
                         const audioUrl = volume.audio_url || volume.audioUrl;
-                        if (audioUrl) {
-                          const fullUrl = audioUrl.startsWith('http') ? audioUrl : `http://localhost:5003${audioUrl}`;
-                          window.open(fullUrl, '_blank');
-                        } else {
+                        if (!audioUrl) {
                           alert('No audio available for this volume.');
+                          return;
+                        }
+                        
+                        const audio = document.getElementById(`audio-${volume.id}`);
+                        const button = e.target;
+                        
+                        if (playingAudio && playingAudio !== volume.id) {
+                          // Stop other playing audio
+                          const otherAudio = document.getElementById(`audio-${playingAudio}`);
+                          if (otherAudio) {
+                            otherAudio.pause();
+                            otherAudio.currentTime = 0;
+                          }
+                          // Reset other button text
+                          const otherButton = document.querySelector(`[data-volume-id="${playingAudio}"]`);
+                          if (otherButton) otherButton.textContent = 'Listen';
+                        }
+                        
+                        if (audio) {
+                          if (audio.paused) {
+                            audio.play().then(() => {
+                              button.textContent = 'Pause';
+                              setPlayingAudio(volume.id);
+                            }).catch((error) => {
+                              console.error('Audio play error:', error);
+                              alert('Unable to play audio file.');
+                            });
+                          } else {
+                            audio.pause();
+                            audio.currentTime = 0;
+                            button.textContent = 'Listen';
+                            setPlayingAudio(null);
+                          }
                         }
                       }}
+                      data-volume-id={volume.id}
                     >
-                      Listen
+                      {playingAudio === volume.id ? 'Pause' : 'Listen'}
                     </button>
                   </div>
                 </div>
+                
+                {/* Hidden Audio Element */}
+                <audio 
+                  id={`audio-${volume.id}`}
+                  preload="none"
+                  onEnded={() => {
+                    const button = document.querySelector(`[data-volume-id="${volume.id}"]`);
+                    if (button) button.textContent = 'Listen';
+                    setPlayingAudio(null);
+                  }}
+                  onError={() => {
+                    const button = document.querySelector(`[data-volume-id="${volume.id}"]`);
+                    if (button) button.textContent = 'Listen';
+                    setPlayingAudio(null);
+                    alert('Error loading audio file.');
+                  }}
+                >
+                  <source 
+                    src={volume.audio_url ? 
+                      (volume.audio_url.startsWith('http') ? volume.audio_url : `http://localhost:5003${volume.audio_url}`) :
+                      (volume.audioUrl ? (volume.audioUrl.startsWith('http') ? volume.audioUrl : `http://localhost:5003${volume.audioUrl}`) : '')
+                    } 
+                    type="audio/mpeg" 
+                  />
+                </audio>
               </motion.div>
             ))}
           </div>
