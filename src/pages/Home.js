@@ -15,16 +15,13 @@ const Home = () => {
 
   const loadFeaturedContent = async () => {
     try {
-      // Load featured posts
       const postsResponse = await blogAPI.getAllPosts({ limit: 3 });
       setFeaturedPosts(postsResponse.data?.posts || postsResponse.data || []);
 
-      // Load featured volumes
       const volumesResponse = await volumeAPI.getAllVolumes({ limit: 3 });
       setFeaturedVolumes(volumesResponse.data || []);
     } catch (error) {
       console.error('Error loading featured content:', error);
-      // Fallback to empty arrays
       setFeaturedPosts([]);
       setFeaturedVolumes([]);
     }
@@ -39,92 +36,109 @@ const Home = () => {
       </Helmet>
 
       {/* Hero Section */}
-      <section className="hero">
+      <section className="home-hero">
+        <div className="container">
+          <div className="hero-content">
+            <motion.div
+              className="hero-text"
+              initial={{ opacity: 0, y: 50 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.8 }}
+            >
+              <div className="hero-badge">Premium Poetry Collection</div>
+              <h1>Welcome to Abbaswhispers</h1>
+              <p>Poetry and reflective conversations inspired by faith. The SELAH series - writings born from a journey through grief into grace, inspired by the Psalms.</p>
+              <div className="hero-actions">
+                <Link to="/volumes" className="btn-hero-primary">Explore Collections</Link>
+                <Link to="/about" className="btn-hero-secondary">Our Story</Link>
+              </div>
+            </motion.div>
+            
+            <motion.div
+              className="hero-stats"
+              initial={{ opacity: 0, scale: 0.9 }}
+              animate={{ opacity: 1, scale: 1 }}
+              transition={{ duration: 0.8, delay: 0.3 }}
+            >
+              <div className="stat-card">
+                <span className="stat-number">{featuredVolumes.length}+</span>
+                <span className="stat-label">Poetry Collections</span>
+              </div>
+              <div className="stat-card">
+                <span className="stat-number">{featuredPosts.length}+</span>
+                <span className="stat-label">Blog Posts</span>
+              </div>
+              <div className="stat-card">
+                <span className="stat-number">Audio</span>
+                <span className="stat-label">Narrations</span>
+              </div>
+            </motion.div>
+          </div>
+        </div>
+      </section>
+
+      {/* Featured Quote */}
+      <section className="home-quote">
         <div className="container">
           <motion.div
-            initial={{ opacity: 0, y: 50 }}
-            animate={{ opacity: 1, y: 0 }}
+            className="quote-content"
+            initial={{ opacity: 0, y: 30 }}
+            whileInView={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.8 }}
-            className="text-center"
+            viewport={{ once: true }}
           >
-            <img 
-              src="/logo.png" 
-              alt="Abbaswhispers Logo" 
-              style={{ 
-                height: '80px', 
-                width: 'auto', 
-                marginBottom: '1rem',
-                filter: 'drop-shadow(0 4px 8px rgba(0,0,0,0.1))'
-              }}
-            />
-            <h1>Welcome to Abbaswhispers</h1>
-            <p>
-              An online space for poetry and reflective conversations. Experience the SELAH series - 
-              writings born from a journey through grief into grace, inspired by the Psalms.
-            </p>
-            <Link to="/volumes" className="btn">Explore Our Volumes</Link>
-          </motion.div>
-
-          <motion.div
-            className="verse-highlight"
-            initial={{ opacity: 0, scale: 0.9 }}
-            animate={{ opacity: 1, scale: 1 }}
-            transition={{ duration: 0.8, delay: 0.3 }}
-          >
-            "The Lord is my shepherd; I shall not want. He makes me lie down in green pastures. 
-            He leads me beside still waters. He restores my soul."
-            <br />
-            <strong>- Psalm 23:1-3</strong>
+            <blockquote>
+              "The Lord is my shepherd; I shall not want. He makes me lie down in green pastures. He leads me beside still waters. He restores my soul."
+            </blockquote>
+            <cite>- Psalm 23:1-3</cite>
           </motion.div>
         </div>
       </section>
 
-      {/* Featured Volumes Section */}
-      <section className="section">
+      {/* Featured Collections */}
+      <section className="home-collections">
         <div className="container">
           <motion.div
-            className="text-center"
+            className="section-header"
             initial={{ opacity: 0, y: 30 }}
             whileInView={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.6 }}
             viewport={{ once: true }}
           >
-            <h2>Featured Volumes</h2>
-            <p>Inspirational collections that speak to the heart and soul</p>
+            <h2>Featured Collections</h2>
+            <p>Discover our most beloved poetry collections</p>
           </motion.div>
 
-          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))', gap: '2rem' }}>
+          <div className="collections-grid">
             {featuredVolumes.slice(0, 3).map((volume, index) => (
               <motion.div
                 key={volume.id}
-                className="card"
+                className="collection-card"
                 initial={{ opacity: 0, y: 30 }}
                 whileInView={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.6, delay: index * 0.2 }}
                 viewport={{ once: true }}
               >
-                {volume.image && (
-                  <img 
-                    src={volume.image.startsWith('http') ? volume.image : `http://localhost:5003${volume.image}`} 
-                    alt={volume.title}
-                    style={{ width: '100%', height: '200px', objectFit: 'cover', borderRadius: '5px', marginBottom: '1rem' }}
-                    onError={(e) => e.target.style.display = 'none'}
-                  />
-                )}
-                <h3>{volume.title}</h3>
-                <p>{volume.description}</p>
-                <Link to="/volumes" className="btn">Read More</Link>
+                <div className="collection-content">
+                  <h3>{volume.title}</h3>
+                  <p>{volume.description || 'A beautiful collection from the SELAH series exploring themes of faith and healing.'}</p>
+                  <Link to="/volumes" className="collection-link">Read Collection</Link>
+                </div>
               </motion.div>
             ))}
+          </div>
+
+          <div className="section-cta">
+            <Link to="/volumes" className="btn-section">View All Collections</Link>
           </div>
         </div>
       </section>
 
       {/* Latest Blog Posts */}
-      <section className="section" style={{ background: 'var(--cream)' }}>
+      <section className="home-blog">
         <div className="container">
           <motion.div
-            className="text-center"
+            className="section-header"
             initial={{ opacity: 0, y: 30 }}
             whileInView={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.6 }}
@@ -134,36 +148,30 @@ const Home = () => {
             <p>Fresh insights and reflections from our recent writings</p>
           </motion.div>
 
-          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))', gap: '2rem' }}>
+          <div className="blog-grid">
             {featuredPosts.slice(0, 3).map((post, index) => (
               <motion.div
                 key={post.id}
-                className="card"
+                className="blog-card"
                 initial={{ opacity: 0, y: 30 }}
                 whileInView={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.6, delay: index * 0.2 }}
                 viewport={{ once: true }}
               >
-                {post.image && (
-                  <img 
-                    src={post.image.startsWith('http') ? post.image : `http://localhost:5003${post.image}`} 
-                    alt={post.title}
-                    style={{ width: '100%', height: '200px', objectFit: 'cover', borderRadius: '5px', marginBottom: '1rem' }}
-                    onError={(e) => e.target.style.display = 'none'}
-                  />
-                )}
-                <h3>{post.title}</h3>
-                <p>{post.excerpt}</p>
-                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginTop: '1rem' }}>
-                  <span style={{ color: 'var(--text-light)', fontSize: '0.9rem' }}>{new Date(post.created_at).toLocaleDateString()}</span>
-                  <Link to={`/blog/${post.id}`} className="btn">Read More</Link>
+                <div className="blog-content">
+                  <h3>{post.title}</h3>
+                  <p>{post.excerpt || 'Discover insights and reflections on faith, healing, and spiritual growth.'}</p>
+                  <div className="blog-meta">
+                    <span className="blog-date">{new Date(post.created_at).toLocaleDateString()}</span>
+                    <Link to={`/blog/${post.id}`} className="blog-link">Read More</Link>
+                  </div>
                 </div>
               </motion.div>
             ))}
           </div>
 
-          <div className="text-center" style={{ marginTop: '3rem' }}>
-            <Link to="/blog" className="btn btn-secondary">View All Posts</Link>
+          <div className="section-cta">
+            <Link to="/blog" className="btn-section">View All Posts</Link>
           </div>
         </div>
       </section>
@@ -172,29 +180,27 @@ const Home = () => {
       <Testimonials />
 
       {/* Call to Action */}
-      <section className="section">
-        <div className="container text-center">
+      <section className="home-cta">
+        <div className="container">
           <motion.div
+            className="cta-content"
             initial={{ opacity: 0, y: 30 }}
             whileInView={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.6 }}
             viewport={{ once: true }}
           >
             <h2>Join Our Community of Faith</h2>
-            <p>
-              Subscribe to our Substack newsletter for weekly inspirations and be part of a community 
-              dedicated to spiritual growth and healing.
-            </p>
-            <div style={{ display: 'flex', gap: '1rem', justifyContent: 'center', marginTop: '2rem', flexWrap: 'wrap' }}>
+            <p>Subscribe to our newsletter for weekly inspirations and be part of a community dedicated to spiritual growth and healing.</p>
+            <div className="cta-actions">
               <a 
                 href="https://abbaswhispers.substack.com" 
                 target="_blank" 
                 rel="noopener noreferrer"
-                className="btn"
+                className="btn-cta-primary"
               >
-                Subscribe on Substack
+                Subscribe Newsletter
               </a>
-              <Link to="/prayer-request" className="btn btn-secondary">Submit Prayer Request</Link>
+              <Link to="/prayer-request" className="btn-cta-secondary">Submit Prayer Request</Link>
             </div>
           </motion.div>
         </div>
