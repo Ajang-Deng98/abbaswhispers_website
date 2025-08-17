@@ -29,7 +29,7 @@ main {
 
 .logo {
   font-family: 'Playfair Display', serif;
-  font-size: 1.8rem;
+  font-size: 1.4rem;
   font-weight: 700;
   color: var(--primary-gold);
   text-decoration: none;
@@ -79,7 +79,7 @@ main {
   display: none;
   background: none;
   border: none;
-  font-size: 1.5rem;
+  font-size: 1.2rem;
   cursor: pointer;
 }
 
@@ -104,7 +104,7 @@ main {
 }
 
 .hero h1 {
-  font-size: 3rem;
+  font-size: 2.2rem;
   color: var(--deep-blue);
   margin-bottom: 2rem;
   text-shadow: 2px 2px 4px rgba(0,0,0,0.1);
@@ -113,7 +113,7 @@ main {
 }
 
 .hero p {
-  font-size: 1.2rem;
+  font-size: 0.95rem;
   max-width: 600px;
   margin: 0 auto 2rem;
 }
@@ -126,7 +126,7 @@ main {
   max-width: 900px;
   box-shadow: 0 12px 35px var(--shadow-warm);
   font-style: italic;
-  font-size: 1.1rem;
+  font-size: 0.9rem;
   color: var(--deep-blue);
   border: 2px solid rgba(212, 175, 55, 0.2);
   backdrop-filter: blur(5px);
@@ -288,7 +288,7 @@ main {
   }
   
   .hero h1 {
-    font-size: 2.5rem;
+    font-size: 1.8rem;
   }
   
   .hero {
