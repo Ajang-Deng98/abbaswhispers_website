@@ -23,12 +23,17 @@ const Volumes = () => {
   };
 
   const categories = [
-    { value: 'all', label: 'All Collections', icon: '📚' },
-    { value: 'healing', label: 'Healing', icon: '🌿' },
-    { value: 'empowerment', label: 'Empowerment', icon: '✨' },
-    { value: 'worship', label: 'Worship', icon: '🙏' },
-    { value: 'faith', label: 'Faith', icon: '💫' }
+    { value: 'all', label: 'All Collections' },
+    { value: 'healing', label: 'Healing' },
+    { value: 'empowerment', label: 'Empowerment' },
+    { value: 'worship', label: 'Worship' },
+    { value: 'faith', label: 'Faith' }
   ];
+
+  const getCategoryCount = (categoryValue) => {
+    if (categoryValue === 'all') return volumes.length;
+    return volumes.filter(v => v.category === categoryValue).length;
+  };
 
   const filteredVolumes = selectedCategory === 'all' 
     ? volumes 
@@ -88,11 +93,8 @@ const Volumes = () => {
                   onClick={() => setSelectedCategory(category.value)}
                   className={`category-card ${selectedCategory === category.value ? 'active' : ''}`}
                 >
-                  <span className="category-icon">{category.icon}</span>
                   <span className="category-label">{category.label}</span>
-                  <span className="category-count">
-                    {category.value === 'all' ? volumes.length : volumes.filter(v => v.category === category.value).length}
-                  </span>
+                  <span className="category-count">{getCategoryCount(category.value)}</span>
                 </button>
               ))}
             </div>
@@ -117,13 +119,15 @@ const Volumes = () => {
                     <img 
                       src={volume.image.startsWith('http') ? volume.image : `http://localhost:5003${volume.image}`} 
                       alt={volume.title}
-                      onError={(e) => e.target.style.display = 'none'}
+                      onError={(e) => {
+                        e.target.style.display = 'none';
+                        e.target.nextSibling.style.display = 'flex';
+                      }}
                     />
-                  ) : (
-                    <div className="volume-placeholder">
-                      <span>📖</span>
-                    </div>
-                  )}
+                  ) : null}
+                  <div className="volume-placeholder" style={{ display: volume.image ? 'none' : 'flex' }}>
+                    <span>No Image</span>
+                  </div>
                   <div className="volume-overlay">
                     <button className="preview-btn" onClick={() => setSelectedVolume(volume)}>
                       Preview
@@ -149,10 +153,16 @@ const Volumes = () => {
                     <button 
                       className="btn-secondary audio-btn"
                       onClick={(e) => {
-                        // Audio functionality here
+                        const audioUrl = volume.audio_url || volume.audioUrl;
+                        if (audioUrl) {
+                          const fullUrl = audioUrl.startsWith('http') ? audioUrl : `http://localhost:5003${audioUrl}`;
+                          window.open(fullUrl, '_blank');
+                        } else {
+                          alert('No audio available for this volume.');
+                        }
                       }}
                     >
-                      🎵 Listen
+                      Listen
                     </button>
                   </div>
                 </div>

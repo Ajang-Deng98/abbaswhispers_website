@@ -514,11 +514,7 @@ main {
   color: white;
 }
 
-.category-icon {
-  font-size: 1.5rem;
-  display: block;
-  margin-bottom: 0.5rem;
-}
+
 
 .category-label {
   display: block;
@@ -577,8 +573,9 @@ main {
   display: flex;
   align-items: center;
   justify-content: center;
-  font-size: 3rem;
-  color: var(--primary-gold);
+  font-size: 0.9rem;
+  color: var(--text-light);
+  font-weight: 500;
 }
 
 .volume-overlay {
