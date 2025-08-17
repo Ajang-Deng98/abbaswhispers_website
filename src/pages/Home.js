@@ -33,7 +33,7 @@ const Home = () => {
   return (
     <>
       <Helmet>
-        <title>Abba Whispers - Healing Through Faith | Christian Inspirational Writings</title>
+        <title>Abbaswhispers - Healing Through Faith | Christian Inspirational Writings</title>
         <meta name="description" content="Find healing and empowerment through Christian writings inspired by the Book of Psalms. Join our community of faith and discover peace through God's word." />
         <meta name="keywords" content="Christian faith, Psalms, healing, inspiration, spiritual growth, Bible study" />
       </Helmet>
@@ -49,7 +49,7 @@ const Home = () => {
           >
             <img 
               src="/logo.png" 
-              alt="Abba Whispers Logo" 
+              alt="Abbaswhispers Logo" 
               style={{ 
                 height: '80px', 
                 width: 'auto', 
@@ -57,7 +57,7 @@ const Home = () => {
                 filter: 'drop-shadow(0 4px 8px rgba(0,0,0,0.1))'
               }}
             />
-            <h1>Welcome to Abba Whispers</h1>
+            <h1>Welcome to Abbaswhispers</h1>
             <p>
               An online space for poetry and reflective conversations. Experience the SELAH series - 
               writings born from a journey through grief into grace, inspired by the Psalms.
@@ -187,7 +187,7 @@ const Home = () => {
             </p>
             <div style={{ display: 'flex', gap: '1rem', justifyContent: 'center', marginTop: '2rem', flexWrap: 'wrap' }}>
               <a 
-                href="https://abbawhispers.substack.com" 
+                href="https://abbaswhispers.substack.com" 
                 target="_blank" 
                 rel="noopener noreferrer"
                 className="btn"

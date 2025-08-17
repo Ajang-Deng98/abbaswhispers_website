@@ -6,8 +6,8 @@ const About = () => {
   return (
     <>
       <Helmet>
-        <title>About Uzo - Abba Whispers | From Grief to Grace Through Poetry</title>
-        <meta name="description" content="Meet Uzo, founder of Abba Whispers and creator of the SELAH poetry series. A journey from devastating loss to finding purpose through faith and reflective writing." />
+        <title>About Uzo - Abbaswhispers | From Grief to Grace Through Poetry</title>
+        <meta name="description" content="Meet Uzo, founder of Abbaswhispers and creator of the SELAH poetry series. A journey from devastating loss to finding purpose through faith and reflective writing." />
       </Helmet>
 
       <section className="section">
@@ -18,7 +18,7 @@ const About = () => {
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.8 }}
           >
-            <h1>About Abba Whispers</h1>
+            <h1>About Abbaswhispers</h1>
             <p style={{ fontSize: '1.2rem', maxWidth: '800px', margin: '0 auto' }}>
               An online space for poetry and reflective conversations, born from a journey 
               through grief into grace.
@@ -103,7 +103,7 @@ const About = () => {
                     }}>
                       <img 
                         src="/aboutimage.jpg" 
-                        alt="Uzo - Founder of Abba Whispers"
+                        alt="Uzo - Founder of Abbaswhispers"
                         style={{ 
                           width: '100%',
                           height: '100%',
@@ -211,7 +211,7 @@ const About = () => {
             >
               <h2>Meet Uzo</h2>
               <p>
-                My name is Uzo and I am the founder of Abba's Whispers: an online space for 
+                My name is Uzo and I am the founder of Abbaswhispers: an online space for 
                 poetry and reflective conversations. I am also a mum, a singer-songwriter and 
                 Dean of a school in South Africa called the African Leadership Academy.
               </p>

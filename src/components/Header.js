@@ -22,10 +22,10 @@ const Header = () => {
           <Link to="/" className="logo" style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
             <img 
               src="/logo.png" 
-              alt="Abba Whispers Logo" 
+              alt="Abbaswhispers Logo" 
               style={{ height: '40px', width: 'auto' }}
             />
-            <span>Abba Whispers</span>
+            <span>Abbaswhispers</span>
           </Link>
           
           <nav className={`nav ${isMenuOpen ? 'nav-open' : ''}`}>

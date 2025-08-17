@@ -49,8 +49,8 @@ const PrayerRequest = () => {
   return (
     <>
       <Helmet>
-        <title>Prayer Request - Abba Whispers | Submit Your Prayer Needs</title>
-        <meta name="description" content="Submit your prayer requests to Abba Whispers. Our prayer team is committed to lifting up your needs in prayer. All requests are kept confidential." />
+        <title>Prayer Request - Abbaswhispers | Submit Your Prayer Needs</title>
+        <meta name="description" content="Submit your prayer requests to Abbaswhispers. Our prayer team is committed to lifting up your needs in prayer. All requests are kept confidential." />
       </Helmet>
 
       <section className="section">
@@ -308,7 +308,7 @@ const PrayerRequest = () => {
                 <p>
                   For urgent prayer requests, you can also call our prayer line at 
                   <strong> +1 (555) PRAY-NOW</strong> or email us directly at 
-                  <strong> urgent@abbawhispers.com</strong>
+                  <strong> urgent@abbaswhispers.com</strong>
                 </p>
               </div>
             </motion.div>

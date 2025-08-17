@@ -39,8 +39,8 @@ const Contact = () => {
   return (
     <>
       <Helmet>
-        <title>Contact Us - Abba Whispers | Get in Touch</title>
-        <meta name="description" content="Contact Abba Whispers for questions, prayer requests, or to learn more about our Christian writings inspired by the Psalms. We'd love to hear from you." />
+        <title>Contact Us - Abbaswhispers | Get in Touch</title>
+        <meta name="description" content="Contact Abbaswhispers for questions, prayer requests, or to learn more about our Christian writings inspired by the Psalms. We'd love to hear from you." />
       </Helmet>
 
       <section className="section">
@@ -248,8 +248,8 @@ const Contact = () => {
                 
                 <div style={{ marginBottom: '1.5rem', padding: '1rem', backgroundColor: 'var(--warm-cream)', borderRadius: '8px' }}>
                   <h3 style={{ color: 'var(--primary-gold)', marginBottom: '0.5rem', fontSize: '1rem' }}>Email</h3>
-                  <p style={{ margin: '0.25rem 0', fontSize: '0.95rem' }}>info@abbawhispers.com</p>
-                  <p style={{ margin: '0.25rem 0', fontSize: '0.95rem' }}>prayer@abbawhispers.com</p>
+                  <p style={{ margin: '0.25rem 0', fontSize: '0.95rem' }}>info@abbaswhispers.com</p>
+                  <p style={{ margin: '0.25rem 0', fontSize: '0.95rem' }}>prayer@abbaswhispers.com</p>
                 </div>
 
                 <div style={{ marginBottom: '1.5rem', padding: '1rem', backgroundColor: 'var(--warm-cream)', borderRadius: '8px' }}>
@@ -263,7 +263,7 @@ const Contact = () => {
                 <div style={{ marginBottom: '1.5rem', padding: '1rem', backgroundColor: 'var(--warm-cream)', borderRadius: '8px' }}>
                   <h3 style={{ color: 'var(--primary-gold)', marginBottom: '0.5rem', fontSize: '1rem' }}>Social Media</h3>
                   <div style={{ display: 'flex', gap: '0.75rem' }}>
-                    <a href="https://facebook.com/abbawhispers" target="_blank" rel="noopener noreferrer" style={{ 
+                    <a href="https://facebook.com/abbaswhispers" target="_blank" rel="noopener noreferrer" style={{ 
                       display: 'inline-block',
                       padding: '8px 12px',
                       background: '#1877F2',
@@ -276,7 +276,7 @@ const Contact = () => {
                       marginRight: '8px',
                       marginBottom: '8px'
                     }} onMouseEnter={(e) => e.target.style.transform = 'scale(1.05)'} onMouseLeave={(e) => e.target.style.transform = 'scale(1)'}>Facebook</a>
-                    <a href="https://twitter.com/abbawhispers" target="_blank" rel="noopener noreferrer" style={{ 
+                    <a href="https://twitter.com/abbaswhispers" target="_blank" rel="noopener noreferrer" style={{ 
                       display: 'inline-block',
                       padding: '8px 12px',
                       background: '#1DA1F2',
@@ -289,7 +289,7 @@ const Contact = () => {
                       marginRight: '8px',
                       marginBottom: '8px'
                     }} onMouseEnter={(e) => e.target.style.transform = 'scale(1.05)'} onMouseLeave={(e) => e.target.style.transform = 'scale(1)'}>Twitter</a>
-                    <a href="https://instagram.com/abbawhispers" target="_blank" rel="noopener noreferrer" style={{ 
+                    <a href="https://instagram.com/abbaswhispers" target="_blank" rel="noopener noreferrer" style={{ 
                       display: 'inline-block',
                       padding: '8px 12px',
                       background: 'linear-gradient(45deg, #F56040, #E1306C, #C13584)',
@@ -302,7 +302,7 @@ const Contact = () => {
                       marginRight: '8px',
                       marginBottom: '8px'
                     }} onMouseEnter={(e) => e.target.style.transform = 'scale(1.05)'} onMouseLeave={(e) => e.target.style.transform = 'scale(1)'}>Instagram</a>
-                    <a href="https://youtube.com/@abbawhispers" target="_blank" rel="noopener noreferrer" style={{ 
+                    <a href="https://youtube.com/@abbaswhispers" target="_blank" rel="noopener noreferrer" style={{ 
                       display: 'inline-block',
                       padding: '8px 12px',
                       background: '#FF0000',

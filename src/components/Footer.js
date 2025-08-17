@@ -33,17 +33,17 @@ const Footer = () => {
             <div style={{ display: 'flex', alignItems: 'center', gap: '10px', marginBottom: '1rem' }}>
               <img 
                 src="/logo.png" 
-                alt="Abba Whispers Logo" 
+                alt="Abbaswhispers Logo" 
                 style={{ height: '30px', width: 'auto' }}
               />
-              <h3 style={{ margin: 0 }}>Abba Whispers</h3>
+              <h3 style={{ margin: 0 }}>Abbaswhispers</h3>
             </div>
             <p>An online space for poetry and reflective conversations. The SELAH series - a journey from grief to grace.</p>
             <div className="social-links">
-              <a href="https://facebook.com/abbawhispers" target="_blank" rel="noopener noreferrer" aria-label="Facebook">Facebook</a>
-              <a href="https://twitter.com/abbawhispers" target="_blank" rel="noopener noreferrer" aria-label="Twitter">Twitter</a>
-              <a href="https://instagram.com/abbawhispers" target="_blank" rel="noopener noreferrer" aria-label="Instagram">Instagram</a>
-              <a href="https://youtube.com/@abbawhispers" target="_blank" rel="noopener noreferrer" aria-label="YouTube">YouTube</a>
+              <a href="https://facebook.com/abbaswhispers" target="_blank" rel="noopener noreferrer" aria-label="Facebook">Facebook</a>
+              <a href="https://twitter.com/abbaswhispers" target="_blank" rel="noopener noreferrer" aria-label="Twitter">Twitter</a>
+              <a href="https://instagram.com/abbaswhispers" target="_blank" rel="noopener noreferrer" aria-label="Instagram">Instagram</a>
+              <a href="https://youtube.com/@abbaswhispers" target="_blank" rel="noopener noreferrer" aria-label="YouTube">YouTube</a>
             </div>
           </div>
           
@@ -58,7 +58,7 @@ const Footer = () => {
           <div>
             <h3>Support</h3>
             <Link to="/prayer-request">Prayer Request</Link>
-            <a href="mailto:info@abbawhispers.com">Email Us</a>
+            <a href="mailto:info@abbaswhispers.com">Email Us</a>
             <a href="tel:+1234567890">Call Us</a>
           </div>
           
@@ -97,7 +97,7 @@ const Footer = () => {
         </div>
         
         <div className="footer-bottom">
-          <p>&copy; 2024 Abba Whispers. All rights reserved. | Privacy Policy | Terms of Service</p>
+          <p>&copy; 2024 Abbaswhispers. All rights reserved. | Privacy Policy | Terms of Service</p>
         </div>
       </div>
     </footer>
