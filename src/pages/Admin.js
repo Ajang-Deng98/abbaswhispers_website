@@ -213,11 +213,15 @@ const Admin = () => {
         <div className="login-container">
           <div className="login-card">
             <div className="login-header">
-              <div className="brand-logo">
-                <img src="/logo.png" alt="Abbaswhispers" className="logo-image" />
+              <div className="login-brand">
+                <div className="login-logo">
+                  <div className="logo-circle">
+                    <span className="logo-text">AW</span>
+                  </div>
+                </div>
                 <h1>Abbaswhispers</h1>
+                <p>Admin Dashboard</p>
               </div>
-              <p>Content Management System</p>
             </div>
             <form onSubmit={handleLogin} className="login-form">
               <div className="input-group">
@@ -262,9 +266,15 @@ const Admin = () => {
       <div className="admin-topbar">
         <div className="topbar-left">
           <div className="brand">
-            <img src="/logo.png" alt="Abbaswhispers" className="brand-logo-img" />
-            <span className="brand-name">Abbaswhispers</span>
-            <span className="brand-subtitle">CMS</span>
+            <div className="brand-logo">
+              <div className="brand-logo-circle">
+                <span className="brand-logo-text">AW</span>
+              </div>
+            </div>
+            <div className="brand-info">
+              <span className="brand-name">Abbaswhispers</span>
+              <span className="brand-subtitle">Admin Panel</span>
+            </div>
           </div>
         </div>
         <div className="topbar-right">
