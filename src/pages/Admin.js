@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { Helmet } from 'react-helmet';
 import { blogAPI, volumeAPI, prayerAPI, contactAPI, subscriberAPI } from '../utils/api';
 import '../styles/Admin.css';
+import '../styles/Admin.css';
 
 const Admin = () => {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
@@ -41,14 +42,11 @@ const Admin = () => {
         subscriberAPI.getAll().catch(() => ({ data: [] }))
       ]);
       
-      const blogsData = Array.isArray(blogsRes.data?.posts) ? blogsRes.data.posts : 
-                       Array.isArray(blogsRes.data) ? blogsRes.data : [];
+      const blogsData = Array.isArray(blogsRes.data) ? blogsRes.data : [];
       const volumesData = Array.isArray(volumesRes.data) ? volumesRes.data : [];
-      const prayersData = Array.isArray(prayersRes.data?.requests) ? prayersRes.data.requests : 
-                         Array.isArray(prayersRes.data) ? prayersRes.data : [];
+      const prayersData = Array.isArray(prayersRes.data) ? prayersRes.data : [];
       const contactsData = Array.isArray(contactsRes.data) ? contactsRes.data : [];
-      const subscribersData = Array.isArray(subscribersRes.data?.subscribers) ? subscribersRes.data.subscribers : 
-                             Array.isArray(subscribersRes.data) ? subscribersRes.data : [];
+      const subscribersData = Array.isArray(subscribersRes.data) ? subscribersRes.data : [];
       
       setBlogs(blogsData);
       setVolumes(volumesData);
@@ -146,14 +144,26 @@ const Admin = () => {
           await blogAPI.createPost(formData);
         }
       } else if (modalType === 'volume') {
-        await volumeAPI.createVolume(formData);
+        const volumeData = {
+          title: formData.title,
+          description: formData.description,
+          excerpt: formData.excerpt || '',
+          category: formData.category,
+          price: formData.price,
+          content: formData.content || '',
+          image: formData.image || '',
+          downloadLink: formData.download_link || '',
+          audioUrl: formData.audio_url || '',
+          status: formData.status || 'published'
+        };
+        await volumeAPI.createVolume(volumeData);
       }
       closeModal();
       loadDashboardData();
       alert(`${modalType === 'blog' ? 'Blog post' : 'Volume'} ${selectedItem ? 'updated' : 'created'} successfully!`);
     } catch (error) {
       console.error('Form submission error:', error);
-      alert('Error saving content. Please try again.');
+      alert(`Error: ${error.response?.data?.message || error.message}`);
     } finally {
       setLoading(false);
     }
@@ -548,11 +558,11 @@ const Admin = () => {
                       </tr>
                     </thead>
                     <tbody>
-                      {Array.isArray(blogs) && blogs.slice(0, 10).map(blog => (
+                      {Array.isArray(blogs) && blogs.length > 0 ? blogs.slice(0, 10).map(blog => (
                         <tr key={blog.id}>
                           <td className="title-cell">{blog.title}</td>
                           <td className="date-cell">{new Date(blog.created_at).toLocaleDateString()}</td>
-                          <td><span className="status-badge published">Published</span></td>
+                          <td><span className={`status-badge ${blog.status || 'published'}`}>{(blog.status || 'published').charAt(0).toUpperCase() + (blog.status || 'published').slice(1)}</span></td>
                           <td className="actions-cell">
                             <button className="icon-btn view" onClick={() => viewItem(blog, 'blog')}>
                               <svg width="16" height="16" viewBox="0 0 24 24" fill="none">
@@ -574,7 +584,11 @@ const Admin = () => {
                             </button>
                           </td>
                         </tr>
-                      ))}
+                      )) : (
+                        <tr>
+                          <td colSpan="4" className="no-data">No blog posts found</td>
+                        </tr>
+                      )}
                     </tbody>
                   </table>
                 </div>
@@ -606,12 +620,18 @@ const Admin = () => {
                       </tr>
                     </thead>
                     <tbody>
-                      {Array.isArray(volumes) && volumes.slice(0, 10).map(volume => (
+                      {Array.isArray(volumes) && volumes.length > 0 ? volumes.slice(0, 10).map(volume => (
                         <tr key={volume.id}>
                           <td className="title-cell">{volume.title}</td>
                           <td className="category-cell">{volume.category || 'General'}</td>
                           <td className="date-cell">{new Date(volume.created_at || Date.now()).toLocaleDateString()}</td>
                           <td className="actions-cell">
+                            <button className="icon-btn view" onClick={() => viewItem(volume, 'volume')}>
+                              <svg width="16" height="16" viewBox="0 0 24 24" fill="none">
+                                <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z" stroke="currentColor" strokeWidth="2"/>
+                                <circle cx="12" cy="12" r="3" stroke="currentColor" strokeWidth="2"/>
+                              </svg>
+                            </button>
                             <button className="icon-btn edit">
                               <svg width="16" height="16" viewBox="0 0 24 24" fill="none">
                                 <path d="M11 4H4a2 2 0 00-2 2v14a2 2 0 002 2h14a2 2 0 002-2v-7" stroke="currentColor" strokeWidth="2"/>
@@ -626,7 +646,11 @@ const Admin = () => {
                             </button>
                           </td>
                         </tr>
-                      ))}
+                      )) : (
+                        <tr>
+                          <td colSpan="4" className="no-data">No volumes found</td>
+                        </tr>
+                      )}
                     </tbody>
                   </table>
                 </div>
@@ -653,7 +677,7 @@ const Admin = () => {
                       </tr>
                     </thead>
                     <tbody>
-                      {Array.isArray(prayers) && prayers.slice(0, 10).map(prayer => (
+                      {Array.isArray(prayers) && prayers.length > 0 ? prayers.slice(0, 10).map(prayer => (
                         <tr key={prayer.id}>
                           <td className="name-cell">{prayer.name || 'Anonymous'}</td>
                           <td className="category-cell">{prayer.category}</td>
@@ -674,7 +698,11 @@ const Admin = () => {
                             </button>
                           </td>
                         </tr>
-                      ))}
+                      )) : (
+                        <tr>
+                          <td colSpan="5" className="no-data">No prayer requests found</td>
+                        </tr>
+                      )}
                     </tbody>
                   </table>
                 </div>
@@ -701,7 +729,7 @@ const Admin = () => {
                       </tr>
                     </thead>
                     <tbody>
-                      {Array.isArray(contacts) && contacts.slice(0, 10).map(contact => (
+                      {Array.isArray(contacts) && contacts.length > 0 ? contacts.slice(0, 10).map(contact => (
                         <tr key={contact.id}>
                           <td className="name-cell">{contact.name}</td>
                           <td className="email-cell">{contact.email}</td>
@@ -722,7 +750,11 @@ const Admin = () => {
                             </button>
                           </td>
                         </tr>
-                      ))}
+                      )) : (
+                        <tr>
+                          <td colSpan="5" className="no-data">No contact messages found</td>
+                        </tr>
+                      )}
                     </tbody>
                   </table>
                 </div>
@@ -755,7 +787,7 @@ const Admin = () => {
                       </tr>
                     </thead>
                     <tbody>
-                      {Array.isArray(subscribers) && subscribers.slice(0, 10).map(subscriber => (
+                      {Array.isArray(subscribers) && subscribers.length > 0 ? subscribers.slice(0, 10).map(subscriber => (
                         <tr key={subscriber.id}>
                           <td className="email-cell">{subscriber.email}</td>
                           <td className="date-cell">{new Date(subscriber.created_at).toLocaleDateString()}</td>
@@ -769,7 +801,11 @@ const Admin = () => {
                             </button>
                           </td>
                         </tr>
-                      ))}
+                      )) : (
+                        <tr>
+                          <td colSpan="4" className="no-data">No subscribers found</td>
+                        </tr>
+                      )}
                     </tbody>
                   </table>
                 </div>
@@ -1023,6 +1059,67 @@ const Admin = () => {
                     </button>
                   </div>
                 </form>
+              )}
+              
+              {modalType === 'volume' && selectedItem && (
+                <div className="view-details">
+                  <div className="detail-group">
+                    <label>Title:</label>
+                    <p>{selectedItem.title}</p>
+                  </div>
+                  <div className="detail-group">
+                    <label>Category:</label>
+                    <p>{selectedItem.category}</p>
+                  </div>
+                  <div className="detail-group">
+                    <label>Price:</label>
+                    <p>{selectedItem.price}</p>
+                  </div>
+                  {selectedItem.description && (
+                    <div className="detail-group">
+                      <label>Description:</label>
+                      <p>{selectedItem.description}</p>
+                    </div>
+                  )}
+                  {selectedItem.excerpt && (
+                    <div className="detail-group">
+                      <label>Excerpt:</label>
+                      <p>{selectedItem.excerpt}</p>
+                    </div>
+                  )}
+                  {selectedItem.content && (
+                    <div className="detail-group">
+                      <label>Content:</label>
+                      <div className="blog-content-preview">
+                        {selectedItem.content}
+                      </div>
+                    </div>
+                  )}
+                  {selectedItem.image && (
+                    <div className="detail-group">
+                      <label>Cover Image:</label>
+                      <img src={selectedItem.image} alt="Volume" className="blog-image-preview" />
+                    </div>
+                  )}
+                  {selectedItem.audio_url && (
+                    <div className="detail-group">
+                      <label>Audio:</label>
+                      <audio controls className="audio-preview">
+                        <source src={selectedItem.audio_url} />
+                      </audio>
+                    </div>
+                  )}
+                  {selectedItem.download_link && (
+                    <div className="detail-group">
+                      <label>Download Link:</label>
+                      <p><a href={selectedItem.download_link} target="_blank" rel="noopener noreferrer">{selectedItem.download_link}</a></p>
+                    </div>
+                  )}
+                  <div className="detail-group">
+                    <label>Created:</label>
+                    <p>{new Date(selectedItem.created_at).toLocaleString()}</p>
+                  </div>
+                </div>
               )}
               
               {modalType === 'prayer' && selectedItem && (
