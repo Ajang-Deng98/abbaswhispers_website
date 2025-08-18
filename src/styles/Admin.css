@@ -749,6 +749,21 @@
   max-width: 300px;
 }
 
+.volume-audio-player {
+  width: 100%;
+  max-width: 500px;
+  height: 54px;
+  border-radius: 8px;
+  background: #f8fafc;
+  border: 1px solid var(--admin-border);
+  outline: none;
+}
+
+.volume-audio-player:focus {
+  border-color: var(--admin-primary);
+  box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.1);
+}
+
 .remove-file {
   position: absolute;
   top: -8px;

@@ -1115,8 +1115,11 @@ const Admin = () => {
                   {selectedItem.audio_url && (
                     <div className="detail-group">
                       <label>Audio:</label>
-                      <audio controls className="audio-preview">
-                        <source src={selectedItem.audio_url} />
+                      <audio controls className="volume-audio-player" preload="metadata">
+                        <source src={selectedItem.audio_url} type="audio/mpeg" />
+                        <source src={selectedItem.audio_url} type="audio/wav" />
+                        <source src={selectedItem.audio_url} type="audio/ogg" />
+                        Your browser does not support the audio element.
                       </audio>
                     </div>
                   )}
