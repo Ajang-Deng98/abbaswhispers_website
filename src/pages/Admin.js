@@ -36,7 +36,7 @@ const Admin = () => {
     try {
       const [blogsRes, volumesRes, prayersRes, contactsRes, subscribersRes] = await Promise.all([
         blogAPI.getAllPosts().catch(() => ({ data: [] })),
-        volumeAPI.getAllVolumes().catch(() => ({ data: [] })),
+        volumeAPI.getAdminVolumes().catch(() => ({ data: [] })),
         prayerAPI.getAllRequests().catch(() => ({ data: [] })),
         contactAPI.getAllContacts().catch(() => ({ data: [] })),
         subscriberAPI.getAll().catch(() => ({ data: [] }))
@@ -77,7 +77,9 @@ const Admin = () => {
   const handleLogin = async (e) => {
     e.preventDefault();
     if (loginData.username === 'admin' && loginData.password === 'password123') {
-      localStorage.setItem('adminToken', 'admin-token');
+      // Generate a proper JWT-like token for testing
+      const token = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOjEsInVzZXJuYW1lIjoiYWRtaW4iLCJpYXQiOjE2MzQ1NjcwMDB9.test';
+      localStorage.setItem('adminToken', token);
       setIsAuthenticated(true);
       loadDashboardData();
     } else {
@@ -114,7 +116,7 @@ const Admin = () => {
       const formData = new FormData();
       formData.append('file', file);
       
-      const response = await fetch(`${process.env.REACT_APP_API_URL || 'http://localhost:5003/api'}/upload`, {
+      const response = await fetch(`${process.env.REACT_APP_API_URL || 'http://localhost:5003'}/api/upload`, {
         method: 'POST',
         headers: {
           'Authorization': `Bearer ${localStorage.getItem('adminToken')}`
@@ -223,12 +225,15 @@ const Admin = () => {
   const deleteVolume = async (volumeId) => {
     if (window.confirm('Are you sure you want to delete this volume?')) {
       try {
-        await volumeAPI.deleteVolume(volumeId);
+        console.log('Deleting volume with ID:', volumeId);
+        const response = await volumeAPI.deleteVolume(volumeId);
+        console.log('Delete response:', response);
         loadDashboardData();
         alert('Volume deleted successfully!');
       } catch (error) {
         console.error('Delete error:', error);
-        alert('Error deleting volume. Please try again.');
+        console.error('Error response:', error.response?.data);
+        alert(`Error deleting volume: ${error.response?.data?.message || error.message}`);
       }
     }
   };
@@ -1000,7 +1005,7 @@ const Admin = () => {
                 </form>
               )}
               
-              {modalType === 'volume' && (!selectedItem || formData.title) && (
+              {modalType === 'volume' && (formData.title || !selectedItem) && (
                 <form className="add-form" onSubmit={handleFormSubmit}>
                   <div className="form-group">
                     <label>Title *</label>
@@ -1127,7 +1132,7 @@ const Admin = () => {
                   <div className="form-actions">
                     <button type="button" className="btn-secondary" onClick={closeModal}>Cancel</button>
                     <button type="submit" className="btn-primary" disabled={loading}>
-                      {loading ? 'Creating...' : 'Create Volume'}
+                      {loading ? (selectedItem ? 'Updating...' : 'Creating...') : (selectedItem ? 'Update Volume' : 'Create Volume')}
                     </button>
                   </div>
                 </form>
@@ -1177,8 +1182,8 @@ const Admin = () => {
                     <div className="detail-group">
                       <label>Audio:</label>
                       <audio controls className="volume-audio-player" preload="metadata" controlsList="nodownload">
-                        <source src={`${process.env.REACT_APP_API_URL || 'http://localhost:5003'}${selectedItem.audio_url}`} type="audio/mpeg" />
-                        <source src={`${process.env.REACT_APP_API_URL || 'http://localhost:5003'}${selectedItem.audio_url}`} type="audio/wav" />
+                        <source src={selectedItem.audio_url.startsWith('http') ? selectedItem.audio_url : `${process.env.REACT_APP_API_URL || 'http://localhost:5003'}${selectedItem.audio_url}`} type="audio/mpeg" />
+                        <source src={selectedItem.audio_url.startsWith('http') ? selectedItem.audio_url : `${process.env.REACT_APP_API_URL || 'http://localhost:5003'}${selectedItem.audio_url}`} type="audio/wav" />
                         Your browser does not support the audio element.
                       </audio>
                     </div>
