@@ -157,7 +157,11 @@ const Admin = () => {
           audioUrl: formData.audio_url || '',
           status: formData.status || 'published'
         };
-        await volumeAPI.createVolume(volumeData);
+        if (selectedItem) {
+          await volumeAPI.updateVolume(selectedItem.id, volumeData);
+        } else {
+          await volumeAPI.createVolume(volumeData);
+        }
       }
       closeModal();
       loadDashboardData();
@@ -194,6 +198,63 @@ const Admin = () => {
       } catch (error) {
         console.error('Delete error:', error);
         alert('Error deleting blog post. Please try again.');
+      }
+    }
+  };
+
+  const editVolume = (volume) => {
+    setSelectedItem(volume);
+    setFormData({
+      title: volume.title || '',
+      description: volume.description || '',
+      excerpt: volume.excerpt || '',
+      category: volume.category || '',
+      price: volume.price || '',
+      content: volume.content || '',
+      image: volume.image || '',
+      download_link: volume.download_link || '',
+      audio_url: volume.audio_url || '',
+      status: volume.status || 'published'
+    });
+    setModalType('volume');
+    setShowAddModal(true);
+  };
+
+  const deleteVolume = async (volumeId) => {
+    if (window.confirm('Are you sure you want to delete this volume?')) {
+      try {
+        await volumeAPI.deleteVolume(volumeId);
+        loadDashboardData();
+        alert('Volume deleted successfully!');
+      } catch (error) {
+        console.error('Delete error:', error);
+        alert('Error deleting volume. Please try again.');
+      }
+    }
+  };
+
+  const deleteContact = async (contactId) => {
+    if (window.confirm('Are you sure you want to delete this contact message?')) {
+      try {
+        await contactAPI.deleteContact(contactId);
+        loadDashboardData();
+        alert('Contact message deleted successfully!');
+      } catch (error) {
+        console.error('Delete error:', error);
+        alert('Error deleting contact message. Please try again.');
+      }
+    }
+  };
+
+  const deletePrayer = async (prayerId) => {
+    if (window.confirm('Are you sure you want to delete this prayer request?')) {
+      try {
+        await prayerAPI.deleteRequest(prayerId);
+        loadDashboardData();
+        alert('Prayer request deleted successfully!');
+      } catch (error) {
+        console.error('Delete error:', error);
+        alert('Error deleting prayer request. Please try again.');
       }
     }
   };
@@ -643,13 +704,13 @@ const Admin = () => {
                                 <circle cx="12" cy="12" r="3" stroke="currentColor" strokeWidth="2"/>
                               </svg>
                             </button>
-                            <button className="icon-btn edit">
+                            <button className="icon-btn edit" onClick={() => editVolume(volume)}>
                               <svg width="16" height="16" viewBox="0 0 24 24" fill="none">
                                 <path d="M11 4H4a2 2 0 00-2 2v14a2 2 0 002 2h14a2 2 0 002-2v-7" stroke="currentColor" strokeWidth="2"/>
                                 <path d="M18.5 2.5a2.121 2.121 0 013 3L12 15l-4 1 1-4 9.5-9.5z" stroke="currentColor" strokeWidth="2"/>
                               </svg>
                             </button>
-                            <button className="icon-btn delete">
+                            <button className="icon-btn delete" onClick={() => deleteVolume(volume.id)}>
                               <svg width="16" height="16" viewBox="0 0 24 24" fill="none">
                                 <polyline points="3,6 5,6 21,6" stroke="currentColor" strokeWidth="2"/>
                                 <path d="M19 6v14a2 2 0 01-2 2H7a2 2 0 01-2-2V6M8 6V4a2 2 0 012-2h4a2 2 0 012 2v2" stroke="currentColor" strokeWidth="2"/>
@@ -701,7 +762,7 @@ const Admin = () => {
                                 <circle cx="12" cy="12" r="3" stroke="currentColor" strokeWidth="2"/>
                               </svg>
                             </button>
-                            <button className="icon-btn edit">
+                            <button className="icon-btn edit" onClick={() => alert('Prayer status update coming soon')}>
                               <svg width="16" height="16" viewBox="0 0 24 24" fill="none">
                                 <path d="M11 4H4a2 2 0 00-2 2v14a2 2 0 002 2h14a2 2 0 002-2v-7" stroke="currentColor" strokeWidth="2"/>
                                 <path d="M18.5 2.5a2.121 2.121 0 013 3L12 15l-4 1 1-4 9.5-9.5z" stroke="currentColor" strokeWidth="2"/>
@@ -753,7 +814,7 @@ const Admin = () => {
                                 <circle cx="12" cy="12" r="3" stroke="currentColor" strokeWidth="2"/>
                               </svg>
                             </button>
-                            <button className="icon-btn delete">
+                            <button className="icon-btn delete" onClick={() => deleteContact(contact.id)}>
                               <svg width="16" height="16" viewBox="0 0 24 24" fill="none">
                                 <polyline points="3,6 5,6 21,6" stroke="currentColor" strokeWidth="2"/>
                                 <path d="M19 6v14a2 2 0 01-2 2H7a2 2 0 01-2-2V6M8 6V4a2 2 0 012-2h4a2 2 0 012 2v2" stroke="currentColor" strokeWidth="2"/>
@@ -834,7 +895,7 @@ const Admin = () => {
               <h2>
                 {modalType === 'blog' && selectedItem && !formData.title ? 'View Blog Post' : ''}
                 {modalType === 'blog' && (selectedItem && formData.title ? 'Edit Blog Post' : (!selectedItem ? 'Add New Blog Post' : ''))}
-                {modalType === 'volume' && 'Add New Volume'}
+                {modalType === 'volume' && (selectedItem && formData.title ? 'Edit Volume' : 'Add New Volume')}
                 {modalType === 'prayer' && 'Prayer Request Details'}
                 {modalType === 'contact' && 'Contact Message Details'}
               </h2>
@@ -939,7 +1000,7 @@ const Admin = () => {
                 </form>
               )}
               
-              {modalType === 'volume' && !selectedItem && (
+              {modalType === 'volume' && (!selectedItem || formData.title) && (
                 <form className="add-form" onSubmit={handleFormSubmit}>
                   <div className="form-group">
                     <label>Title *</label>
@@ -1115,10 +1176,9 @@ const Admin = () => {
                   {selectedItem.audio_url && (
                     <div className="detail-group">
                       <label>Audio:</label>
-                      <audio controls className="volume-audio-player" preload="metadata">
-                        <source src={selectedItem.audio_url} type="audio/mpeg" />
-                        <source src={selectedItem.audio_url} type="audio/wav" />
-                        <source src={selectedItem.audio_url} type="audio/ogg" />
+                      <audio controls className="volume-audio-player" preload="metadata" controlsList="nodownload">
+                        <source src={`${process.env.REACT_APP_API_URL || 'http://localhost:5003'}${selectedItem.audio_url}`} type="audio/mpeg" />
+                        <source src={`${process.env.REACT_APP_API_URL || 'http://localhost:5003'}${selectedItem.audio_url}`} type="audio/wav" />
                         Your browser does not support the audio element.
                       </audio>
                     </div>
