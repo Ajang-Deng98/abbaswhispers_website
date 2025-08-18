@@ -849,6 +849,20 @@
   line-height: 1.6;
 }
 
+.content-preview {
+  background: #f8fafc;
+  padding: 1.5rem;
+  border-radius: 8px;
+  border: 1px solid var(--admin-border);
+  max-height: 400px;
+  overflow-y: auto;
+  line-height: 1.8;
+  white-space: pre-line;
+  font-family: 'Georgia', serif;
+  color: var(--admin-text);
+  font-size: 0.95rem;
+}
+
 .blog-image-preview {
   max-width: 100%;
   height: auto;

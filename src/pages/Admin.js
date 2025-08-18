@@ -1101,8 +1101,8 @@ const Admin = () => {
                   {selectedItem.content && (
                     <div className="detail-group">
                       <label>Content:</label>
-                      <div className="blog-content-preview">
-                        {selectedItem.content}
+                      <div className="content-preview">
+                        {selectedItem.content.replace(/<[^>]*>/g, '').replace(/&nbsp;/g, ' ').trim()}
                       </div>
                     </div>
                   )}
@@ -1153,8 +1153,8 @@ const Admin = () => {
                   </div>
                   <div className="detail-group">
                     <label>Prayer Request:</label>
-                    <div className="blog-content-preview">
-                      {selectedItem.request || selectedItem.message || selectedItem.prayer_text}
+                    <div className="content-preview">
+                      {(selectedItem.request || selectedItem.message || selectedItem.prayer_text || '').replace(/<[^>]*>/g, '').replace(/&nbsp;/g, ' ').trim()}
                     </div>
                   </div>
                   {selectedItem.is_anonymous && (
@@ -1210,8 +1210,8 @@ const Admin = () => {
                   )}
                   <div className="detail-group">
                     <label>Content:</label>
-                    <div className="blog-content-preview">
-                      {selectedItem.content}
+                    <div className="content-preview">
+                      {selectedItem.content.replace(/<[^>]*>/g, '').replace(/&nbsp;/g, ' ').trim()}
                     </div>
                   </div>
                   {selectedItem.image && (
