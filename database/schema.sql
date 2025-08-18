@@ -162,6 +162,68 @@ INSERT INTO volumes (title, description, excerpt, category, price) VALUES
     '$9.99'
 );
 
+-- Insert sample prayer requests
+INSERT INTO prayer_requests (name, email, category, request, is_anonymous, allow_sharing, status) VALUES 
+(
+    'Sarah Johnson',
+    'sarah@example.com',
+    'healing',
+    'Please pray for my mother who is battling cancer. She starts chemotherapy next week and we are trusting God for complete healing.',
+    FALSE,
+    TRUE,
+    'praying'
+),
+(
+    'Anonymous',
+    NULL,
+    'financial',
+    'I lost my job last month and struggling to pay bills. Please pray for God to provide a new opportunity and for peace during this difficult time.',
+    TRUE,
+    FALSE,
+    'new'
+),
+(
+    'Michael Chen',
+    'michael.chen@example.com',
+    'family',
+    'My teenage son has been struggling with depression. Please pray for his healing and for wisdom as we navigate this journey together.',
+    FALSE,
+    TRUE,
+    'praying'
+),
+(
+    'Anonymous',
+    NULL,
+    'guidance',
+    'I am at a crossroads in my career and need God\'s direction. Please pray for clarity and wisdom in making this important decision.',
+    TRUE,
+    FALSE,
+    'new'
+);
+
+-- Insert sample contact messages
+INSERT INTO contact_messages (name, email, subject, message, status) VALUES 
+(
+    'Jennifer Smith',
+    'jennifer@example.com',
+    'Thank you for your ministry',
+    'I wanted to reach out and thank you for the beautiful writings. They have brought so much comfort during my difficult season.',
+    'new'
+),
+(
+    'David Wilson',
+    'david.wilson@example.com',
+    'Question about volumes',
+    'I am interested in purchasing your complete collection. Do you offer any bundle discounts?',
+    'new'
+);
+
+-- Insert sample subscribers
+INSERT INTO subscribers (email, name, status) VALUES 
+('subscriber1@example.com', 'Mary Johnson', 'active'),
+('subscriber2@example.com', 'John Smith', 'active'),
+('subscriber3@example.com', 'Lisa Brown', 'active');
+
 -- Insert default site settings
 INSERT INTO site_settings (setting_key, setting_value) VALUES 
 ('site_title', 'Abba Whispers'),

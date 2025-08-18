@@ -44,7 +44,8 @@ const Admin = () => {
       
       const blogsData = Array.isArray(blogsRes.data) ? blogsRes.data : [];
       const volumesData = Array.isArray(volumesRes.data) ? volumesRes.data : [];
-      const prayersData = Array.isArray(prayersRes.data) ? prayersRes.data : [];
+      const prayersData = Array.isArray(prayersRes.data?.requests) ? prayersRes.data.requests : 
+                         Array.isArray(prayersRes.data) ? prayersRes.data : [];
       const contactsData = Array.isArray(contactsRes.data) ? contactsRes.data : [];
       const subscribersData = Array.isArray(subscribersRes.data) ? subscribersRes.data : [];
       
@@ -1071,7 +1072,7 @@ const Admin = () => {
                 </form>
               )}
               
-              {modalType === 'volume' && selectedItem && (
+              {modalType === 'volume' && selectedItem && !formData.title && (
                 <div className="view-details">
                   <div className="detail-group">
                     <label>Title:</label>
@@ -1147,13 +1148,43 @@ const Admin = () => {
                     <p>{selectedItem.category}</p>
                   </div>
                   <div className="detail-group">
-                    <label>Prayer Request:</label>
-                    <p>{selectedItem.message || selectedItem.prayer_text}</p>
+                    <label>Status:</label>
+                    <p><span className={`status-badge ${selectedItem.status || 'new'}`}>{(selectedItem.status || 'new').charAt(0).toUpperCase() + (selectedItem.status || 'new').slice(1)}</span></p>
                   </div>
                   <div className="detail-group">
-                    <label>Date:</label>
+                    <label>Prayer Request:</label>
+                    <div className="blog-content-preview">
+                      {selectedItem.request || selectedItem.message || selectedItem.prayer_text}
+                    </div>
+                  </div>
+                  {selectedItem.is_anonymous && (
+                    <div className="detail-group">
+                      <label>Anonymous Request:</label>
+                      <p>Yes</p>
+                    </div>
+                  )}
+                  {selectedItem.allow_sharing && (
+                    <div className="detail-group">
+                      <label>Allow Sharing:</label>
+                      <p>Yes</p>
+                    </div>
+                  )}
+                  {selectedItem.notes && (
+                    <div className="detail-group">
+                      <label>Admin Notes:</label>
+                      <p>{selectedItem.notes}</p>
+                    </div>
+                  )}
+                  <div className="detail-group">
+                    <label>Submitted:</label>
                     <p>{new Date(selectedItem.created_at).toLocaleString()}</p>
                   </div>
+                  {selectedItem.updated_at && selectedItem.updated_at !== selectedItem.created_at && (
+                    <div className="detail-group">
+                      <label>Last Updated:</label>
+                      <p>{new Date(selectedItem.updated_at).toLocaleString()}</p>
+                    </div>
+                  )}
                 </div>
               )}
               
