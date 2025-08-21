@@ -423,11 +423,9 @@ const Admin = () => {
           <div className="content-area">
             {activeTab === 'dashboard' && (
               <div className="dashboard-view">
-                <div className="page-header">
-                  <div>
-                    <h1>Dashboard</h1>
-                    <p>Manage your content</p>
-                  </div>
+                <div className="welcome-header">
+                  <h1>Welcome to Abba Whispers Admin</h1>
+                  <p>Manage your spiritual content and connect with your community</p>
                 </div>
 
                 <div className="stats-overview">
