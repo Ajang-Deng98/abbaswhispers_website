@@ -423,27 +423,94 @@ const Admin = () => {
           <div className="content-area">
             {activeTab === 'dashboard' && (
               <div className="dashboard-view">
-                <div className="page-header">
-                  <div>
-                    <h1>Dashboard Overview</h1>
-                    <p>Manage your content and monitor activity</p>
-                  </div>
-                  <div className="refresh-indicator">
-                    {loading && (
-                      <div className="loading-spinner">
-                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none">
-                          <path d="M12 2v4M12 18v4M4.93 4.93l2.83 2.83M16.24 16.24l2.83 2.83M2 12h4M18 12h4M4.93 19.07l2.83-2.83M16.24 7.76l2.83-2.83" stroke="currentColor" strokeWidth="2" strokeLinecap="round"/>
-                        </svg>
-                        <span>Updating...</span>
-                      </div>
-                    )}
-                    <button className="refresh-btn" onClick={loadDashboardData} disabled={loading}>
-                      <svg width="16" height="16" viewBox="0 0 24 24" fill="none">
-                        <path d="M1 4v6h6M23 20v-6h-6" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
-                        <path d="M20.49 9A9 9 0 005.64 5.64L1 10m22 4l-4.64 4.36A9 9 0 013.51 15" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+                <div className="welcome-section">
+                  <div className="welcome-card">
+                    <div className="welcome-content">
+                      <h2>Welcome to Abba Whispers Admin</h2>
+                      <p>Manage your spiritual content and connect with your community</p>
+                    </div>
+                    <div className="welcome-icon">
+                      <svg width="48" height="48" viewBox="0 0 24 24" fill="none">
+                        <path d="M12 2L2 7l10 5 10-5-10-5z" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+                        <path d="M2 17l10 5 10-5" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+                        <path d="M2 12l10 5 10-5" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
                       </svg>
-                      Refresh
-                    </button>
+                    </div>
+                  </div>
+                </div>
+
+                <div className="stats-overview">
+                  <h3>Content Overview</h3>
+                  <div className="stats-grid">
+                    <div className="stat-card blog-card">
+                      <div className="stat-header">
+                        <div className="stat-icon">
+                          <svg width="20" height="20" viewBox="0 0 24 24" fill="none">
+                            <path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z" stroke="currentColor" strokeWidth="2"/>
+                            <polyline points="14,2 14,8 20,8" stroke="currentColor" strokeWidth="2"/>
+                          </svg>
+                        </div>
+                        <span className="stat-label">Blog Posts</span>
+                      </div>
+                      <div className="stat-number">{stats.blogs}</div>
+                      <div className="stat-action">
+                        <button onClick={() => openAddModal('blog')} className="stat-btn">
+                          Create New Post
+                        </button>
+                      </div>
+                    </div>
+
+                    <div className="stat-card volume-card">
+                      <div className="stat-header">
+                        <div className="stat-icon">
+                          <svg width="20" height="20" viewBox="0 0 24 24" fill="none">
+                            <path d="M4 19.5A2.5 2.5 0 016.5 17H20" stroke="currentColor" strokeWidth="2"/>
+                            <path d="M6.5 2H20v20H6.5A2.5 2.5 0 014 19.5v-15A2.5 2.5 0 016.5 2z" stroke="currentColor" strokeWidth="2"/>
+                          </svg>
+                        </div>
+                        <span className="stat-label">Volumes</span>
+                      </div>
+                      <div className="stat-number">{stats.volumes}</div>
+                      <div className="stat-action">
+                        <button onClick={() => openAddModal('volume')} className="stat-btn">
+                          Add New Volume
+                        </button>
+                      </div>
+                    </div>
+
+                    <div className="stat-card prayer-card">
+                      <div className="stat-header">
+                        <div className="stat-icon">
+                          <svg width="20" height="20" viewBox="0 0 24 24" fill="none">
+                            <path d="M20 6L9 17l-5-5" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+                          </svg>
+                        </div>
+                        <span className="stat-label">Prayer Requests</span>
+                      </div>
+                      <div className="stat-number">{stats.prayers}</div>
+                      <div className="stat-action">
+                        <button onClick={() => setActiveTab('prayers')} className="stat-btn">
+                          View Requests
+                        </button>
+                      </div>
+                    </div>
+
+                    <div className="stat-card contact-card">
+                      <div className="stat-header">
+                        <div className="stat-icon">
+                          <svg width="20" height="20" viewBox="0 0 24 24" fill="none">
+                            <path d="M22 16.92v3a2 2 0 01-2.18 2 19.79 19.79 0 01-8.63-3.07 19.5 19.5 0 01-6-6 19.79 19.79 0 01-3.07-8.67A2 2 0 014.11 2h3a2 2 0 012 1.72 12.84 12.84 0 00.7 2.81 2 2 0 01-.45 2.11L8.09 9.91a16 16 0 006 6l1.27-1.27a2 2 0 012.11-.45 12.84 12.84 0 002.81.7A2 2 0 0122 16.92z" stroke="currentColor" strokeWidth="2"/>
+                          </svg>
+                        </div>
+                        <span className="stat-label">Messages</span>
+                      </div>
+                      <div className="stat-number">{stats.contacts}</div>
+                      <div className="stat-action">
+                        <button onClick={() => setActiveTab('contacts')} className="stat-btn">
+                          View Messages
+                        </button>
+                      </div>
+                    </div>
                   </div>
                 </div>
                 
