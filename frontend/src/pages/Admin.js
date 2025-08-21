@@ -2,7 +2,6 @@ import React, { useState, useEffect } from 'react';
 import { Helmet } from 'react-helmet';
 import { blogAPI, volumeAPI, prayerAPI, contactAPI, subscriberAPI } from '../utils/api';
 import '../styles/Admin.css';
-import '../styles/Admin.css';
 
 const Admin = () => {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
@@ -414,16 +413,7 @@ const Admin = () => {
               </svg>
               <span>Contacts</span>
             </button>
-            <button 
-              className={`nav-item ${activeTab === 'subscribers' ? 'active' : ''}`}
-              onClick={() => setActiveTab('subscribers')}
-            >
-              <svg width="20" height="20" viewBox="0 0 24 24" fill="none">
-                <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z" stroke="currentColor" strokeWidth="2"/>
-                <polyline points="22,6 12,13 2,6" stroke="currentColor" strokeWidth="2"/>
-              </svg>
-              <span>Subscribers</span>
-            </button>
+
           </nav>
         </div>
 
@@ -504,67 +494,13 @@ const Admin = () => {
                       </svg>
                     </div>
                   </div>
-                  <div className="stat-card">
-                    <div className="stat-content">
-                      <div className="stat-number">{stats.subscribers}</div>
-                      <div className="stat-label">Newsletter Subscribers</div>
-                    </div>
-                    <div className="stat-icon subscriber">
-                      <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
-                        <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z" stroke="currentColor" strokeWidth="2"/>
-                        <polyline points="22,6 12,13 2,6" stroke="currentColor" strokeWidth="2"/>
-                      </svg>
-                    </div>
-                  </div>
+
                 </div>
 
-                <div className="activity-section">
-                  <div className="section-header-with-data">
-                    <h2>Recent Activity</h2>
-                    <span className="last-updated">Last updated: {new Date().toLocaleTimeString()}</span>
-                  </div>
-                  <div className="recent-data-grid">
-                    <div className="recent-card">
-                      <h3>Latest Blog Posts</h3>
-                      <div className="recent-items">
-                        {blogs.slice(0, 3).map(blog => (
-                          <div key={blog.id} className="recent-item">
-                            <span className="item-title">{blog.title}</span>
-                            <span className="item-date">{new Date(blog.created_at).toLocaleDateString()}</span>
-                          </div>
-                        ))}
-                        {blogs.length === 0 && <p className="no-data">No blog posts yet</p>}
-                      </div>
-                    </div>
-                    <div className="recent-card">
-                      <h3>Recent Prayer Requests</h3>
-                      <div className="recent-items">
-                        {prayers.slice(0, 3).map(prayer => (
-                          <div key={prayer.id} className="recent-item">
-                            <span className="item-title">{prayer.name || 'Anonymous'} - {prayer.category}</span>
-                            <span className="item-date">{new Date(prayer.created_at).toLocaleDateString()}</span>
-                          </div>
-                        ))}
-                        {prayers.length === 0 && <p className="no-data">No prayer requests yet</p>}
-                      </div>
-                    </div>
-                    <div className="recent-card">
-                      <h3>New Contacts</h3>
-                      <div className="recent-items">
-                        {contacts.slice(0, 3).map(contact => (
-                          <div key={contact.id} className="recent-item">
-                            <span className="item-title">{contact.name}</span>
-                            <span className="item-date">{new Date(contact.created_at).toLocaleDateString()}</span>
-                          </div>
-                        ))}
-                        {contacts.length === 0 && <p className="no-data">No contacts yet</p>}
-                      </div>
-                    </div>
-                  </div>
-                  
+                <div className="quick-actions-section">
                   <h2>Quick Actions</h2>
                   <div className="quick-actions">
-                    <button className="action-card" onClick={() => setActiveTab('blogs')}>
+                    <button className="action-card" onClick={() => openAddModal('blog')}>
                       <div className="action-icon">
                         <svg width="20" height="20" viewBox="0 0 24 24" fill="none">
                           <path d="M12 5v14M5 12h14" stroke="currentColor" strokeWidth="2" strokeLinecap="round"/>
@@ -572,7 +508,7 @@ const Admin = () => {
                       </div>
                       <span>New Blog Post</span>
                     </button>
-                    <button className="action-card" onClick={() => setActiveTab('volumes')}>
+                    <button className="action-card" onClick={() => openAddModal('volume')}>
                       <div className="action-icon">
                         <svg width="20" height="20" viewBox="0 0 24 24" fill="none">
                           <path d="M12 5v14M5 12h14" stroke="currentColor" strokeWidth="2" strokeLinecap="round"/>
@@ -583,7 +519,8 @@ const Admin = () => {
                     <button className="action-card" onClick={() => setActiveTab('prayers')}>
                       <div className="action-icon">
                         <svg width="20" height="20" viewBox="0 0 24 24" fill="none">
-                          <path d="M15 3h4a2 2 0 012 2v14a2 2 0 01-2 2h-4M10 17l5-5-5-5M21 12H9" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+                          <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z" stroke="currentColor" strokeWidth="2"/>
+                          <circle cx="12" cy="12" r="3" stroke="currentColor" strokeWidth="2"/>
                         </svg>
                       </div>
                       <span>View Prayers</span>
@@ -595,15 +532,6 @@ const Admin = () => {
                         </svg>
                       </div>
                       <span>View Contacts</span>
-                    </button>
-                    <button className="action-card" onClick={() => setActiveTab('subscribers')}>
-                      <div className="action-icon">
-                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none">
-                          <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z" stroke="currentColor" strokeWidth="2"/>
-                          <polyline points="22,6 12,13 2,6" stroke="currentColor" strokeWidth="2"/>
-                        </svg>
-                      </div>
-                      <span>Manage Subscribers</span>
                     </button>
                   </div>
                 </div>
@@ -838,56 +766,7 @@ const Admin = () => {
               </div>
             )}
 
-            {activeTab === 'subscribers' && (
-              <div className="content-view">
-                <div className="page-header">
-                  <div>
-                    <h1>Newsletter Subscribers</h1>
-                    <p>Manage your newsletter subscriber list</p>
-                  </div>
-                  <button className="primary-btn">
-                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none">
-                      <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z" stroke="currentColor" strokeWidth="2"/>
-                      <polyline points="22,6 12,13 2,6" stroke="currentColor" strokeWidth="2"/>
-                    </svg>
-                    Send Newsletter
-                  </button>
-                </div>
-                <div className="data-table">
-                  <table>
-                    <thead>
-                      <tr>
-                        <th>Email</th>
-                        <th>Subscribed Date</th>
-                        <th>Status</th>
-                        <th>Actions</th>
-                      </tr>
-                    </thead>
-                    <tbody>
-                      {Array.isArray(subscribers) && subscribers.length > 0 ? subscribers.slice(0, 10).map(subscriber => (
-                        <tr key={subscriber.id}>
-                          <td className="email-cell">{subscriber.email}</td>
-                          <td className="date-cell">{new Date(subscriber.created_at).toLocaleDateString()}</td>
-                          <td><span className="status-badge published">Active</span></td>
-                          <td className="actions-cell">
-                            <button className="icon-btn delete">
-                              <svg width="16" height="16" viewBox="0 0 24 24" fill="none">
-                                <polyline points="3,6 5,6 21,6" stroke="currentColor" strokeWidth="2"/>
-                                <path d="M19 6v14a2 2 0 01-2 2H7a2 2 0 01-2-2V6M8 6V4a2 2 0 012-2h4a2 2 0 012 2v2" stroke="currentColor" strokeWidth="2"/>
-                              </svg>
-                            </button>
-                          </td>
-                        </tr>
-                      )) : (
-                        <tr>
-                          <td colSpan="4" className="no-data">No subscribers found</td>
-                        </tr>
-                      )}
-                    </tbody>
-                  </table>
-                </div>
-              </div>
-            )}
+
           </div>
         </div>
       </div>
@@ -1256,7 +1135,7 @@ const Admin = () => {
                 </div>
               )}
               
-              {modalType === 'blog' && selectedItem && !showAddModal && (
+              {modalType === 'blog' && selectedItem && !formData.title && (
                 <div className="view-details">
                   <div className="detail-group">
                     <label>Title:</label>
@@ -1268,7 +1147,7 @@ const Admin = () => {
                   </div>
                   <div className="detail-group">
                     <label>Status:</label>
-                    <p>{selectedItem.status}</p>
+                    <p><span className={`status-badge ${selectedItem.status || 'published'}`}>{(selectedItem.status || 'published').charAt(0).toUpperCase() + (selectedItem.status || 'published').slice(1)}</span></p>
                   </div>
                   {selectedItem.excerpt && (
                     <div className="detail-group">
