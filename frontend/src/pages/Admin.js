@@ -423,24 +423,14 @@ const Admin = () => {
           <div className="content-area">
             {activeTab === 'dashboard' && (
               <div className="dashboard-view">
-                <div className="welcome-section">
-                  <div className="welcome-card">
-                    <div className="welcome-content">
-                      <h2>Welcome to Abba Whispers Admin</h2>
-                      <p>Manage your spiritual content and connect with your community</p>
-                    </div>
-                    <div className="welcome-icon">
-                      <svg width="48" height="48" viewBox="0 0 24 24" fill="none">
-                        <path d="M12 2L2 7l10 5 10-5-10-5z" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
-                        <path d="M2 17l10 5 10-5" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
-                        <path d="M2 12l10 5 10-5" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
-                      </svg>
-                    </div>
+                <div className="page-header">
+                  <div>
+                    <h1>Dashboard</h1>
+                    <p>Manage your content</p>
                   </div>
                 </div>
 
                 <div className="stats-overview">
-                  <h3>Content Overview</h3>
                   <div className="stats-grid">
                     <div className="stat-card blog-card">
                       <div className="stat-header">
@@ -514,55 +504,7 @@ const Admin = () => {
                   </div>
                 </div>
                 
-                <div className={`stats-grid ${loading ? 'loading' : ''}`}>
-                  <div className="stat-card">
-                    <div className="stat-content">
-                      <div className="stat-number">{stats.blogs}</div>
-                      <div className="stat-label">Blog Posts</div>
-                    </div>
-                    <div className="stat-icon blog">
-                      <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
-                        <path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z" stroke="currentColor" strokeWidth="2"/>
-                        <polyline points="14,2 14,8 20,8" stroke="currentColor" strokeWidth="2"/>
-                      </svg>
-                    </div>
-                  </div>
-                  <div className="stat-card">
-                    <div className="stat-content">
-                      <div className="stat-number">{stats.volumes}</div>
-                      <div className="stat-label">Volumes</div>
-                    </div>
-                    <div className="stat-icon volume">
-                      <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
-                        <path d="M4 19.5A2.5 2.5 0 016.5 17H20" stroke="currentColor" strokeWidth="2"/>
-                        <path d="M6.5 2H20v20H6.5A2.5 2.5 0 014 19.5v-15A2.5 2.5 0 016.5 2z" stroke="currentColor" strokeWidth="2"/>
-                      </svg>
-                    </div>
-                  </div>
-                  <div className="stat-card">
-                    <div className="stat-content">
-                      <div className="stat-number">{stats.prayers}</div>
-                      <div className="stat-label">Prayer Requests</div>
-                    </div>
-                    <div className="stat-icon prayer">
-                      <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
-                        <path d="M20 6L9 17l-5-5" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
-                      </svg>
-                    </div>
-                  </div>
-                  <div className="stat-card">
-                    <div className="stat-content">
-                      <div className="stat-number">{stats.contacts}</div>
-                      <div className="stat-label">Contact Messages</div>
-                    </div>
-                    <div className="stat-icon contact">
-                      <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
-                        <path d="M22 16.92v3a2 2 0 01-2.18 2 19.79 19.79 0 01-8.63-3.07 19.5 19.5 0 01-6-6 19.79 19.79 0 01-3.07-8.67A2 2 0 014.11 2h3a2 2 0 012 1.72 12.84 12.84 0 00.7 2.81 2 2 0 01-.45 2.11L8.09 9.91a16 16 0 006 6l1.27-1.27a2 2 0 012.11-.45 12.84 12.84 0 002.81.7A2 2 0 0122 16.92z" stroke="currentColor" strokeWidth="2"/>
-                      </svg>
-                    </div>
-                  </div>
 
-                </div>
 
                 <div className="quick-actions-section">
                   <h2>Quick Actions</h2>
