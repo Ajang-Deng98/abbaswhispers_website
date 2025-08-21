@@ -744,7 +744,10 @@ main {
 
 /* Home Page Professional Design */
 .home-hero {
-  background: linear-gradient(135deg, var(--deep-blue) 0%, var(--warm-brown) 100%);
+  background: linear-gradient(135deg, rgba(44, 62, 80, 0.8) 0%, rgba(139, 115, 85, 0.8) 100%), url('../herobackgroundimage.jpg');
+  background-size: cover;
+  background-position: center;
+  background-attachment: fixed;
   color: white;
   padding: 5rem 0;
   position: relative;

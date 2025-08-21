@@ -90,7 +90,7 @@ const Footer = () => {
         
         <div className="footer-bottom">
           <div className="footer-bottom-content">
-            <p>&copy; 2024 Abbaswhispers. All rights reserved.</p>
+            <p>&copy; 2025 Abbaswhispers. All rights reserved.</p>
             <div className="footer-legal">
               <a href="/privacy">Privacy Policy</a>
               <a href="/terms">Terms of Service</a>
