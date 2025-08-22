@@ -22,8 +22,17 @@ const Home = () => {
       setFeaturedVolumes(volumesResponse.data || []);
     } catch (error) {
       console.error('Error loading featured content:', error);
-      setFeaturedPosts([]);
-      setFeaturedVolumes([]);
+      // Set fallback data
+      setFeaturedPosts([
+        { id: 1, title: 'Finding Peace in Psalms', excerpt: 'Discover how the ancient words of David can bring comfort to modern hearts.', created_at: new Date() },
+        { id: 2, title: 'Grace in Grief', excerpt: 'A journey through loss and the healing power of faith.', created_at: new Date() },
+        { id: 3, title: 'Selah Moments', excerpt: 'Pausing to reflect on God\'s goodness in our daily lives.', created_at: new Date() }
+      ]);
+      setFeaturedVolumes([
+        { id: 1, title: 'SELAH Volume I', description: 'Poetry born from grief, transformed by grace.' },
+        { id: 2, title: 'SELAH Volume II', description: 'Continuing the journey of faith and healing.' },
+        { id: 3, title: 'SELAH Volume III', description: 'Finding hope in the darkest valleys.' }
+      ]);
     }
   };
 
@@ -60,11 +69,11 @@ const Home = () => {
               transition={{ duration: 0.8, delay: 0.3 }}
             >
               <div className="stat-card">
-                <span className="stat-number">{featuredVolumes.length}+</span>
+                <span className="stat-number">3+</span>
                 <span className="stat-label">Poetry Collections</span>
               </div>
               <div className="stat-card">
-                <span className="stat-number">{featuredPosts.length}+</span>
+                <span className="stat-number">15+</span>
                 <span className="stat-label">Blog Posts</span>
               </div>
               <div className="stat-card">
