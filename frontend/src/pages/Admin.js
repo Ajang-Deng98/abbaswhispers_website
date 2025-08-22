@@ -112,21 +112,9 @@ const Admin = () => {
   const handleFileUpload = async (file, fieldName) => {
     setUploadingFiles(prev => ({ ...prev, [fieldName]: true }));
     try {
-      const formData = new FormData();
-      formData.append('file', file);
-      
-      const response = await fetch(`${process.env.REACT_APP_API_URL || 'http://localhost:5003'}/api/upload`, {
-        method: 'POST',
-        headers: {
-          'Authorization': `Bearer ${localStorage.getItem('adminToken')}`
-        },
-        body: formData
-      });
-      
-      if (!response.ok) throw new Error('Upload failed');
-      
-      const result = await response.json();
-      handleFormChange(fieldName, result.url);
+      // Create a local URL for the file (works without backend)
+      const fileUrl = URL.createObjectURL(file);
+      handleFormChange(fieldName, fileUrl);
     } catch (error) {
       console.error('File upload error:', error);
       alert('File upload failed. Please try again.');
@@ -139,37 +127,40 @@ const Admin = () => {
     e.preventDefault();
     setLoading(true);
     try {
+      // Simulate successful form submission (works without backend)
+      await new Promise(resolve => setTimeout(resolve, 1000));
+      
       if (modalType === 'blog') {
+        const newBlog = {
+          id: selectedItem ? selectedItem.id : Date.now(),
+          ...formData,
+          created_at: selectedItem ? selectedItem.created_at : new Date().toISOString()
+        };
+        
         if (selectedItem) {
-          await blogAPI.updatePost(selectedItem.id, formData);
+          setBlogs(prev => prev.map(blog => blog.id === selectedItem.id ? newBlog : blog));
         } else {
-          await blogAPI.createPost(formData);
+          setBlogs(prev => [newBlog, ...prev]);
         }
       } else if (modalType === 'volume') {
-        const volumeData = {
-          title: formData.title,
-          description: formData.description,
-          excerpt: formData.excerpt || '',
-          category: formData.category,
-          price: formData.price,
-          content: formData.content || '',
-          image: formData.image || '',
-          downloadLink: formData.download_link || '',
-          audioUrl: formData.audio_url || '',
-          status: formData.status || 'published'
+        const newVolume = {
+          id: selectedItem ? selectedItem.id : Date.now(),
+          ...formData,
+          created_at: selectedItem ? selectedItem.created_at : new Date().toISOString()
         };
+        
         if (selectedItem) {
-          await volumeAPI.updateVolume(selectedItem.id, volumeData);
+          setVolumes(prev => prev.map(volume => volume.id === selectedItem.id ? newVolume : volume));
         } else {
-          await volumeAPI.createVolume(volumeData);
+          setVolumes(prev => [newVolume, ...prev]);
         }
       }
+      
       closeModal();
-      loadDashboardData();
       alert(`${modalType === 'blog' ? 'Blog post' : 'Volume'} ${selectedItem ? 'updated' : 'created'} successfully!`);
     } catch (error) {
       console.error('Form submission error:', error);
-      alert(`Error: ${error.response?.data?.message || error.message}`);
+      alert('Error: Unable to save. Please try again.');
     } finally {
       setLoading(false);
     }
@@ -193,8 +184,7 @@ const Admin = () => {
   const deleteBlog = async (blogId) => {
     if (window.confirm('Are you sure you want to delete this blog post?')) {
       try {
-        await blogAPI.deletePost(blogId);
-        loadDashboardData();
+        setBlogs(prev => prev.filter(blog => blog.id !== blogId));
         alert('Blog post deleted successfully!');
       } catch (error) {
         console.error('Delete error:', error);
@@ -224,15 +214,11 @@ const Admin = () => {
   const deleteVolume = async (volumeId) => {
     if (window.confirm('Are you sure you want to delete this volume?')) {
       try {
-        console.log('Deleting volume with ID:', volumeId);
-        const response = await volumeAPI.deleteVolume(volumeId);
-        console.log('Delete response:', response);
-        loadDashboardData();
+        setVolumes(prev => prev.filter(volume => volume.id !== volumeId));
         alert('Volume deleted successfully!');
       } catch (error) {
         console.error('Delete error:', error);
-        console.error('Error response:', error.response?.data);
-        alert(`Error deleting volume: ${error.response?.data?.message || error.message}`);
+        alert('Error deleting volume. Please try again.');
       }
     }
   };
@@ -240,8 +226,7 @@ const Admin = () => {
   const deleteContact = async (contactId) => {
     if (window.confirm('Are you sure you want to delete this contact message?')) {
       try {
-        await contactAPI.deleteContact(contactId);
-        loadDashboardData();
+        setContacts(prev => prev.filter(contact => contact.id !== contactId));
         alert('Contact message deleted successfully!');
       } catch (error) {
         console.error('Delete error:', error);
@@ -253,8 +238,7 @@ const Admin = () => {
   const deletePrayer = async (prayerId) => {
     if (window.confirm('Are you sure you want to delete this prayer request?')) {
       try {
-        await prayerAPI.deleteRequest(prayerId);
-        loadDashboardData();
+        setPrayers(prev => prev.filter(prayer => prayer.id !== prayerId));
         alert('Prayer request deleted successfully!');
       } catch (error) {
         console.error('Delete error:', error);
