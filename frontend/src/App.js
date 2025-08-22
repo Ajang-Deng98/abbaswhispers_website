@@ -3,10 +3,10 @@ import { BrowserRouter as Router, Routes, Route, useLocation } from 'react-route
 import { motion } from 'framer-motion';
 import Header from './components/Header';
 import Footer from './components/Footer';
-import SimpleHome from './pages/SimpleHome';
+import Home from './pages/Home';
 import About from './pages/About';
 import Volumes from './pages/Volumes';
-import SimpleBlog from './pages/SimpleBlog';
+import Blog from './pages/Blog';
 import BlogPost from './pages/BlogPost';
 import Contact from './pages/Contact';
 import PrayerRequest from './pages/PrayerRequest';
@@ -33,10 +33,10 @@ function App() {
   return (
     <Router>
       <Routes>
-        <Route path="/" element={<Layout><SimpleHome /></Layout>} />
+        <Route path="/" element={<Layout><Home /></Layout>} />
         <Route path="/about" element={<Layout><About /></Layout>} />
         <Route path="/volumes" element={<Layout><Volumes /></Layout>} />
-        <Route path="/blog" element={<Layout><SimpleBlog /></Layout>} />
+        <Route path="/blog" element={<Layout><Blog /></Layout>} />
         <Route path="/blog/:id" element={<Layout><BlogPost /></Layout>} />
         <Route path="/contact" element={<Layout><Contact /></Layout>} />
         <Route path="/prayer-request" element={<Layout><PrayerRequest /></Layout>} />
