@@ -10,6 +10,19 @@ const Home = () => {
   const [featuredVolumes, setFeaturedVolumes] = useState([]);
 
   useEffect(() => {
+    // Set fallback data immediately
+    setFeaturedPosts([
+      { id: 1, title: 'Finding Peace in Psalms', excerpt: 'Discover how the ancient words of David can bring comfort to modern hearts.', created_at: new Date() },
+      { id: 2, title: 'Grace in Grief', excerpt: 'A journey through loss and the healing power of faith.', created_at: new Date() },
+      { id: 3, title: 'Selah Moments', excerpt: 'Pausing to reflect on God\'s goodness in our daily lives.', created_at: new Date() }
+    ]);
+    setFeaturedVolumes([
+      { id: 1, title: 'SELAH Volume I', description: 'Poetry born from grief, transformed by grace.' },
+      { id: 2, title: 'SELAH Volume II', description: 'Continuing the journey of faith and healing.' },
+      { id: 3, title: 'SELAH Volume III', description: 'Finding hope in the darkest valleys.' }
+    ]);
+    
+    // Try to load real data
     loadFeaturedContent();
   }, []);
 
@@ -22,17 +35,7 @@ const Home = () => {
       setFeaturedVolumes(volumesResponse.data || []);
     } catch (error) {
       console.error('Error loading featured content:', error);
-      // Set fallback data
-      setFeaturedPosts([
-        { id: 1, title: 'Finding Peace in Psalms', excerpt: 'Discover how the ancient words of David can bring comfort to modern hearts.', created_at: new Date() },
-        { id: 2, title: 'Grace in Grief', excerpt: 'A journey through loss and the healing power of faith.', created_at: new Date() },
-        { id: 3, title: 'Selah Moments', excerpt: 'Pausing to reflect on God\'s goodness in our daily lives.', created_at: new Date() }
-      ]);
-      setFeaturedVolumes([
-        { id: 1, title: 'SELAH Volume I', description: 'Poetry born from grief, transformed by grace.' },
-        { id: 2, title: 'SELAH Volume II', description: 'Continuing the journey of faith and healing.' },
-        { id: 3, title: 'SELAH Volume III', description: 'Finding hope in the darkest valleys.' }
-      ]);
+      // Keep fallback data if API fails
     }
   };
 

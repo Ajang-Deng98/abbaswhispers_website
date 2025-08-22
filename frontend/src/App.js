@@ -3,7 +3,7 @@ import { BrowserRouter as Router, Routes, Route, useLocation } from 'react-route
 import { motion } from 'framer-motion';
 import Header from './components/Header';
 import Footer from './components/Footer';
-import HomeTest from './pages/HomeTest';
+import Home from './pages/Home';
 import About from './pages/About';
 import Volumes from './pages/Volumes';
 import Blog from './pages/Blog';
@@ -33,7 +33,7 @@ function App() {
   return (
     <Router>
       <Routes>
-        <Route path="/" element={<Layout><HomeTest /></Layout>} />
+        <Route path="/" element={<Layout><Home /></Layout>} />
         <Route path="/about" element={<Layout><About /></Layout>} />
         <Route path="/volumes" element={<Layout><Volumes /></Layout>} />
         <Route path="/blog" element={<Layout><Blog /></Layout>} />
