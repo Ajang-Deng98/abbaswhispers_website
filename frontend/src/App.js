@@ -13,14 +13,7 @@ import PrayerRequest from './pages/PrayerRequest';
 import Admin from './pages/Admin';
 import './styles/App.css';
 
-function AppContent() {
-  const location = useLocation();
-  const isAdminRoute = location.pathname === '/admin';
-
-  if (isAdminRoute) {
-    return <Admin />;
-  }
-
+function Layout({ children }) {
   return (
     <div className="App">
       <Header />
@@ -29,15 +22,7 @@ function AppContent() {
         animate={{ opacity: 1 }}
         transition={{ duration: 0.5 }}
       >
-        <Routes>
-          <Route path="/" element={<Home />} />
-          <Route path="/about" element={<About />} />
-          <Route path="/volumes" element={<Volumes />} />
-          <Route path="/blog" element={<Blog />} />
-          <Route path="/blog/:id" element={<BlogPost />} />
-          <Route path="/contact" element={<Contact />} />
-          <Route path="/prayer-request" element={<PrayerRequest />} />
-        </Routes>
+        {children}
       </motion.main>
       <Footer />
     </div>
@@ -48,8 +33,14 @@ function App() {
   return (
     <Router>
       <Routes>
+        <Route path="/" element={<Layout><Home /></Layout>} />
+        <Route path="/about" element={<Layout><About /></Layout>} />
+        <Route path="/volumes" element={<Layout><Volumes /></Layout>} />
+        <Route path="/blog" element={<Layout><Blog /></Layout>} />
+        <Route path="/blog/:id" element={<Layout><BlogPost /></Layout>} />
+        <Route path="/contact" element={<Layout><Contact /></Layout>} />
+        <Route path="/prayer-request" element={<Layout><PrayerRequest /></Layout>} />
         <Route path="/admin" element={<Admin />} />
-        <Route path="/*" element={<AppContent />} />
       </Routes>
     </Router>
   );

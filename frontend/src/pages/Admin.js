@@ -309,10 +309,7 @@ const Admin = () => {
                 />
               </div>
               <button type="submit" className="login-btn">
-                <span>Sign In</span>
-                <svg width="16" height="16" viewBox="0 0 24 24" fill="none">
-                  <path d="M5 12h14m-7-7l7 7-7 7" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
-                </svg>
+                Sign In
               </button>
             </form>
           </div>
@@ -349,9 +346,7 @@ const Admin = () => {
             <span className="profile-name">Admin</span>
           </div>
           <button onClick={handleLogout} className="logout-button">
-            <svg width="18" height="18" viewBox="0 0 24 24" fill="none">
-              <path d="M9 21H5a2 2 0 01-2-2V5a2 2 0 012-2h4M16 17l5-5-5-5M21 12H9" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
-            </svg>
+            Logout
           </button>
         </div>
       </div>
@@ -364,54 +359,31 @@ const Admin = () => {
               className={`nav-item ${activeTab === 'dashboard' ? 'active' : ''}`}
               onClick={() => setActiveTab('dashboard')}
             >
-              <svg width="20" height="20" viewBox="0 0 24 24" fill="none">
-                <rect x="3" y="3" width="7" height="9" rx="1" stroke="currentColor" strokeWidth="2"/>
-                <rect x="14" y="3" width="7" height="5" rx="1" stroke="currentColor" strokeWidth="2"/>
-                <rect x="14" y="12" width="7" height="9" rx="1" stroke="currentColor" strokeWidth="2"/>
-                <rect x="3" y="16" width="7" height="5" rx="1" stroke="currentColor" strokeWidth="2"/>
-              </svg>
-              <span>Dashboard</span>
+              Dashboard
             </button>
             <button 
               className={`nav-item ${activeTab === 'blogs' ? 'active' : ''}`}
               onClick={() => setActiveTab('blogs')}
             >
-              <svg width="20" height="20" viewBox="0 0 24 24" fill="none">
-                <path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z" stroke="currentColor" strokeWidth="2"/>
-                <polyline points="14,2 14,8 20,8" stroke="currentColor" strokeWidth="2"/>
-                <line x1="16" y1="13" x2="8" y2="13" stroke="currentColor" strokeWidth="2"/>
-                <line x1="16" y1="17" x2="8" y2="17" stroke="currentColor" strokeWidth="2"/>
-                <polyline points="10,9 9,9 8,9" stroke="currentColor" strokeWidth="2"/>
-              </svg>
-              <span>Blog Posts</span>
+              Blog Posts
             </button>
             <button 
               className={`nav-item ${activeTab === 'volumes' ? 'active' : ''}`}
               onClick={() => setActiveTab('volumes')}
             >
-              <svg width="20" height="20" viewBox="0 0 24 24" fill="none">
-                <path d="M4 19.5A2.5 2.5 0 016.5 17H20" stroke="currentColor" strokeWidth="2"/>
-                <path d="M6.5 2H20v20H6.5A2.5 2.5 0 014 19.5v-15A2.5 2.5 0 016.5 2z" stroke="currentColor" strokeWidth="2"/>
-              </svg>
-              <span>Volumes</span>
+              Volumes
             </button>
             <button 
               className={`nav-item ${activeTab === 'prayers' ? 'active' : ''}`}
               onClick={() => setActiveTab('prayers')}
             >
-              <svg width="20" height="20" viewBox="0 0 24 24" fill="none">
-                <path d="M20 6L9 17l-5-5" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
-              </svg>
-              <span>Prayer Requests</span>
+              Prayer Requests
             </button>
             <button 
               className={`nav-item ${activeTab === 'contacts' ? 'active' : ''}`}
               onClick={() => setActiveTab('contacts')}
             >
-              <svg width="20" height="20" viewBox="0 0 24 24" fill="none">
-                <path d="M22 16.92v3a2 2 0 01-2.18 2 19.79 19.79 0 01-8.63-3.07 19.5 19.5 0 01-6-6 19.79 19.79 0 01-3.07-8.67A2 2 0 014.11 2h3a2 2 0 012 1.72 12.84 12.84 0 00.7 2.81 2 2 0 01-.45 2.11L8.09 9.91a16 16 0 006 6l1.27-1.27a2 2 0 012.11-.45 12.84 12.84 0 002.81.7A2 2 0 0122 16.92z" stroke="currentColor" strokeWidth="2"/>
-              </svg>
-              <span>Contacts</span>
+              Contacts
             </button>
 
           </nav>
@@ -432,12 +404,6 @@ const Admin = () => {
                   <div className="stats-grid">
                     <div className="stat-card blog-card">
                       <div className="stat-header">
-                        <div className="stat-icon">
-                          <svg width="20" height="20" viewBox="0 0 24 24" fill="none">
-                            <path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z" stroke="currentColor" strokeWidth="2"/>
-                            <polyline points="14,2 14,8 20,8" stroke="currentColor" strokeWidth="2"/>
-                          </svg>
-                        </div>
                         <span className="stat-label">Blog Posts</span>
                       </div>
                       <div className="stat-number">{stats.blogs}</div>
@@ -450,12 +416,6 @@ const Admin = () => {
 
                     <div className="stat-card volume-card">
                       <div className="stat-header">
-                        <div className="stat-icon">
-                          <svg width="20" height="20" viewBox="0 0 24 24" fill="none">
-                            <path d="M4 19.5A2.5 2.5 0 016.5 17H20" stroke="currentColor" strokeWidth="2"/>
-                            <path d="M6.5 2H20v20H6.5A2.5 2.5 0 014 19.5v-15A2.5 2.5 0 016.5 2z" stroke="currentColor" strokeWidth="2"/>
-                          </svg>
-                        </div>
                         <span className="stat-label">Volumes</span>
                       </div>
                       <div className="stat-number">{stats.volumes}</div>
@@ -468,11 +428,6 @@ const Admin = () => {
 
                     <div className="stat-card prayer-card">
                       <div className="stat-header">
-                        <div className="stat-icon">
-                          <svg width="20" height="20" viewBox="0 0 24 24" fill="none">
-                            <path d="M20 6L9 17l-5-5" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
-                          </svg>
-                        </div>
                         <span className="stat-label">Prayer Requests</span>
                       </div>
                       <div className="stat-number">{stats.prayers}</div>
@@ -485,11 +440,6 @@ const Admin = () => {
 
                     <div className="stat-card contact-card">
                       <div className="stat-header">
-                        <div className="stat-icon">
-                          <svg width="20" height="20" viewBox="0 0 24 24" fill="none">
-                            <path d="M22 16.92v3a2 2 0 01-2.18 2 19.79 19.79 0 01-8.63-3.07 19.5 19.5 0 01-6-6 19.79 19.79 0 01-3.07-8.67A2 2 0 014.11 2h3a2 2 0 012 1.72 12.84 12.84 0 00.7 2.81 2 2 0 01-.45 2.11L8.09 9.91a16 16 0 006 6l1.27-1.27a2 2 0 012.11-.45 12.84 12.84 0 002.81.7A2 2 0 0122 16.92z" stroke="currentColor" strokeWidth="2"/>
-                          </svg>
-                        </div>
                         <span className="stat-label">Messages</span>
                       </div>
                       <div className="stat-number">{stats.contacts}</div>
@@ -508,36 +458,15 @@ const Admin = () => {
                   <h2>Quick Actions</h2>
                   <div className="quick-actions">
                     <button className="action-card" onClick={() => openAddModal('blog')}>
-                      <div className="action-icon">
-                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none">
-                          <path d="M12 5v14M5 12h14" stroke="currentColor" strokeWidth="2" strokeLinecap="round"/>
-                        </svg>
-                      </div>
                       <span>New Blog Post</span>
                     </button>
                     <button className="action-card" onClick={() => openAddModal('volume')}>
-                      <div className="action-icon">
-                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none">
-                          <path d="M12 5v14M5 12h14" stroke="currentColor" strokeWidth="2" strokeLinecap="round"/>
-                        </svg>
-                      </div>
                       <span>Add Volume</span>
                     </button>
                     <button className="action-card" onClick={() => setActiveTab('prayers')}>
-                      <div className="action-icon">
-                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none">
-                          <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z" stroke="currentColor" strokeWidth="2"/>
-                          <circle cx="12" cy="12" r="3" stroke="currentColor" strokeWidth="2"/>
-                        </svg>
-                      </div>
                       <span>View Prayers</span>
                     </button>
                     <button className="action-card" onClick={() => setActiveTab('contacts')}>
-                      <div className="action-icon">
-                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none">
-                          <path d="M22 16.92v3a2 2 0 01-2.18 2 19.79 19.79 0 01-8.63-3.07 19.5 19.5 0 01-6-6 19.79 19.79 0 01-3.07-8.67A2 2 0 014.11 2h3a2 2 0 012 1.72 12.84 12.84 0 00.7 2.81 2 2 0 01-.45 2.11L8.09 9.91a16 16 0 006 6l1.27-1.27a2 2 0 012.11-.45 12.84 12.84 0 002.81.7A2 2 0 0122 16.92z" stroke="currentColor" strokeWidth="2"/>
-                        </svg>
-                      </div>
                       <span>View Contacts</span>
                     </button>
                   </div>
@@ -553,9 +482,6 @@ const Admin = () => {
                     <p>Manage your blog content and articles</p>
                   </div>
                   <button className="primary-btn" onClick={() => openAddModal('blog')}>
-                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none">
-                      <path d="M12 5v14M5 12h14" stroke="currentColor" strokeWidth="2" strokeLinecap="round"/>
-                    </svg>
                     New Post
                   </button>
                 </div>
@@ -577,22 +503,13 @@ const Admin = () => {
                           <td><span className={`status-badge ${blog.status || 'published'}`}>{(blog.status || 'published').charAt(0).toUpperCase() + (blog.status || 'published').slice(1)}</span></td>
                           <td className="actions-cell">
                             <button className="icon-btn view" onClick={() => viewItem(blog, 'blog')}>
-                              <svg width="16" height="16" viewBox="0 0 24 24" fill="none">
-                                <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z" stroke="currentColor" strokeWidth="2"/>
-                                <circle cx="12" cy="12" r="3" stroke="currentColor" strokeWidth="2"/>
-                              </svg>
+                              View
                             </button>
                             <button className="icon-btn edit" onClick={() => editBlog(blog)}>
-                              <svg width="16" height="16" viewBox="0 0 24 24" fill="none">
-                                <path d="M11 4H4a2 2 0 00-2 2v14a2 2 0 002 2h14a2 2 0 002-2v-7" stroke="currentColor" strokeWidth="2"/>
-                                <path d="M18.5 2.5a2.121 2.121 0 013 3L12 15l-4 1 1-4 9.5-9.5z" stroke="currentColor" strokeWidth="2"/>
-                              </svg>
+                              Edit
                             </button>
                             <button className="icon-btn delete" onClick={() => deleteBlog(blog.id)}>
-                              <svg width="16" height="16" viewBox="0 0 24 24" fill="none">
-                                <polyline points="3,6 5,6 21,6" stroke="currentColor" strokeWidth="2"/>
-                                <path d="M19 6v14a2 2 0 01-2 2H7a2 2 0 01-2-2V6M8 6V4a2 2 0 012-2h4a2 2 0 012 2v2" stroke="currentColor" strokeWidth="2"/>
-                              </svg>
+                              Delete
                             </button>
                           </td>
                         </tr>
@@ -615,9 +532,6 @@ const Admin = () => {
                     <p>Manage your inspirational volume collections</p>
                   </div>
                   <button className="primary-btn" onClick={() => openAddModal('volume')}>
-                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none">
-                      <path d="M12 5v14M5 12h14" stroke="currentColor" strokeWidth="2" strokeLinecap="round"/>
-                    </svg>
                     New Volume
                   </button>
                 </div>
@@ -639,22 +553,13 @@ const Admin = () => {
                           <td className="date-cell">{new Date(volume.created_at || Date.now()).toLocaleDateString()}</td>
                           <td className="actions-cell">
                             <button className="icon-btn view" onClick={() => viewItem(volume, 'volume')}>
-                              <svg width="16" height="16" viewBox="0 0 24 24" fill="none">
-                                <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z" stroke="currentColor" strokeWidth="2"/>
-                                <circle cx="12" cy="12" r="3" stroke="currentColor" strokeWidth="2"/>
-                              </svg>
+                              View
                             </button>
                             <button className="icon-btn edit" onClick={() => editVolume(volume)}>
-                              <svg width="16" height="16" viewBox="0 0 24 24" fill="none">
-                                <path d="M11 4H4a2 2 0 00-2 2v14a2 2 0 002 2h14a2 2 0 002-2v-7" stroke="currentColor" strokeWidth="2"/>
-                                <path d="M18.5 2.5a2.121 2.121 0 013 3L12 15l-4 1 1-4 9.5-9.5z" stroke="currentColor" strokeWidth="2"/>
-                              </svg>
+                              Edit
                             </button>
                             <button className="icon-btn delete" onClick={() => deleteVolume(volume.id)}>
-                              <svg width="16" height="16" viewBox="0 0 24 24" fill="none">
-                                <polyline points="3,6 5,6 21,6" stroke="currentColor" strokeWidth="2"/>
-                                <path d="M19 6v14a2 2 0 01-2 2H7a2 2 0 01-2-2V6M8 6V4a2 2 0 012-2h4a2 2 0 012 2v2" stroke="currentColor" strokeWidth="2"/>
-                              </svg>
+                              Delete
                             </button>
                           </td>
                         </tr>
@@ -697,16 +602,10 @@ const Admin = () => {
                           <td><span className={`status-badge ${prayer.status || 'new'}`}>{(prayer.status || 'new').charAt(0).toUpperCase() + (prayer.status || 'new').slice(1)}</span></td>
                           <td className="actions-cell">
                             <button className="icon-btn view" onClick={() => viewItem(prayer, 'prayer')}>
-                              <svg width="16" height="16" viewBox="0 0 24 24" fill="none">
-                                <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z" stroke="currentColor" strokeWidth="2"/>
-                                <circle cx="12" cy="12" r="3" stroke="currentColor" strokeWidth="2"/>
-                              </svg>
+                              View
                             </button>
                             <button className="icon-btn edit" onClick={() => alert('Prayer status update coming soon')}>
-                              <svg width="16" height="16" viewBox="0 0 24 24" fill="none">
-                                <path d="M11 4H4a2 2 0 00-2 2v14a2 2 0 002 2h14a2 2 0 002-2v-7" stroke="currentColor" strokeWidth="2"/>
-                                <path d="M18.5 2.5a2.121 2.121 0 013 3L12 15l-4 1 1-4 9.5-9.5z" stroke="currentColor" strokeWidth="2"/>
-                              </svg>
+                              Update
                             </button>
                           </td>
                         </tr>
@@ -749,16 +648,10 @@ const Admin = () => {
                           <td className="date-cell">{new Date(contact.created_at).toLocaleDateString()}</td>
                           <td className="actions-cell">
                             <button className="icon-btn view" onClick={() => viewItem(contact, 'contact')}>
-                              <svg width="16" height="16" viewBox="0 0 24 24" fill="none">
-                                <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z" stroke="currentColor" strokeWidth="2"/>
-                                <circle cx="12" cy="12" r="3" stroke="currentColor" strokeWidth="2"/>
-                              </svg>
+                              View
                             </button>
                             <button className="icon-btn delete" onClick={() => deleteContact(contact.id)}>
-                              <svg width="16" height="16" viewBox="0 0 24 24" fill="none">
-                                <polyline points="3,6 5,6 21,6" stroke="currentColor" strokeWidth="2"/>
-                                <path d="M19 6v14a2 2 0 01-2 2H7a2 2 0 01-2-2V6M8 6V4a2 2 0 012-2h4a2 2 0 012 2v2" stroke="currentColor" strokeWidth="2"/>
-                              </svg>
+                              Delete
                             </button>
                           </td>
                         </tr>
@@ -791,9 +684,7 @@ const Admin = () => {
                 {modalType === 'contact' && 'Contact Message Details'}
               </h2>
               <button className="modal-close" onClick={closeModal}>
-                <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
-                  <path d="M18 6L6 18M6 6l12 12" stroke="currentColor" strokeWidth="2" strokeLinecap="round"/>
-                </svg>
+                ×
               </button>
             </div>
             <div className="modal-body">

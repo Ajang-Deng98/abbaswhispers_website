@@ -144,7 +144,6 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  gap: 0.5rem;
   box-shadow: 0 4px 15px rgba(37, 99, 235, 0.2);
 }
 
@@ -249,10 +248,12 @@
   background: var(--admin-danger);
   color: white;
   border: none;
-  padding: 0.5rem;
+  padding: 0.5rem 1rem;
   border-radius: 6px;
   cursor: pointer;
   transition: all 0.2s ease;
+  font-size: 0.875rem;
+  font-weight: 500;
 }
 
 .logout-button:hover {
@@ -284,7 +285,7 @@
 .nav-item {
   display: flex;
   align-items: center;
-  gap: 0.75rem;
+  justify-content: center;
   padding: 0.875rem 1rem;
   background: none;
   border: none;
@@ -293,7 +294,7 @@
   font-weight: 500;
   cursor: pointer;
   transition: all 0.2s ease;
-  text-align: left;
+  text-align: center;
   border-radius: 8px;
   border-left: 3px solid transparent;
   margin: 0 1rem;
@@ -349,7 +350,7 @@
   transition: all 0.2s ease;
   display: flex;
   align-items: center;
-  gap: 0.5rem;
+  justify-content: center;
 }
 
 .primary-btn:hover {
@@ -655,9 +656,8 @@
   cursor: pointer;
   transition: all 0.2s ease;
   display: flex;
-  flex-direction: column;
   align-items: center;
-  gap: 0.75rem;
+  justify-content: center;
   text-align: center;
 }
 
@@ -667,21 +667,12 @@
   box-shadow: 0 4px 12px rgba(212, 175, 55, 0.15);
 }
 
-.action-icon {
-  width: 36px;
-  height: 36px;
-  background: var(--admin-gold);
-  color: white;
-  border-radius: 8px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-}
+
 
 .action-card span {
   color: var(--admin-text);
   font-weight: 500;
-  font-size: 0.8rem;
+  font-size: 0.875rem;
 }
 
 /* Data Tables */
@@ -759,11 +750,13 @@
 }
 
 .icon-btn {
-  padding: 0.5rem;
+  padding: 0.5rem 0.75rem;
   border: none;
   border-radius: 6px;
   cursor: pointer;
   transition: all 0.2s ease;
+  font-size: 0.75rem;
+  font-weight: 500;
 }
 
 .icon-btn.view {
@@ -844,6 +837,13 @@
   padding: 0.5rem;
   border-radius: 6px;
   transition: all 0.2s ease;
+  font-size: 1.5rem;
+  font-weight: bold;
+  width: 32px;
+  height: 32px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
 .modal-close:hover {
