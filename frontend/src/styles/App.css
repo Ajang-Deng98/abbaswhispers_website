@@ -1155,48 +1155,101 @@ main {
     padding: 0 1rem;
   }
   
-  .hero h1, .home-hero h1 {
-    font-size: 1.8rem !important;
-    line-height: 1.3;
+  /* Home Hero Mobile Fixes */
+  .home-hero {
+    padding: 2rem 0 !important;
+    min-height: auto;
   }
   
-  .hero p, .home-hero p {
+  .home-hero .hero-content {
+    grid-template-columns: 1fr !important;
+    gap: 2rem;
+    text-align: center;
+  }
+  
+  .home-hero .hero-text h1 {
+    font-size: 1.75rem !important;
+    line-height: 1.2;
+    margin-bottom: 1rem;
+    padding: 0 0.5rem;
+  }
+  
+  .home-hero .hero-text p {
+    font-size: 0.95rem !important;
+    line-height: 1.5;
+    margin-bottom: 1.5rem;
+    padding: 0 0.5rem;
+  }
+  
+  .hero-actions {
+    flex-direction: column;
+    gap: 0.75rem;
+    align-items: center;
+  }
+  
+  .btn-hero-primary, .btn-hero-secondary {
+    width: 100%;
+    max-width: 280px;
+    text-align: center;
+    padding: 0.875rem 1.5rem;
     font-size: 0.9rem;
   }
   
-  .hero-actions, .cta-actions {
+  /* Stats Section Mobile */
+  .hero-stats {
+    display: grid !important;
+    grid-template-columns: 1fr !important;
+    gap: 1rem;
+    margin-top: 1rem;
+  }
+  
+  .stat-card {
+    background: rgba(255, 255, 255, 0.15) !important;
+    backdrop-filter: blur(10px);
+    padding: 1.25rem !important;
+    border-radius: 12px;
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    text-align: center;
+    min-height: 80px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+  }
+  
+  .stat-number {
+    font-size: 1.5rem !important;
+    font-weight: 700;
+    color: var(--primary-gold) !important;
+    margin-bottom: 0.25rem;
+    display: block;
+  }
+  
+  .stat-label {
+    font-size: 0.85rem !important;
+    color: white !important;
+    font-weight: 500;
+    display: block;
+  }
+  
+  /* Other mobile fixes */
+  .hero h1, .hero-text h1 {
+    font-size: 1.75rem !important;
+    line-height: 1.3;
+  }
+  
+  .hero p, .hero-text p {
+    font-size: 0.95rem;
+  }
+  
+  .cta-actions {
     flex-direction: column;
     gap: 0.75rem;
   }
   
-  .btn-hero-primary, .btn-hero-secondary,
   .btn-cta-primary, .btn-cta-secondary {
     width: 100%;
     text-align: center;
     padding: 0.875rem 1.5rem;
-  }
-  
-  .hero-content {
-    grid-template-columns: 1fr !important;
-    gap: 1.5rem;
-    text-align: center;
-  }
-  
-  .hero-stats {
-    grid-template-columns: repeat(3, 1fr);
-    gap: 0.75rem;
-  }
-  
-  .stat-card {
-    padding: 1rem;
-  }
-  
-  .stat-number {
-    font-size: 1.2rem;
-  }
-  
-  .stat-label {
-    font-size: 0.75rem;
   }
   
   .collections-grid, .blog-grid {
@@ -1224,7 +1277,11 @@ main {
     padding: 0 1.5rem;
   }
   
-  .hero h1, .home-hero h1 {
+  .home-hero {
+    padding: 3rem 0;
+  }
+  
+  .home-hero .hero-text h1 {
     font-size: 2.2rem;
   }
   
@@ -1235,8 +1292,20 @@ main {
   }
   
   .hero-stats {
-    grid-template-columns: repeat(3, 1fr);
+    grid-template-columns: repeat(3, 1fr) !important;
     gap: 1rem;
+  }
+  
+  .stat-card {
+    padding: 1.5rem;
+  }
+  
+  .stat-number {
+    font-size: 1.6rem;
+  }
+  
+  .stat-label {
+    font-size: 0.9rem;
   }
   
   .collections-grid, .blog-grid {
@@ -1252,9 +1321,18 @@ main {
 
 @media (min-width: 769px) and (max-width: 1024px) {
   /* Large tablets / small laptops */
+  .home-hero {
+    padding: 4rem 0;
+  }
+  
   .hero-content {
     grid-template-columns: 2fr 1fr;
     gap: 2rem;
+  }
+  
+  .hero-stats {
+    grid-template-columns: 1fr;
+    gap: 1rem;
   }
   
   .collections-grid, .blog-grid {

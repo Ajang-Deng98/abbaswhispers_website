@@ -13,6 +13,26 @@
     max-width: 100%;
   }
   
+  /* Home Hero Mobile Specific */
+  .home-hero .container {
+    padding: 0 0.75rem;
+  }
+  
+  .home-hero .hero-content {
+    padding: 0;
+  }
+  
+  /* Ensure stats are visible */
+  .home-hero .hero-stats {
+    width: 100%;
+    max-width: 300px;
+    margin: 0 auto;
+  }
+  
+  .home-hero .stat-card {
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+  }
+  
   /* Button improvements */
   .btn-hero-primary, .btn-hero-secondary,
   .btn-cta-primary, .btn-cta-secondary,
@@ -84,6 +104,12 @@
     padding: 0 1.5rem;
   }
   
+  /* Home hero tablet adjustments */
+  .home-hero .hero-stats {
+    max-width: 400px;
+    margin: 0 auto;
+  }
+  
   .btn-hero-primary, .btn-hero-secondary,
   .btn-cta-primary, .btn-cta-secondary {
     width: auto;
@@ -118,20 +144,45 @@
 /* Landscape phone orientation */
 @media (max-height: 500px) and (orientation: landscape) {
   .home-hero {
-    padding: 1.5rem 0;
+    padding: 1rem 0 !important;
   }
   
-  .hero-text h1 {
-    font-size: 1.5rem;
+  .home-hero .hero-text h1 {
+    font-size: 1.4rem !important;
+    margin-bottom: 0.5rem;
   }
   
-  .hero-stats {
-    grid-template-columns: repeat(3, 1fr);
+  .home-hero .hero-text p {
+    font-size: 0.85rem !important;
+    margin-bottom: 1rem;
+  }
+  
+  .home-hero .hero-stats {
+    grid-template-columns: repeat(3, 1fr) !important;
+    gap: 0.5rem;
+    max-width: 100%;
+  }
+  
+  .home-hero .stat-card {
+    padding: 0.75rem !important;
+    min-height: 60px;
+  }
+  
+  .home-hero .stat-number {
+    font-size: 1.2rem !important;
+  }
+  
+  .home-hero .stat-label {
+    font-size: 0.7rem !important;
+  }
+  
+  .hero-actions {
     gap: 0.5rem;
   }
   
-  .stat-card {
-    padding: 0.75rem;
+  .btn-hero-primary, .btn-hero-secondary {
+    padding: 0.6rem 1rem;
+    font-size: 0.85rem;
   }
 }
 
