@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import { Helmet } from 'react-helmet';
-import Testimonials from '../components/Testimonials';
+
 import { blogAPI, volumeAPI } from '../utils/api';
 
 const Home = () => {
@@ -187,8 +187,7 @@ const Home = () => {
         </div>
       </section>
 
-      {/* Testimonials */}
-      <Testimonials />
+
 
       {/* Call to Action */}
       <section className="home-cta">
