@@ -19,17 +19,17 @@ async function testDatabase() {
     console.log('✅ MySQL connection successful');
     
     // Check if database exists
-    const [databases] = await connection.execute('SHOW DATABASES');
+    const [databases] = await connection.query('SHOW DATABASES');
     const dbExists = databases.some(db => db.Database === process.env.DB_NAME);
     
     if (dbExists) {
       console.log('✅ Database exists');
       
       // Connect to specific database
-      await connection.execute(`USE ${process.env.DB_NAME}`);
+      await connection.query(`USE ${process.env.DB_NAME}`);
       
       // Check tables
-      const [tables] = await connection.execute('SHOW TABLES');
+      const [tables] = await connection.query('SHOW TABLES');
       console.log(`📊 Found ${tables.length} tables:`, tables.map(t => Object.values(t)[0]));
       
       // Check users table

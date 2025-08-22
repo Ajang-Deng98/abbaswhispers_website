@@ -17,11 +17,11 @@ async function setupDatabase() {
     console.log('✅ Connected to MySQL');
     
     // Create database if it doesn't exist
-    await connection.execute(`CREATE DATABASE IF NOT EXISTS ${process.env.DB_NAME}`);
+    await connection.query(`CREATE DATABASE IF NOT EXISTS ${process.env.DB_NAME}`);
     console.log(`✅ Database '${process.env.DB_NAME}' created/verified`);
     
     // Use the database
-    await connection.execute(`USE ${process.env.DB_NAME}`);
+    await connection.query(`USE ${process.env.DB_NAME}`);
     
     // Read and execute schema
     const schemaPath = path.join(__dirname, '../database/schema.sql');
@@ -34,7 +34,7 @@ async function setupDatabase() {
       for (const statement of statements) {
         if (statement.trim()) {
           try {
-            await connection.execute(statement);
+            await connection.query(statement);
           } catch (err) {
             // Ignore errors for CREATE DATABASE and USE statements
             if (!err.message.includes('database exists') && !err.message.includes('Unknown database')) {
@@ -50,11 +50,11 @@ async function setupDatabase() {
     }
     
     // Verify setup
-    const [tables] = await connection.execute('SHOW TABLES');
+    const [tables] = await connection.query('SHOW TABLES');
     console.log(`📊 Created ${tables.length} tables`);
     
     // Check if admin user exists
-    const [users] = await connection.execute('SELECT * FROM users WHERE username = "admin"');
+    const [users] = await connection.execute('SELECT * FROM users WHERE username = ?', ['admin']);
     if (users.length > 0) {
       console.log('👤 Admin user exists');
     } else {
