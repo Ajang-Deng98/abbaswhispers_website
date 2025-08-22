@@ -1,0 +1,183 @@
+/* Mobile-First Responsive Enhancements */
+
+/* Base mobile styles (320px and up) */
+@media (max-width: 480px) {
+  /* Typography scaling */
+  html {
+    font-size: 14px;
+  }
+  
+  /* Container improvements */
+  .container {
+    padding: 0 1rem;
+    max-width: 100%;
+  }
+  
+  /* Button improvements */
+  .btn-hero-primary, .btn-hero-secondary,
+  .btn-cta-primary, .btn-cta-secondary,
+  .btn-section {
+    font-size: 0.9rem;
+    padding: 0.875rem 1.25rem;
+    border-radius: 25px;
+    width: 100%;
+    max-width: 280px;
+    margin: 0 auto;
+    display: block;
+    text-align: center;
+  }
+  
+  /* Card spacing */
+  .card {
+    margin-bottom: 1rem;
+    padding: 1.25rem;
+  }
+  
+  /* Section padding */
+  .section {
+    padding: 2rem 0;
+  }
+  
+  .home-hero, .home-collections, .home-blog, .home-cta {
+    padding: 2.5rem 0;
+  }
+  
+  /* Form improvements */
+  input, textarea, select {
+    font-size: 16px; /* Prevents zoom on iOS */
+    padding: 0.875rem;
+    border-radius: 8px;
+  }
+  
+  /* Modal improvements */
+  .modal-content {
+    margin: 1rem;
+    max-height: 90vh;
+    overflow-y: auto;
+  }
+  
+  /* Table responsiveness */
+  .data-table {
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+  }
+  
+  .data-table table {
+    min-width: 600px;
+  }
+  
+  /* Touch targets */
+  .action-btn, .icon-btn {
+    min-height: 44px;
+    min-width: 44px;
+    padding: 0.5rem;
+  }
+}
+
+/* Small tablets (481px - 768px) */
+@media (min-width: 481px) and (max-width: 768px) {
+  html {
+    font-size: 15px;
+  }
+  
+  .container {
+    padding: 0 1.5rem;
+  }
+  
+  .btn-hero-primary, .btn-hero-secondary,
+  .btn-cta-primary, .btn-cta-secondary {
+    width: auto;
+    min-width: 160px;
+  }
+  
+  .hero-actions, .cta-actions {
+    justify-content: center;
+    gap: 1rem;
+  }
+  
+  .section {
+    padding: 3rem 0;
+  }
+}
+
+/* Large tablets (769px - 1024px) */
+@media (min-width: 769px) and (max-width: 1024px) {
+  html {
+    font-size: 16px;
+  }
+  
+  .container {
+    padding: 0 2rem;
+  }
+  
+  .section {
+    padding: 4rem 0;
+  }
+}
+
+/* Landscape phone orientation */
+@media (max-height: 500px) and (orientation: landscape) {
+  .home-hero {
+    padding: 1.5rem 0;
+  }
+  
+  .hero-text h1 {
+    font-size: 1.5rem;
+  }
+  
+  .hero-stats {
+    grid-template-columns: repeat(3, 1fr);
+    gap: 0.5rem;
+  }
+  
+  .stat-card {
+    padding: 0.75rem;
+  }
+}
+
+/* High DPI displays */
+@media (-webkit-min-device-pixel-ratio: 2), (min-resolution: 192dpi) {
+  .logo img {
+    image-rendering: -webkit-optimize-contrast;
+    image-rendering: crisp-edges;
+  }
+}
+
+/* Reduced motion preferences */
+@media (prefers-reduced-motion: reduce) {
+  * {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}
+
+/* Dark mode support */
+@media (prefers-color-scheme: dark) {
+  :root {
+    --text-dark: #f0f0f0;
+    --text-medium: #d0d0d0;
+    --text-light: #a0a0a0;
+    --soft-white: #1a1a1a;
+    --warm-cream: #2a2a2a;
+    --cream: #333333;
+  }
+}
+
+/* Print styles */
+@media print {
+  .header, .footer, .mobile-menu-toggle,
+  .btn-hero-primary, .btn-hero-secondary,
+  .btn-cta-primary, .btn-cta-secondary {
+    display: none !important;
+  }
+  
+  .container {
+    max-width: none;
+    padding: 0;
+  }
+  
+  .section {
+    padding: 1rem 0;
+  }
+}

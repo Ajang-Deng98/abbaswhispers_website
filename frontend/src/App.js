@@ -12,6 +12,7 @@ import Contact from './pages/Contact';
 import PrayerRequest from './pages/PrayerRequest';
 import Admin from './pages/Admin';
 import './styles/App.css';
+import './styles/Mobile.css';
 
 function Layout({ children }) {
   return (
