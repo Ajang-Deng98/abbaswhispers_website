@@ -1,0 +1,135 @@
+from rest_framework import viewsets, status
+from rest_framework.decorators import api_view, permission_classes
+from rest_framework.permissions import IsAuthenticated, AllowAny
+from rest_framework.response import Response
+from rest_framework_simplejwt.views import TokenObtainPairView
+from django_ratelimit.decorators import ratelimit
+from django.utils.decorators import method_decorator
+from django.contrib.auth import authenticate
+from .models import BlogPost, Volume, PrayerRequest, ContactMessage, Subscriber, Comment, SiteSetting, Testimonial, PrayerTestimonial, Book
+from .serializers import (
+    BlogPostSerializer, VolumeSerializer, PrayerRequestSerializer,
+    ContactMessageSerializer, SubscriberSerializer, CommentSerializer, SiteSettingSerializer, TestimonialSerializer, PrayerTestimonialSerializer, BookSerializer
+)
+
+class BlogPostViewSet(viewsets.ModelViewSet):
+    queryset = BlogPost.objects.filter(status='published')
+    serializer_class = BlogPostSerializer
+    permission_classes = [AllowAny]
+    
+    def get_permissions(self):
+        if self.action in ['create', 'update', 'partial_update', 'destroy']:
+            return [IsAuthenticated()]
+        return [AllowAny()]
+
+class VolumeViewSet(viewsets.ModelViewSet):
+    queryset = Volume.objects.filter(status='published')
+    serializer_class = VolumeSerializer
+    permission_classes = [AllowAny]
+    
+    def get_permissions(self):
+        if self.action in ['create', 'update', 'partial_update', 'destroy']:
+            return [IsAuthenticated()]
+        return [AllowAny()]
+
+class PrayerRequestViewSet(viewsets.ModelViewSet):
+    queryset = PrayerRequest.objects.all()
+    serializer_class = PrayerRequestSerializer
+    
+    def get_permissions(self):
+        if self.action == 'create':
+            return [AllowAny()]
+        return [IsAuthenticated()]
+
+class ContactMessageViewSet(viewsets.ModelViewSet):
+    queryset = ContactMessage.objects.all()
+    serializer_class = ContactMessageSerializer
+    
+    def get_permissions(self):
+        if self.action == 'create':
+            return [AllowAny()]
+        return [IsAuthenticated()]
+
+class SubscriberViewSet(viewsets.ModelViewSet):
+    queryset = Subscriber.objects.all()
+    serializer_class = SubscriberSerializer
+    
+    def get_permissions(self):
+        if self.action == 'create':
+            return [AllowAny()]
+        return [IsAuthenticated()]
+
+class CommentViewSet(viewsets.ModelViewSet):
+    queryset = Comment.objects.all()
+    serializer_class = CommentSerializer
+    
+    def get_permissions(self):
+        if self.action == 'create':
+            return [AllowAny()]
+        return [IsAuthenticated()]
+
+@api_view(['GET'])
+@permission_classes([AllowAny])
+def health_check(request):
+    return Response({'status': 'OK', 'message': 'Django API is running'})
+
+@api_view(['POST'])
+@permission_classes([AllowAny])
+@method_decorator(ratelimit(key='ip', rate='5/m', method='POST'))
+def subscribe_newsletter(request):
+    serializer = SubscriberSerializer(data=request.data)
+    if serializer.is_valid():
+        serializer.save()
+        return Response({'message': 'Successfully subscribed!'}, status=status.HTTP_201_CREATED)
+    return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+@api_view(['GET'])
+@permission_classes([AllowAny])
+def get_post_comments(request, pk):
+    try:
+        comments = Comment.objects.filter(post_id=pk, status='approved')
+        serializer = CommentSerializer(comments, many=True)
+        return Response(serializer.data)
+    except Exception as e:
+        return Response({'error': str(e)}, status=status.HTTP_400_BAD_REQUEST)
+
+class TestimonialViewSet(viewsets.ModelViewSet):
+    queryset = Testimonial.objects.filter(status='published')
+    serializer_class = TestimonialSerializer
+    permission_classes = [AllowAny]
+    
+    def get_permissions(self):
+        if self.action in ['create', 'update', 'partial_update', 'destroy']:
+            return [IsAuthenticated()]
+        return [AllowAny()]
+
+class PrayerTestimonialViewSet(viewsets.ModelViewSet):
+    queryset = PrayerTestimonial.objects.filter(status='published')
+    serializer_class = PrayerTestimonialSerializer
+    permission_classes = [AllowAny]
+    
+    def get_permissions(self):
+        if self.action in ['create', 'update', 'partial_update', 'destroy']:
+            return [IsAuthenticated()]
+        return [AllowAny()]
+
+class BookViewSet(viewsets.ModelViewSet):
+    queryset = Book.objects.filter(status='published')
+    serializer_class = BookSerializer
+    permission_classes = [AllowAny]
+    
+    def get_permissions(self):
+        if self.action in ['create', 'update', 'partial_update', 'destroy']:
+            return [IsAuthenticated()]
+        return [AllowAny()]
+
+@api_view(['PATCH'])
+@permission_classes([AllowAny])
+def track_download(request, pk):
+    try:
+        volume = Volume.objects.get(pk=pk)
+        volume.downloads += 1
+        volume.save()
+        return Response({'message': 'Download tracked', 'downloads': volume.downloads})
+    except Volume.DoesNotExist:
+        return Response({'error': 'Volume not found'}, status=status.HTTP_404_NOT_FOUND)

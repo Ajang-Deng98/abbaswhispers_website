@@ -1,6 +1,6 @@
 import axios from 'axios';
 
-const API_BASE_URL = process.env.REACT_APP_API_URL || 'http://localhost:5003/api';
+const API_BASE_URL = process.env.REACT_APP_API_URL || 'http://localhost:8000/api';
 
 // Create axios instance
 const api = axios.create({
@@ -39,60 +39,84 @@ api.interceptors.response.use(
   }
 );
 
-// API functions
+// API functions - Updated for Django REST Framework
 export const blogAPI = {
-  getAllPosts: (params) => api.get('/blog', { params }),
-  getPost: (id) => api.get(`/blog/${id}`),
-  createPost: (data) => api.post('/blog', data),
-  updatePost: (id, data) => api.put(`/blog/${id}`, data),
-  deletePost: (id) => api.delete(`/blog/${id}`),
-  getAdminPosts: () => api.get('/blog/admin/all'),
+  getAllPosts: (params) => api.get('/blog/', { params }),
+  getPost: (id) => api.get(`/blog/${id}/`),
+  createPost: (data) => api.post('/blog/', data),
+  updatePost: (id, data) => api.put(`/blog/${id}/`, data),
+  deletePost: (id) => api.delete(`/blog/${id}/`),
+  getAdminPosts: () => api.get('/blog/'),
 };
 
 export const volumeAPI = {
-  getAllVolumes: (params) => api.get('/volumes', { params }),
-  getVolume: (id) => api.get(`/volumes/${id}`),
-  createVolume: (data) => api.post('/volumes', data),
-  updateVolume: (id, data) => api.put(`/volumes/${id}`, data),
-  updateStatus: (id, data) => api.put(`/volumes/${id}`, data),
-  deleteVolume: (id) => api.delete(`/volumes/${id}`),
-  trackDownload: (id) => api.post(`/volumes/${id}/download`),
-  getAdminVolumes: () => api.get('/volumes/admin/all'),
+  getAllVolumes: (params) => api.get('/volumes/', { params }),
+  getVolume: (id) => api.get(`/volumes/${id}/`),
+  createVolume: (data) => api.post('/volumes/', data),
+  updateVolume: (id, data) => api.put(`/volumes/${id}/`, data),
+  updateStatus: (id, data) => api.put(`/volumes/${id}/`, data),
+  deleteVolume: (id) => api.delete(`/volumes/${id}/`),
+  trackDownload: (id) => api.patch(`/volumes/${id}/download/`),
+  getAdminVolumes: () => api.get('/volumes/'),
 };
 
 export const prayerAPI = {
-  submitRequest: (data) => api.post('/prayers', data),
-  getAllRequests: (params) => api.get('/prayers', { params }),
-  getRequest: (id) => api.get(`/prayers/${id}`),
-  updateStatus: (id, data) => api.put(`/prayers/${id}/status`, data),
-  deleteRequest: (id) => api.delete(`/prayers/${id}`),
-  getStats: () => api.get('/prayers/admin/stats'),
+  submitRequest: (data) => api.post('/prayers/', data),
+  getAllRequests: (params) => api.get('/prayers/', { params }),
+  getRequest: (id) => api.get(`/prayers/${id}/`),
+  updateStatus: (id, data) => api.patch(`/prayers/${id}/`, data),
+  deleteRequest: (id) => api.delete(`/prayers/${id}/`),
+  getStats: () => api.get('/prayers/'),
 };
 
 export const contactAPI = {
-  submitForm: (data) => api.post('/contact', data),
-  getAllContacts: () => api.get('/contact/admin/all'),
-  deleteContact: (id) => api.delete(`/contact/${id}`),
+  submitForm: (data) => api.post('/contact/', data),
+  getAllContacts: () => api.get('/contact/'),
+  deleteContact: (id) => api.delete(`/contact/${id}/`),
 };
 
 export const subscriberAPI = {
-  subscribe: (data) => api.post('/subscribers/subscribe', data),
-  unsubscribe: (data) => api.post('/subscribers/unsubscribe', data),
-  getAll: (params) => api.get('/subscribers', { params }),
-  getStats: () => api.get('/subscribers/stats'),
-  sendNewsletter: (data) => api.post('/subscribers/send-newsletter', data),
+  subscribe: (data) => api.post('/subscribers/subscribe/', data),
+  unsubscribe: (data) => api.patch('/subscribers/', data),
+  getAll: (params) => api.get('/subscribers/', { params }),
+  getStats: () => api.get('/subscribers/'),
+  sendNewsletter: (data) => api.post('/subscribers/', data),
 };
 
 export const authAPI = {
-  login: (data) => api.post('/auth/login', data),
-  verify: () => api.get('/auth/verify'),
+  login: (data) => api.post('/auth/login/', data),
+  verify: () => api.get('/health/'),
 };
 
 export const commentAPI = {
-  getPostComments: (postId) => api.get(`/comments/post/${postId}`),
-  addComment: (data) => api.post('/comments', data),
-  getAllComments: () => api.get('/comments/admin/all'),
-  deleteComment: (id) => api.delete(`/comments/${id}`),
+  getPostComments: (postId) => api.get(`/blog/${postId}/comments/`),
+  addComment: (data) => api.post('/comments/', data),
+  getAllComments: () => api.get('/comments/'),
+  deleteComment: (id) => api.delete(`/comments/${id}/`),
+};
+
+export const testimonialAPI = {
+  getAllTestimonials: (params) => api.get('/testimonials/', { params }),
+  getTestimonial: (id) => api.get(`/testimonials/${id}/`),
+  createTestimonial: (data) => api.post('/testimonials/', data),
+  updateTestimonial: (id, data) => api.put(`/testimonials/${id}/`, data),
+  deleteTestimonial: (id) => api.delete(`/testimonials/${id}/`),
+};
+
+export const prayerTestimonialAPI = {
+  getAllPrayerTestimonials: (params) => api.get('/prayer-testimonials/', { params }),
+  getPrayerTestimonial: (id) => api.get(`/prayer-testimonials/${id}/`),
+  createPrayerTestimonial: (data) => api.post('/prayer-testimonials/', data),
+  updatePrayerTestimonial: (id, data) => api.put(`/prayer-testimonials/${id}/`, data),
+  deletePrayerTestimonial: (id) => api.delete(`/prayer-testimonials/${id}/`),
+};
+
+export const bookAPI = {
+  getAllBooks: (params) => api.get('/books/', { params }),
+  getBook: (id) => api.get(`/books/${id}/`),
+  createBook: (data) => api.post('/books/', data),
+  updateBook: (id, data) => api.put(`/books/${id}/`, data),
+  deleteBook: (id) => api.delete(`/books/${id}/`),
 };
 
 export default api;

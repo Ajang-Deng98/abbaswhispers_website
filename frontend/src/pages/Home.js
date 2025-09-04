@@ -3,39 +3,47 @@ import { Link } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import { Helmet } from 'react-helmet';
 
-import { blogAPI, volumeAPI } from '../utils/api';
+import { blogAPI, volumeAPI, testimonialAPI } from '../utils/api';
 
 const Home = () => {
   const [featuredPosts, setFeaturedPosts] = useState([]);
   const [featuredVolumes, setFeaturedVolumes] = useState([]);
+  const [testimonials, setTestimonials] = useState([]);
 
   useEffect(() => {
-    // Set fallback data immediately
-    setFeaturedPosts([
-      { id: 1, title: 'Finding Peace in Psalms', excerpt: 'Discover how the ancient words of David can bring comfort to modern hearts.', created_at: new Date() },
-      { id: 2, title: 'Grace in Grief', excerpt: 'A journey through loss and the healing power of faith.', created_at: new Date() },
-      { id: 3, title: 'Selah Moments', excerpt: 'Pausing to reflect on God\'s goodness in our daily lives.', created_at: new Date() }
-    ]);
-    setFeaturedVolumes([
-      { id: 1, title: 'SELAH Volume I', description: 'Poetry born from grief, transformed by grace.' },
-      { id: 2, title: 'SELAH Volume II', description: 'Continuing the journey of faith and healing.' },
-      { id: 3, title: 'SELAH Volume III', description: 'Finding hope in the darkest valleys.' }
-    ]);
-    
-    // Try to load real data
     loadFeaturedContent();
   }, []);
 
   const loadFeaturedContent = async () => {
     try {
       const postsResponse = await blogAPI.getAllPosts({ limit: 3 });
-      setFeaturedPosts(postsResponse.data?.posts || postsResponse.data || []);
+      const posts = postsResponse.data;
+      if (Array.isArray(posts)) {
+        setFeaturedPosts(posts);
+      } else if (posts?.results && Array.isArray(posts.results)) {
+        setFeaturedPosts(posts.results);
+      }
 
       const volumesResponse = await volumeAPI.getAllVolumes({ limit: 3 });
-      setFeaturedVolumes(volumesResponse.data || []);
+      const volumes = volumesResponse.data;
+      if (Array.isArray(volumes)) {
+        setFeaturedVolumes(volumes);
+      } else if (volumes?.results && Array.isArray(volumes.results)) {
+        setFeaturedVolumes(volumes.results);
+      }
+
+      const testimonialsResponse = await testimonialAPI.getAllTestimonials({ limit: 3 });
+      const testimonialsData = testimonialsResponse.data;
+      if (Array.isArray(testimonialsData)) {
+        setTestimonials(testimonialsData);
+      } else if (testimonialsData?.results && Array.isArray(testimonialsData.results)) {
+        setTestimonials(testimonialsData.results);
+      }
     } catch (error) {
       console.error('Error loading featured content:', error);
-      // Keep fallback data if API fails
+      setFeaturedPosts([]);
+      setFeaturedVolumes([]);
+      setTestimonials([]);
     }
   };
 
@@ -57,8 +65,9 @@ const Home = () => {
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.8 }}
             >
-              <h1>Welcome to Abbaswhispers</h1>
-              <p>Poetry and reflective conversations inspired by faith. The SELAH series - writings born from a journey through grief into grace, inspired by the Psalms.</p>
+              <div className="hero-badge">Inspirational Poetry & Faith</div>
+              <h1>Abba's Whispers</h1>
+              <p>My debut poetry series SELAH - a powerful collection of Christian poetry inspired by the Psalms. Journey from grief to grace and discover God's unfailing love through words that speak directly to your soul.</p>
               <div className="hero-actions">
                 <Link to="/volumes" className="btn-hero-primary">Explore Collections</Link>
                 <Link to="/about" className="btn-hero-secondary">Our Story</Link>
@@ -72,16 +81,16 @@ const Home = () => {
               transition={{ duration: 0.8, delay: 0.3 }}
             >
               <div className="stat-card">
-                <span className="stat-number">3+</span>
-                <span className="stat-label">Poetry Collections</span>
+                <span className="stat-number">{featuredVolumes.length}</span>
+                <span className="stat-label">SELAH Volumes</span>
               </div>
               <div className="stat-card">
-                <span className="stat-number">15+</span>
+                <span className="stat-number">{featuredPosts.length}</span>
                 <span className="stat-label">Blog Posts</span>
               </div>
               <div className="stat-card">
                 <span className="stat-number">Audio</span>
-                <span className="stat-label">Narrations</span>
+                <span className="stat-label">Included</span>
               </div>
             </motion.div>
           </div>
@@ -121,7 +130,7 @@ const Home = () => {
           </motion.div>
 
           <div className="collections-grid">
-            {featuredVolumes.slice(0, 3).map((volume, index) => (
+            {Array.isArray(featuredVolumes) && featuredVolumes.slice(0, 3).map((volume, index) => (
               <motion.div
                 key={volume.id}
                 className="collection-card"
@@ -132,7 +141,7 @@ const Home = () => {
               >
                 <div className="collection-content">
                   <h3>{volume.title}</h3>
-                  <p>{volume.description || 'A beautiful collection from the SELAH series exploring themes of faith and healing.'}</p>
+                  <p>{volume.description}</p>
                   <Link to="/volumes" className="collection-link">Read Collection</Link>
                 </div>
               </motion.div>
@@ -160,7 +169,7 @@ const Home = () => {
           </motion.div>
 
           <div className="blog-grid">
-            {featuredPosts.slice(0, 3).map((post, index) => (
+            {Array.isArray(featuredPosts) && featuredPosts.slice(0, 3).map((post, index) => (
               <motion.div
                 key={post.id}
                 className="blog-card"
@@ -169,9 +178,21 @@ const Home = () => {
                 transition={{ duration: 0.6, delay: index * 0.2 }}
                 viewport={{ once: true }}
               >
+                {post.image && (
+                  <div className="blog-image" style={{ height: '200px', overflow: 'hidden', borderRadius: '8px 8px 0 0', marginBottom: '1rem' }}>
+                    <img 
+                      src={post.image.startsWith('http') ? post.image : `http://localhost:8000${post.image}`}
+                      alt={post.title}
+                      style={{ width: '100%', height: '100%', objectFit: 'cover', transition: 'transform 0.3s ease' }}
+                      onMouseEnter={(e) => e.target.style.transform = 'scale(1.05)'}
+                      onMouseLeave={(e) => e.target.style.transform = 'scale(1)'}
+                      onError={(e) => e.target.parentElement.style.display = 'none'}
+                    />
+                  </div>
+                )}
                 <div className="blog-content">
                   <h3>{post.title}</h3>
-                  <p>{post.excerpt || 'Discover insights and reflections on faith, healing, and spiritual growth.'}</p>
+                  <p>{post.excerpt}</p>
                   <div className="blog-meta">
                     <span className="blog-date">{new Date(post.created_at).toLocaleDateString()}</span>
                     <Link to={`/blog/${post.id}`} className="blog-link">Read More</Link>
@@ -188,6 +209,48 @@ const Home = () => {
       </section>
 
 
+
+
+
+      {/* Testimonials Section */}
+      {testimonials.length > 0 && (
+        <section className="home-testimonials">
+          <div className="container">
+            <motion.div
+              className="section-header"
+              initial={{ opacity: 0, y: 30 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.6 }}
+              viewport={{ once: true }}
+            >
+              <h2>Voices of Transformation</h2>
+              <p>Stories from our community of faith and healing</p>
+            </motion.div>
+
+            <div className="testimonials-grid">
+              {testimonials.slice(0, 3).map((testimonial, index) => (
+                <motion.div
+                  key={testimonial.id}
+                  className="testimonial-card"
+                  initial={{ opacity: 0, y: 30 }}
+                  whileInView={{ opacity: 1, y: 0 }}
+                  transition={{ duration: 0.6, delay: index * 0.2 }}
+                  viewport={{ once: true }}
+                >
+                  <div className="testimonial-content">
+                    <div className="quote-mark">"</div>
+                    <p>{testimonial.quote}</p>
+                    <div className="testimonial-author">
+                      <strong>{testimonial.author_name}</strong>
+                      {testimonial.author_role && <span>{testimonial.author_role}</span>}
+                    </div>
+                  </div>
+                </motion.div>
+              ))}
+            </div>
+          </div>
+        </section>
+      )}
 
       {/* Call to Action */}
       <section className="home-cta">

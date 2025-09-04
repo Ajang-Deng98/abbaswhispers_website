@@ -144,7 +144,7 @@ const BlogPost = () => {
             {/* Featured Image */}
             {post.image && (
               <img 
-                src={post.image.startsWith('http') ? post.image : `http://localhost:5003${post.image}`} 
+                src={post.image.startsWith('http') ? post.image : `http://localhost:8000${post.image}`} 
                 alt={post.title}
                 style={{ 
                   width: '100%', 
@@ -210,7 +210,7 @@ const BlogPost = () => {
                 >
                   {relatedPost.image && (
                     <img 
-                      src={relatedPost.image.startsWith('http') ? relatedPost.image : `http://localhost:5003${relatedPost.image}`} 
+                      src={relatedPost.image.startsWith('http') ? relatedPost.image : `http://localhost:8000${relatedPost.image}`} 
                       alt={relatedPost.title}
                       style={{ 
                         width: '100%', 

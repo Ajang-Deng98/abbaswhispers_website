@@ -1,8 +1,29 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { motion } from 'framer-motion';
 import { Helmet } from 'react-helmet';
+import aboutImage from '../assets/images/about.jpg';
+import img1 from '../assets/images/GCQ28997-Edit.jpg';
+import img2 from '../assets/images/GCQ28999-Edit.jpg';
+import img3 from '../assets/images/GCQ29003-Edit.jpg';
+import img4 from '../assets/images/GCQ29069-Edit.jpg';
+import img5 from '../assets/images/GCQ29078-Edit.jpg';
+import img6 from '../assets/images/GCQ29088-Edit.jpg';
+import img7 from '../assets/images/GCQ29179-Edit.jpg';
+import img8 from '../assets/images/GCQ29182-Edit.jpg';
+import img9 from '../assets/images/GCQ29192-Edit.jpg';
 
 const About = () => {
+  const [currentSlide, setCurrentSlide] = useState(0);
+  const slideImages = [img1, img2, img3, img4, img5];
+
+  const nextSlide = () => {
+    setCurrentSlide((prev) => (prev + 1) % slideImages.length);
+  };
+
+  const prevSlide = () => {
+    setCurrentSlide((prev) => (prev - 1 + slideImages.length) % slideImages.length);
+  };
+
   return (
     <>
       <Helmet>
@@ -10,245 +31,251 @@ const About = () => {
         <meta name="description" content="Meet Uzo, founder of Abbaswhispers and creator of the SELAH poetry series. A journey from devastating loss to finding purpose through faith and reflective writing." />
       </Helmet>
 
-      <section className="section">
-        <div className="container">
-          <motion.div
-            className="text-center"
-            initial={{ opacity: 0, y: 30 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.8 }}
-          >
-            <h1>About Abbaswhispers</h1>
-            <p style={{ fontSize: '1.2rem', maxWidth: '800px', margin: '0 auto' }}>
-              An online space for poetry and reflective conversations, born from a journey 
-              through grief into grace.
-            </p>
-          </motion.div>
-
-          <div className="grid grid-2" style={{ marginTop: '4rem' }}>
+      {/* Full Width Layout */}
+      <div style={{
+        background: '#ffffff',
+        minHeight: '100vh',
+        fontFamily: 'Space Grotesk, sans-serif'
+      }}>
+        
+        {/* Hero Section */}
+        <div style={{
+          padding: '2rem 0',
+          borderBottom: '1px solid #e5e7eb'
+        }}>
+          <div style={{
+            maxWidth: '1200px',
+            margin: '0 auto',
+            padding: '0 2rem',
+            textAlign: 'center'
+          }}>
             <motion.div
-              initial={{ opacity: 0, x: -50 }}
-              whileInView={{ opacity: 1, x: 0 }}
-              transition={{ duration: 0.8 }}
-              viewport={{ once: true }}
-              style={{ 
-                position: 'relative',
-                height: 'fit-content',
-                display: 'flex',
-                alignItems: 'center'
-              }}
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.6 }}
             >
+              <h1 style={{ 
+                fontSize: 'clamp(2.5rem, 5vw, 4rem)', 
+                marginBottom: '0.5rem', 
+                color: '#000',
+                fontWeight: '800',
+                letterSpacing: '-0.02em'
+              }}>Abba's Whispers</h1>
               <div style={{
-                position: 'relative',
-                width: '100%',
-                background: 'linear-gradient(135deg, rgba(255,255,255,0.9) 0%, rgba(249,247,244,0.9) 100%)',
-                borderRadius: '25px',
-                padding: '30px',
-                minHeight: '220px',
-                boxShadow: '0 25px 50px rgba(139, 115, 85, 0.2), 0 0 0 1px rgba(212, 175, 55, 0.1)',
-                backdropFilter: 'blur(20px)',
-                border: '2px solid rgba(212, 175, 55, 0.15)'
+                width: '80px',
+                height: '4px',
+                background: 'var(--primary-gold)',
+                margin: '0.8rem auto',
+                borderRadius: '2px'
+              }} />
+              <p style={{ 
+                fontSize: '1.1rem', 
+                color: '#6b7280', 
+                fontWeight: '400',
+                fontStyle: 'italic',
+                maxWidth: '600px',
+                margin: '0 auto'
               }}>
-                {/* Floating decorative elements */}
-                <div style={{
-                  position: 'absolute',
-                  top: '-15px',
-                  right: '30px',
-                  width: '40px',
-                  height: '40px',
-                  background: 'linear-gradient(135deg, var(--primary-gold) 0%, var(--warm-gold) 100%)',
-                  borderRadius: '50%',
-                  boxShadow: '0 8px 20px rgba(212, 175, 55, 0.3)',
-                  animation: 'float 3s ease-in-out infinite'
-                }} />
-                
-                <div style={{
-                  position: 'absolute',
-                  bottom: '-10px',
-                  left: '20px',
-                  width: '30px',
-                  height: '30px',
-                  background: 'linear-gradient(135deg, var(--sage-green) 0%, var(--light-olive) 100%)',
-                  borderRadius: '50%',
-                  boxShadow: '0 6px 15px rgba(168, 184, 154, 0.3)',
-                  animation: 'float 4s ease-in-out infinite reverse'
-                }} />
-                
-                {/* Main content container */}
-                <div style={{
-                  display: 'flex',
-                  alignItems: 'center',
-                  justifyContent: 'center',
-                  gap: '30px',
-                  position: 'relative',
-                  zIndex: 1,
-                  minHeight: '180px'
-                }}>
-                  {/* Image container */}
-                  <div style={{
-                    flex: '0 0 180px',
-                    position: 'relative',
-                    display: 'flex',
-                    alignItems: 'center',
-                    justifyContent: 'center'
-                  }}>
-                    <div style={{
-                      width: '180px',
-                      height: '180px',
-                      borderRadius: '50%',
-                      overflow: 'hidden',
-                      border: '4px solid rgba(212, 175, 55, 0.3)',
-                      boxShadow: '0 15px 30px rgba(139, 115, 85, 0.3), inset 0 0 0 2px rgba(255,255,255,0.5)',
-                      position: 'relative'
-                    }}>
-                      <img 
-                        src="/aboutimage.jpg" 
-                        alt="Uzo - Founder of Abbaswhispers"
-                        style={{ 
-                          width: '100%',
-                          height: '100%',
-                          objectFit: 'cover',
-                          transition: 'transform 0.4s ease, filter 0.4s ease'
-                        }}
-                        onMouseEnter={(e) => {
-                          e.target.style.transform = 'scale(1.1)';
-                          e.target.style.filter = 'brightness(1.1) contrast(1.1)';
-                        }}
-                        onMouseLeave={(e) => {
-                          e.target.style.transform = 'scale(1)';
-                          e.target.style.filter = 'brightness(1) contrast(1)';
-                        }}
-                      />
-                      
-                      {/* Overlay ring */}
-                      <div style={{
-                        position: 'absolute',
-                        top: '-2px',
-                        left: '-2px',
-                        right: '-2px',
-                        bottom: '-2px',
-                        borderRadius: '50%',
-                        background: 'conic-gradient(from 0deg, var(--primary-gold), var(--warm-gold), var(--sage-green), var(--primary-gold))',
-                        zIndex: -1,
-                        animation: 'rotate 8s linear infinite'
-                      }} />
-                    </div>
-                  </div>
-                  
-                  {/* Text content */}
-                  <div style={{ 
-                    flex: 1,
-                    display: 'flex',
-                    flexDirection: 'column',
-                    justifyContent: 'center',
-                    alignItems: 'flex-start'
-                  }}>
-                    <h4 style={{
-                      color: 'var(--primary-gold)',
-                      fontSize: '1.3rem',
-                      marginBottom: '8px',
-                      fontWeight: '700',
-                      fontFamily: 'Playfair Display, serif'
-                    }}>
-                      Uzo
-                    </h4>
-                    <p style={{
-                      fontSize: '0.95rem',
-                      color: 'var(--text-medium)',
-                      marginBottom: '12px',
-                      fontWeight: '500'
-                    }}>
-                      Founder, Poet & Dean
-                    </p>
-                    <p style={{
-                      fontSize: '0.9rem',
-                      color: 'var(--text-light)',
-                      fontStyle: 'italic',
-                      margin: 0,
-                      lineHeight: '1.4'
-                    }}>
-                      "From grief to grace through the SELAH journey"
-                    </p>
-                    
-                    {/* Achievement badges */}
-                    <div style={{
-                      display: 'flex',
-                      gap: '8px',
-                      marginTop: '15px',
-                      flexWrap: 'wrap'
-                    }}>
-                      <span style={{
-                        fontSize: '0.75rem',
-                        padding: '4px 10px',
-                        background: 'rgba(212, 175, 55, 0.15)',
-                        color: 'var(--primary-gold)',
-                        borderRadius: '12px',
-                        fontWeight: '500'
-                      }}>
-                        30+ Years Experience
-                      </span>
-                      <span style={{
-                        fontSize: '0.75rem',
-                        padding: '4px 10px',
-                        background: 'rgba(168, 184, 154, 0.15)',
-                        color: 'var(--sage-green)',
-                        borderRadius: '12px',
-                        fontWeight: '500'
-                      }}>
-                        African Leadership Academy
-                      </span>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </motion.div>
-
-            <motion.div
-              initial={{ opacity: 0, x: 50 }}
-              whileInView={{ opacity: 1, x: 0 }}
-              transition={{ duration: 0.8 }}
-              viewport={{ once: true }}
-            >
-              <h2>Meet Uzo</h2>
-              <p>
-                My name is Uzo and I am the founder of Abbaswhispers: an online space for 
-                poetry and reflective conversations. I am also a mum, a singer-songwriter and 
-                Dean of a school in South Africa called the African Leadership Academy.
-              </p>
-              <p>
-                Over 30 years of work experience, I have helped people harness the power of 
-                their personal experiences to solve problems as a community organiser, 
-                international consultant, coach, and school leader.
+                An online space for poetry conversations, born from a journey through grief and grace.
               </p>
             </motion.div>
           </div>
         </div>
-      </section>
 
-      <section className="section" style={{ background: 'var(--cream)' }}>
-        <div className="container">
+        {/* Main Content */}
+        <div style={{
+          maxWidth: '1200px',
+          margin: '0 auto',
+          padding: '1.5rem 2rem'
+        }}>
+
+          {/* Hero Image */}
           <motion.div
-            className="text-center"
-            initial={{ opacity: 0, y: 30 }}
-            whileInView={{ opacity: 1, y: 0 }}
+            initial={{ opacity: 0, scale: 0.95 }}
+            animate={{ opacity: 1, scale: 1 }}
             transition={{ duration: 0.8 }}
-            viewport={{ once: true }}
+            style={{
+              position: 'relative',
+              marginBottom: '2rem',
+              borderRadius: '24px',
+              overflow: 'hidden',
+              boxShadow: '0 25px 50px -12px rgba(0, 0, 0, 0.25)'
+            }}
           >
-            <h2>The SELAH Journey</h2>
-            <div style={{ maxWidth: '900px', margin: '0 auto', textAlign: 'left' }}>
-              <p>
-                My poetry series is called <strong>SELAH</strong>. This series played a pivotal role in 
+            <img 
+              src={aboutImage} 
+              alt="Uzo - Founder of Abba's Whispers"
+              style={{
+                width: '100%',
+                height: 'auto',
+                maxHeight: '60vh',
+                objectFit: 'cover',
+                display: 'block'
+              }}
+            />
+            <div style={{
+              position: 'absolute',
+              bottom: 0,
+              left: 0,
+              right: 0,
+              background: 'linear-gradient(transparent, rgba(0,0,0,0.7))',
+              padding: '2rem',
+              color: 'white'
+            }}>
+              <h2 style={{
+                fontSize: '1.8rem',
+                fontWeight: '700',
+                margin: '0 0 0.5rem 0'
+              }}>Founder, Resident Poet</h2>
+              <p style={{
+                fontSize: '1rem',
+                opacity: 0.9,
+                margin: 0
+              }}>Creating sacred spaces for healing through words</p>
+            </div>
+          </motion.div>
+
+          {/* Introduction */}
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.6, delay: 0.2 }}
+            style={{ marginBottom: '2rem' }}
+          >
+            <h2 style={{ 
+              fontSize: '1.8rem', 
+              marginBottom: '1rem', 
+              color: '#000',
+              fontWeight: '700'
+            }}>Founder, Resident Poet</h2>
+            <p style={{ 
+              fontSize: '1.2rem', 
+              lineHeight: '1.7',
+              color: '#374151',
+              margin: 0
+            }}>
+              My name is Uzo and I am the founder of <strong style={{color: 'var(--primary-gold)'}}>Abba's Whispers</strong>. I am also a mum, a singer-songwriter and an education leader.
+            </p>
+          </motion.div>
+
+          {/* Modern Slideshow */}
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.6 }}
+            viewport={{ once: true }}
+            style={{ 
+              marginBottom: '1.5rem', 
+              position: 'relative',
+              borderRadius: '20px',
+              overflow: 'hidden',
+              boxShadow: '0 15px 35px rgba(0,0,0,0.1)'
+            }}
+          >
+            <img 
+              src={slideImages[currentSlide]}
+              alt={`Uzo ${currentSlide + 1}`}
+              style={{
+                width: '100%',
+                height: '70vh',
+                objectFit: 'cover'
+              }}
+            />
+            <button 
+              onClick={prevSlide}
+              style={{
+                position: 'absolute',
+                left: '15px',
+                top: '50%',
+                transform: 'translateY(-50%)',
+                background: 'rgba(255,255,255,0.9)',
+                color: '#000',
+                border: 'none',
+                borderRadius: '50%',
+                width: '45px',
+                height: '45px',
+                cursor: 'pointer',
+                fontSize: '18px',
+                boxShadow: '0 4px 12px rgba(0,0,0,0.15)',
+                transition: 'all 0.2s ease'
+              }}
+            >
+              ‹
+            </button>
+            <button 
+              onClick={nextSlide}
+              style={{
+                position: 'absolute',
+                right: '15px',
+                top: '50%',
+                transform: 'translateY(-50%)',
+                background: 'rgba(255,255,255,0.9)',
+                color: '#000',
+                border: 'none',
+                borderRadius: '50%',
+                width: '45px',
+                height: '45px',
+                cursor: 'pointer',
+                fontSize: '18px',
+                boxShadow: '0 4px 12px rgba(0,0,0,0.15)',
+                transition: 'all 0.2s ease'
+              }}
+            >
+              ›
+            </button>
+            <div style={{
+              position: 'absolute',
+              bottom: '15px',
+              left: '50%',
+              transform: 'translateX(-50%)',
+              display: 'flex',
+              gap: '8px'
+            }}>
+              {slideImages.map((_, index) => (
+                <div
+                  key={index}
+                  onClick={() => setCurrentSlide(index)}
+                  style={{
+                    width: '10px',
+                    height: '10px',
+                    borderRadius: '50%',
+                    background: index === currentSlide ? 'white' : 'rgba(255,255,255,0.5)',
+                    cursor: 'pointer',
+                    transition: 'all 0.2s ease'
+                  }}
+                />
+              ))}
+            </div>
+          </motion.div>
+
+          {/* The SELAH Journey */}
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.6 }}
+            viewport={{ once: true }}
+            style={{ marginBottom: '2rem' }}
+          >
+            <h2 style={{ 
+              fontSize: '2rem', 
+              marginBottom: '1.2rem', 
+              color: '#000',
+              fontWeight: '700'
+            }}>The SELAH Journey</h2>
+            <div style={{ lineHeight: '1.7' }}>
+              <p style={{ fontSize: '1.1rem', marginBottom: '1.2rem', color: '#374151' }}>
+                My poetry series is called <strong style={{color: 'var(--primary-gold)'}}>SELAH</strong>. This series played a pivotal role in 
                 helping me grow from grief. I lost my beloved husband in 2015 from a devastating illness. 
                 I was in shock for a very long time. I went into a space of denial and closed up my 
                 feelings for everything.
               </p>
-              <p>
+              <p style={{ fontSize: '1.1rem', marginBottom: '1.2rem', color: '#374151' }}>
                 The only things that kept me going were looking after our children and speaking to God, 
                 who I call 'Abba,' meaning Father. Though for a couple of years, I'm not sure I was 
                 speaking — I raged and cried and shouted at Him for many years. He listened…He held me…
                 He shouted back occasionally…Most importantly…He let me be.
               </p>
-              <p>
+              <p style={{ fontSize: '1.1rem', marginBottom: 0, color: '#374151' }}>
                 In 2021, my Abba asked me to come out of the shadows.. to begin once again to live a 
                 life of purpose and destiny. I have wondered for a long time what this message meant to me. 
                 I have always wrestled with my identity.. Who am I? What am I? What am I called to do 
@@ -256,31 +283,35 @@ const About = () => {
               </p>
             </div>
           </motion.div>
-        </div>
-      </section>
 
-      <section className="section">
-        <div className="container">
+
+
+          {/* From Pain to Purpose */}
           <motion.div
-            className="text-center"
-            initial={{ opacity: 0, y: 30 }}
+            initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.8 }}
+            transition={{ duration: 0.6 }}
             viewport={{ once: true }}
+            style={{ marginBottom: '2rem' }}
           >
-            <h2>From Pain to Purpose</h2>
-            <div style={{ maxWidth: '900px', margin: '0 auto', textAlign: 'left' }}>
-              <p>
+            <h2 style={{ 
+              fontSize: '2rem', 
+              marginBottom: '1.2rem', 
+              color: '#000',
+              fontWeight: '700'
+            }}>From Pain to Purpose</h2>
+            <div style={{ lineHeight: '1.7' }}>
+              <p style={{ fontSize: '1.1rem', marginBottom: '1.2rem', color: '#374151' }}>
                 These writings come from time with myself and Abba. I realized that whenever I 
                 stepped into moments of despair, anguish and pain... I would fall into writing to 
                 express my heart. The early writings were influenced by reading the Psalms of the 
                 Bible and then very soon, I found my own voice of expression.
               </p>
-              <p>
-                You will find the word <strong>"selah"</strong> sprinkled throughout these poems…
+              <p style={{ fontSize: '1.1rem', marginBottom: '1.2rem', color: '#374151' }}>
+                You will find the word <strong style={{color: 'var(--primary-gold)'}}>"selah"</strong> sprinkled throughout these poems…
                 Use those moments to pause and reflect on your feelings.
               </p>
-              <p>
+              <p style={{ fontSize: '1.1rem', marginBottom: 0, color: '#374151' }}>
                 Today, I am deeply grateful for these words of truth in my life. My wish for 
                 anyone who reads them is that it brings you to a grace-filled encounter with God. 
                 A moment to experience His presence in your life everyday.
@@ -288,71 +319,68 @@ const About = () => {
             </div>
           </motion.div>
 
-          <div className="grid grid-3" style={{ marginTop: '4rem' }}>
-            {[
-              {
-                title: "Poetry & Reflection",
-                description: "SELAH series - writings born from moments of despair transformed into expressions of hope."
-              },
-              {
-                title: "Authentic Journey",
-                description: "Real experiences of grief, healing, and finding purpose through relationship with Abba."
-              },
-              {
-                title: "Grace-Filled Encounters",
-                description: "Creating moments for readers to experience God's presence in their everyday lives."
-              }
-            ].map((value, index) => (
-              <motion.div
-                key={value.title}
-                className="card text-center"
-                initial={{ opacity: 0, y: 30 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.6, delay: index * 0.1 }}
-                viewport={{ once: true }}
-              >
 
-                <h3>{value.title}</h3>
-                <p>{value.description}</p>
-              </motion.div>
-            ))}
-          </div>
-        </div>
-      </section>
 
-      <section className="section" style={{ background: 'var(--light-olive)', color: 'white' }}>
-        <div className="container text-center">
+          {/* Closing Quote */}
           <motion.div
-            initial={{ opacity: 0, y: 30 }}
+            initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.8 }}
+            transition={{ duration: 0.6 }}
             viewport={{ once: true }}
+            style={{ 
+              textAlign: 'center', 
+              padding: '2rem 0',
+              marginBottom: '1rem'
+            }}
           >
-            <h2>A Grace-Filled Encounter Awaits</h2>
             <blockquote style={{ 
-              fontSize: '1.2rem', 
+              fontSize: '1.4rem', 
               fontStyle: 'italic', 
-              maxWidth: '700px', 
-              margin: '2rem auto',
-              borderLeft: '4px solid white',
-              paddingLeft: '2rem',
-              textAlign: 'left'
+              color: '#1f2937',
+              marginBottom: '1.5rem',
+              lineHeight: '1.6',
+              fontWeight: '500'
             }}>
               "My wish for anyone who reads these words is that it brings you to a 
               grace-filled encounter with God. A moment to experience His presence 
               in your life everyday."
-              <br /><br />
-              <strong>- Uzo, Founder</strong>
             </blockquote>
-            <div style={{ display: 'flex', gap: '1rem', justifyContent: 'center', flexWrap: 'wrap', marginTop: '3rem' }}>
-              <a href="/volumes" className="btn">Explore SELAH Series</a>
-              <a href="/prayer-request" className="btn btn-secondary" style={{ borderColor: 'white', color: 'white' }}>
-                Share Your Heart
-              </a>
+            <p style={{ 
+              fontSize: '1rem', 
+              fontWeight: '600', 
+              color: 'var(--primary-gold)',
+              marginBottom: '2rem'
+            }}>- Uzo, Founder</p>
+            
+            <div style={{ 
+              display: 'flex', 
+              gap: '1rem', 
+              justifyContent: 'center', 
+              flexWrap: 'wrap'
+            }}>
+              <a href="/volumes" style={{
+                background: 'var(--primary-gold)',
+                color: 'white',
+                padding: '1rem 2rem',
+                borderRadius: '50px',
+                textDecoration: 'none',
+                fontWeight: '600',
+                transition: 'all 0.2s ease'
+              }}>Explore SELAH Series</a>
+              <a href="/prayer-request" style={{
+                border: '2px solid var(--primary-gold)',
+                color: 'var(--primary-gold)',
+                background: 'transparent',
+                padding: '1rem 2rem',
+                borderRadius: '50px',
+                textDecoration: 'none',
+                fontWeight: '600',
+                transition: 'all 0.2s ease'
+              }}>Share Your Heart</a>
             </div>
           </motion.div>
         </div>
-      </section>
+      </div>
     </>
   );
 };

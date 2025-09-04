@@ -6,11 +6,14 @@ import Footer from './components/Footer';
 import Home from './pages/Home';
 import About from './pages/About';
 import Volumes from './pages/Volumes';
+import Books from './pages/Books';
 import Blog from './pages/Blog';
 import BlogPost from './pages/BlogPost';
 import Contact from './pages/Contact';
 import PrayerRequest from './pages/PrayerRequest';
-import Admin from './pages/Admin';
+import PrivacyPolicy from './pages/PrivacyPolicy';
+import TermsOfService from './pages/TermsOfService';
+
 import './styles/App.css';
 import './styles/Mobile.css';
 
@@ -37,11 +40,14 @@ function App() {
         <Route path="/" element={<Layout><Home /></Layout>} />
         <Route path="/about" element={<Layout><About /></Layout>} />
         <Route path="/volumes" element={<Layout><Volumes /></Layout>} />
+        <Route path="/books" element={<Layout><Books /></Layout>} />
         <Route path="/blog" element={<Layout><Blog /></Layout>} />
         <Route path="/blog/:id" element={<Layout><BlogPost /></Layout>} />
         <Route path="/contact" element={<Layout><Contact /></Layout>} />
         <Route path="/prayer-request" element={<Layout><PrayerRequest /></Layout>} />
-        <Route path="/admin" element={<Admin />} />
+        <Route path="/privacy" element={<Layout><PrivacyPolicy /></Layout>} />
+        <Route path="/terms" element={<Layout><TermsOfService /></Layout>} />
+
       </Routes>
     </Router>
   );

@@ -16,36 +16,6 @@ const Blog = () => {
   }, [searchTerm, selectedCategory, currentPage]);
 
   const loadPosts = async () => {
-    // Set fallback data immediately
-    const fallbackPosts = [
-      {
-        id: 1,
-        title: 'Finding Peace in Psalms',
-        excerpt: 'Discover how the ancient words of David can bring comfort to modern hearts.',
-        category: 'peace',
-        tags: 'peace,psalms,comfort',
-        created_at: new Date().toISOString()
-      },
-      {
-        id: 2,
-        title: 'Grace in Grief',
-        excerpt: 'A journey through loss and the healing power of faith.',
-        category: 'gratitude',
-        tags: 'grief,healing,faith',
-        created_at: new Date().toISOString()
-      },
-      {
-        id: 3,
-        title: 'Selah Moments',
-        excerpt: 'Pausing to reflect on God\'s goodness in our daily lives.',
-        category: 'worship',
-        tags: 'selah,reflection,worship',
-        created_at: new Date().toISOString()
-      }
-    ];
-    
-    setPosts(fallbackPosts);
-    
     try {
       const response = await blogAPI.getAllPosts({
         search: searchTerm,
@@ -53,12 +23,14 @@ const Blog = () => {
         page: currentPage,
         limit: postsPerPage
       });
-      if (response.data && response.data.length > 0) {
-        setPosts(response.data);
+      if (response.data) {
+        setPosts(Array.isArray(response.data) ? response.data : response.data.results || []);
+      } else {
+        setPosts([]);
       }
     } catch (error) {
       console.error('Error loading posts:', error);
-      // Keep fallback data
+      setPosts([]);
     }
   };
 
@@ -94,132 +66,152 @@ const Blog = () => {
         <meta name="description" content="Read our latest blog posts featuring Christian inspiration, psalm reflections, and spiritual insights for daily living and faith growth." />
       </Helmet>
 
-      <section className="section">
-        <div className="container">
-          <motion.div
-            className="text-center"
-            initial={{ opacity: 0, y: 30 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.8 }}
-          >
-            <h1 style={{ fontSize: '2.2rem', marginBottom: '1rem' }}>Inspirational Blog</h1>
-            <p style={{ fontSize: '1rem', maxWidth: '700px', margin: '0 auto', lineHeight: '1.6' }}>
-              Dive deeper into the wisdom of the Psalms with reflections, insights, 
-              and practical applications for modern Christian living.
-            </p>
-          </motion.div>
+      <div style={{
+        maxWidth: '1200px',
+        margin: '0 auto',
+        padding: '1rem 2rem',
+        background: 'rgba(255, 255, 255, 0.8)',
+        minHeight: '100vh',
+        fontFamily: 'Space Grotesk, sans-serif'
+      }}>
+        
+        {/* Header */}
+        <motion.div
+          initial={{ opacity: 0, y: 30 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.8 }}
+          style={{
+            textAlign: 'center',
+            marginBottom: '2rem',
+            padding: '2rem 0 1rem 0',
+            borderBottom: '2px solid var(--primary-gold)'
+          }}
+        >
 
-          {/* Search and Filter */}
-          <motion.div
-            style={{ margin: '3rem 0' }}
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.6, delay: 0.2 }}
-          >
-            <div style={{ 
-              display: 'flex', 
-              flexDirection: 'column', 
-              gap: '1rem',
-              alignItems: 'center',
-              marginBottom: '2rem'
+          <h1 style={{
+            fontSize: 'clamp(2rem, 5vw, 3rem)',
+            fontWeight: '700',
+            color: '#000',
+            marginBottom: '0.5rem'
+          }}>Abba's Whispers</h1>
+          <p style={{
+            fontSize: '1.1rem',
+            color: '#666',
+            margin: '0 auto',
+            lineHeight: '1.5'
+          }}>
+            Dive deeper into the wisdom of the Psalms with reflections and insights.
+          </p>
+        </motion.div>
+
+        {/* Search and Filter */}
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.6, delay: 0.2 }}
+          style={{
+            marginBottom: '2rem',
+            background: 'rgba(255, 255, 255, 0.9)',
+            padding: '1.5rem',
+            borderRadius: '15px',
+            boxShadow: '0 5px 15px rgba(0, 0, 0, 0.1)',
+            border: '1px solid rgba(212, 175, 55, 0.2)'
+          }}
+        >
+
+          
+          <div style={{
+            display: 'flex',
+            flexDirection: 'column',
+            gap: '1rem',
+            alignItems: 'center'
+          }}>
+            <input
+              type="text"
+              placeholder="Search posts..."
+              value={searchTerm}
+              onChange={(e) => setSearchTerm(e.target.value)}
+              style={{
+                padding: '12px 20px',
+                border: '1px solid rgba(212, 175, 55, 0.3)',
+                borderRadius: '25px',
+                width: '100%',
+                maxWidth: '400px',
+                fontSize: '1rem',
+                outline: 'none',
+                transition: 'all 0.3s ease'
+              }}
+            />
+            
+            <div style={{
+              display: 'flex',
+              flexWrap: 'wrap',
+              justifyContent: 'center',
+              gap: '0.5rem'
             }}>
-              <input
-                type="text"
-                placeholder="Search posts..."
-                value={searchTerm}
-                onChange={(e) => setSearchTerm(e.target.value)}
-                style={{
-                  padding: '14px 20px',
-                  border: '1px solid #e0e0e0',
-                  borderRadius: '25px',
-                  width: '100%',
-                  maxWidth: '400px',
-                  fontSize: '0.95rem',
-                  outline: 'none',
-                  transition: 'all 0.3s ease',
-                  backgroundColor: '#fafafa'
-                }}
-                onFocus={(e) => {
-                  e.target.style.borderColor = 'var(--primary-gold)';
-                  e.target.style.backgroundColor = 'white';
-                  e.target.style.boxShadow = '0 0 0 3px rgba(212, 175, 55, 0.1)';
-                }}
-                onBlur={(e) => {
-                  e.target.style.borderColor = '#e0e0e0';
-                  e.target.style.backgroundColor = '#fafafa';
-                  e.target.style.boxShadow = 'none';
-                }}
-              />
-              
-              <div style={{ 
-                display: 'flex', 
-                flexWrap: 'wrap', 
-                justifyContent: 'center', 
-                gap: '0.5rem'
-              }}>
-                {categories.map((category) => (
-                  <button
-                    key={category.value}
-                    onClick={() => {
-                      setSelectedCategory(category.value);
-                      setCurrentPage(1);
-                    }}
-                    style={{
-                      padding: '8px 16px',
-                      fontSize: '0.85rem',
-                      fontWeight: '500',
-                      borderRadius: '20px',
-                      border: selectedCategory === category.value ? 'none' : '1px solid var(--primary-gold)',
-                      background: selectedCategory === category.value ? 'var(--primary-gold)' : 'transparent',
-                      color: selectedCategory === category.value ? 'white' : 'var(--primary-gold)',
-                      cursor: 'pointer',
-                      transition: 'all 0.3s ease'
-                    }}
-                    onMouseEnter={(e) => {
-                      if (selectedCategory !== category.value) {
-                        e.target.style.background = 'var(--primary-gold)';
-                        e.target.style.color = 'white';
-                      }
-                    }}
-                    onMouseLeave={(e) => {
-                      if (selectedCategory !== category.value) {
-                        e.target.style.background = 'transparent';
-                        e.target.style.color = 'var(--primary-gold)';
-                      }
-                    }}
-                  >
-                    {category.label}
-                  </button>
-                ))}
-              </div>
+              {categories.map((category) => (
+                <button
+                  key={category.value}
+                  onClick={() => {
+                    setSelectedCategory(category.value);
+                    setCurrentPage(1);
+                  }}
+                  style={{
+                    padding: '8px 16px',
+                    fontSize: '0.9rem',
+                    fontWeight: '500',
+                    borderRadius: '20px',
+                    border: selectedCategory === category.value ? 'none' : '1px solid var(--primary-gold)',
+                    background: selectedCategory === category.value ? 'var(--primary-gold)' : 'white',
+                    color: selectedCategory === category.value ? 'white' : 'var(--primary-gold)',
+                    cursor: 'pointer',
+                    transition: 'all 0.3s ease'
+                  }}
+                >
+                  {category.label}
+                </button>
+              ))}
             </div>
-          </motion.div>
+          </div>
+        </motion.div>
 
-          {/* Blog Posts Grid */}
-          <div style={{ 
+        {/* Blog Posts */}
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.6, delay: 0.4 }}
+          style={{
+            marginBottom: '2rem'
+          }}
+        >
+
+          
+          <div style={{
             display: 'grid',
-            gridTemplateColumns: 'repeat(auto-fit, minmax(350px, 1fr))',
-            gap: '2rem',
-            maxWidth: '1200px',
-            margin: '0 auto'
+            gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))',
+            gap: '1.5rem'
           }}>
             {currentPosts.map((post, index) => (
               <motion.article
                 key={post.id}
-                className="card"
                 initial={{ opacity: 0, y: 30 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.6, delay: index * 0.1 }}
-                style={{ 
+                style={{
+                  background: 'white',
                   padding: '1.5rem',
-                  minHeight: '450px',
+                  borderRadius: '15px',
+                  border: '1px solid rgba(212, 175, 55, 0.2)',
+                  boxShadow: '0 5px 15px rgba(0, 0, 0, 0.1)',
+                  transition: 'all 0.3s ease',
+                  minHeight: '400px',
                   display: 'flex',
                   flexDirection: 'column'
                 }}
               >
                 {post.image && (
                   <img 
-                    src={post.image.startsWith('http') ? post.image : `http://localhost:5003${post.image}`} 
+                    src={post.image.startsWith('http') ? post.image : `http://localhost:8000${post.image}`} 
                     alt={post.title}
                     style={{ 
                       width: '100%', 
@@ -229,7 +221,6 @@ const Blog = () => {
                       marginBottom: '1rem' 
                     }}
                     onError={(e) => {
-                      console.log('Image failed to load:', post.image);
                       e.target.style.display = 'none';
                     }}
                   />
@@ -260,21 +251,23 @@ const Blog = () => {
                   </div>
                 )}
                 
-                <h3 style={{ 
+                <h3 style={{
                   fontSize: '1.2rem',
                   marginBottom: '0.75rem',
-                  lineHeight: '1.4'
+                  lineHeight: '1.4',
+                  fontWeight: '600'
                 }}>
-                  <Link to={`/blog/${post.id}`} style={{ 
+                  <Link to={`/blog/${post.id}`} style={{
                     color: 'var(--text-dark)',
-                    textDecoration: 'none'
+                    textDecoration: 'none',
+                    transition: 'color 0.3s ease'
                   }}>
                     {post.title}
                   </Link>
                 </h3>
                 
-                <p style={{ 
-                  fontSize: '0.95rem',
+                <p style={{
+                  fontSize: '1rem',
                   lineHeight: '1.6',
                   color: 'var(--text-medium)',
                   marginBottom: 'auto',
@@ -285,7 +278,7 @@ const Blog = () => {
                   display: 'flex', 
                   justifyContent: 'space-between', 
                   alignItems: 'center',
-                  marginTop: '1.5rem',
+                  marginTop: '1rem',
                   paddingTop: '1rem',
                   borderTop: '1px solid rgba(212, 175, 55, 0.1)'
                 }}>
@@ -301,25 +294,15 @@ const Blog = () => {
                     to={`/blog/${post.id}`} 
                     style={{
                       padding: '10px 20px',
-                      fontSize: '0.85rem',
+                      fontSize: '0.9rem',
                       fontWeight: '500',
                       borderRadius: '20px',
-                      background: 'linear-gradient(135deg, var(--primary-gold) 0%, var(--warm-gold) 100%)',
+                      background: 'var(--primary-gold)',
                       border: 'none',
                       color: 'white',
                       textDecoration: 'none',
-                      cursor: 'pointer',
                       transition: 'all 0.3s ease',
-                      boxShadow: '0 3px 10px rgba(212, 175, 55, 0.3)',
                       display: 'inline-block'
-                    }}
-                    onMouseEnter={(e) => {
-                      e.target.style.transform = 'translateY(-2px)';
-                      e.target.style.boxShadow = '0 5px 15px rgba(212, 175, 55, 0.4)';
-                    }}
-                    onMouseLeave={(e) => {
-                      e.target.style.transform = 'translateY(0)';
-                      e.target.style.boxShadow = '0 3px 10px rgba(212, 175, 55, 0.3)';
                     }}
                   >
                     Read More
@@ -328,66 +311,63 @@ const Blog = () => {
               </motion.article>
             ))}
           </div>
-
-          {/* Pagination */}
-          {totalPages > 1 && (
-            <motion.div
-              className="text-center"
-              style={{ marginTop: '3rem' }}
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              transition={{ duration: 0.5, delay: 0.3 }}
-            >
-              <div style={{ display: 'flex', justifyContent: 'center', gap: '0.5rem', flexWrap: 'wrap' }}>
-                {Array.from({ length: totalPages }, (_, i) => i + 1).map(page => (
-                  <button
-                    key={page}
-                    onClick={() => setCurrentPage(page)}
-                    style={{
-                      minWidth: '40px',
-                      padding: '10px 15px',
-                      fontSize: '0.9rem',
-                      fontWeight: '500',
-                      borderRadius: '8px',
-                      border: currentPage === page ? 'none' : '1px solid var(--primary-gold)',
-                      background: currentPage === page ? 'var(--primary-gold)' : 'transparent',
-                      color: currentPage === page ? 'white' : 'var(--primary-gold)',
-                      cursor: 'pointer',
-                      transition: 'all 0.3s ease'
-                    }}
-                    onMouseEnter={(e) => {
-                      if (currentPage !== page) {
-                        e.target.style.background = 'var(--primary-gold)';
-                        e.target.style.color = 'white';
-                      }
-                    }}
-                    onMouseLeave={(e) => {
-                      if (currentPage !== page) {
-                        e.target.style.background = 'transparent';
-                        e.target.style.color = 'var(--primary-gold)';
-                      }
-                    }}
-                  >
-                    {page}
-                  </button>
-                ))}
-              </div>
-            </motion.div>
-          )}
-
-          {filteredPosts.length === 0 && (
-            <motion.div
-              className="text-center"
-              style={{ marginTop: '3rem' }}
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              transition={{ duration: 0.5 }}
-            >
-              <p>No posts found matching your search criteria. Please try different keywords or categories.</p>
-            </motion.div>
-          )}
-        </div>
-      </section>
+        </motion.div>
+        
+        {/* Pagination */}
+        {totalPages > 1 && (
+          <motion.div
+            style={{
+              textAlign: 'center',
+              marginTop: '2rem',
+              padding: '1rem'
+            }}
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            transition={{ duration: 0.5, delay: 0.3 }}
+          >
+            <div style={{ display: 'flex', justifyContent: 'center', gap: '0.5rem', flexWrap: 'wrap' }}>
+              {Array.from({ length: totalPages }, (_, i) => i + 1).map(page => (
+                <button
+                  key={page}
+                  onClick={() => setCurrentPage(page)}
+                  style={{
+                    minWidth: '40px',
+                    padding: '8px 12px',
+                    fontSize: '0.9rem',
+                    fontWeight: '500',
+                    borderRadius: '8px',
+                    border: currentPage === page ? 'none' : '1px solid var(--primary-gold)',
+                    background: currentPage === page ? 'var(--primary-gold)' : 'white',
+                    color: currentPage === page ? 'white' : 'var(--primary-gold)',
+                    cursor: 'pointer',
+                    transition: 'all 0.3s ease'
+                  }}
+                >
+                  {page}
+                </button>
+              ))}
+            </div>
+          </motion.div>
+        )}
+        
+        {filteredPosts.length === 0 && (
+          <motion.div
+            style={{
+              textAlign: 'center',
+              marginTop: '2rem',
+              padding: '2rem'
+            }}
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            transition={{ duration: 0.5 }}
+          >
+            <h3 style={{ color: 'var(--primary-gold)', marginBottom: '0.5rem' }}>No Articles Found</h3>
+            <p style={{ fontSize: '1rem', color: 'var(--text-medium)' }}>
+              No posts found. Try different keywords or categories.
+            </p>
+          </motion.div>
+        )}
+      </div>
     </>
   );
 };

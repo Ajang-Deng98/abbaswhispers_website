@@ -43,7 +43,12 @@ const Contact = () => {
         <meta name="description" content="Contact Abbaswhispers for questions, prayer requests, or to learn more about our Christian writings inspired by the Psalms. We'd love to hear from you." />
       </Helmet>
 
-      <section className="section">
+      <section className="contact-hero" style={{
+        background: 'linear-gradient(rgba(0, 0, 0, 0.4), rgba(0, 0, 0, 0.4)), url("https://images.unsplash.com/photo-1470071459604-3b5ec3a7fe05?ixlib=rb-4.0.3&w=2000&q=80") center/cover no-repeat',
+        padding: '4rem 0',
+        color: 'white',
+        textAlign: 'center'
+      }}>
         <div className="container">
           <motion.div
             className="text-center"
@@ -51,354 +56,205 @@ const Contact = () => {
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.8 }}
           >
-            <h1>Contact Us</h1>
-            <p style={{ fontSize: '1.2rem', maxWidth: '800px', margin: '0 auto' }}>
-              We'd love to hear from you! Whether you have questions, feedback, or just want to 
-              share how our writings have touched your heart, please don't hesitate to reach out.
+            <div className="hero-badge" style={{ background: 'rgba(212, 175, 55, 0.9)', color: 'white', padding: '0.5rem 1.5rem', borderRadius: '25px', display: 'inline-block', marginBottom: '2rem' }}>
+              Let's Connect
+            </div>
+            <h1 style={{ color: 'white', textShadow: '2px 2px 4px rgba(0,0,0,0.5)' }}>We'd Love to Hear From You</h1>
+            <p style={{ fontSize: '1.3rem', maxWidth: '900px', margin: '0 auto', lineHeight: '1.6', color: 'white', textShadow: '1px 1px 2px rgba(0,0,0,0.5)' }}>
+              Your story matters to us. Whether you have questions about our writings, need prayer support, 
+              or want to share how the SELAH series has touched your heart, we're here to listen and connect.
             </p>
           </motion.div>
+        </div>
+      </section>
 
-          <div className="contact-grid">
-            {/* Contact Form */}
+      <section className="section">
+        <div className="container">
+          <div className="modern-contact-layout">
             <motion.div
-              className="contact-form-section"
-              initial={{ opacity: 0, x: -50 }}
-              animate={{ opacity: 1, x: 0 }}
-              transition={{ duration: 0.8, delay: 0.2 }}
+              className="contact-main-card"
+              initial={{ opacity: 0, y: 30 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.8 }}
             >
-              <div className="contact-card">
-                <h2>Send Message</h2>
-                <form onSubmit={handleSubmit}>
-                  <div style={{ marginBottom: '1.5rem' }}>
-                    <label style={{ display: 'block', marginBottom: '0.5rem', fontWeight: '500', fontSize: '0.9rem', color: 'var(--text-dark)' }}>
-                      Name *
-                    </label>
-                    <input
-                      type="text"
-                      name="name"
-                      value={formData.name}
-                      onChange={handleChange}
-                      required
-                      style={{
-                        width: '100%',
-                        padding: '14px 16px',
-                        border: '1px solid #e0e0e0',
-                        borderRadius: '8px',
-                        fontSize: '0.95rem',
-                        transition: 'all 0.3s ease',
-                        backgroundColor: '#fafafa',
-                        fontFamily: 'Inter, sans-serif'
-                      }}
-                      onFocus={(e) => {
-                        e.target.style.borderColor = 'var(--primary-gold)';
-                        e.target.style.backgroundColor = 'white';
-                        e.target.style.boxShadow = '0 0 0 3px rgba(212, 175, 55, 0.1)';
-                      }}
-                      onBlur={(e) => {
-                        e.target.style.borderColor = '#e0e0e0';
-                        e.target.style.backgroundColor = '#fafafa';
-                        e.target.style.boxShadow = 'none';
-                      }}
-                    />
+              <div className="contact-form-wrapper">
+                <h2>Send us a Message</h2>
+                <p>We'd love to hear from you. Send us a message and we'll respond as soon as possible.</p>
+                
+                <form onSubmit={handleSubmit} className="modern-form">
+                  <div className="form-row">
+                    <div className="form-group">
+                      <input
+                        type="text"
+                        name="name"
+                        value={formData.name}
+                        onChange={handleChange}
+                        placeholder="Your Name"
+                        required
+                        className="form-input"
+                      />
+                    </div>
+                    <div className="form-group">
+                      <input
+                        type="email"
+                        name="email"
+                        value={formData.email}
+                        onChange={handleChange}
+                        placeholder="Your Email"
+                        required
+                        className="form-input"
+                      />
+                    </div>
                   </div>
-
-                  <div style={{ marginBottom: '1.5rem' }}>
-                    <label style={{ display: 'block', marginBottom: '0.5rem', fontWeight: '500', fontSize: '0.9rem', color: 'var(--text-dark)' }}>
-                      Email *
-                    </label>
-                    <input
-                      type="email"
-                      name="email"
-                      value={formData.email}
-                      onChange={handleChange}
-                      required
-                      style={{
-                        width: '100%',
-                        padding: '14px 16px',
-                        border: '1px solid #e0e0e0',
-                        borderRadius: '8px',
-                        fontSize: '0.95rem',
-                        transition: 'all 0.3s ease',
-                        backgroundColor: '#fafafa',
-                        fontFamily: 'Inter, sans-serif'
-                      }}
-                      onFocus={(e) => {
-                        e.target.style.borderColor = 'var(--primary-gold)';
-                        e.target.style.backgroundColor = 'white';
-                        e.target.style.boxShadow = '0 0 0 3px rgba(212, 175, 55, 0.1)';
-                      }}
-                      onBlur={(e) => {
-                        e.target.style.borderColor = '#e0e0e0';
-                        e.target.style.backgroundColor = '#fafafa';
-                        e.target.style.boxShadow = 'none';
-                      }}
-                    />
-                  </div>
-
-                  <div style={{ marginBottom: '1.5rem' }}>
-                    <label style={{ display: 'block', marginBottom: '0.5rem', fontWeight: '500', fontSize: '0.9rem', color: 'var(--text-dark)' }}>
-                      Subject *
-                    </label>
+                  
+                  <div className="form-group">
                     <select
                       name="subject"
                       value={formData.subject}
                       onChange={handleChange}
                       required
-                      style={{
-                        width: '100%',
-                        padding: '14px 16px',
-                        border: '1px solid #e0e0e0',
-                        borderRadius: '8px',
-                        fontSize: '0.95rem',
-                        backgroundColor: '#fafafa',
-                        transition: 'all 0.3s ease',
-                        fontFamily: 'Inter, sans-serif'
-                      }}
-                      onFocus={(e) => {
-                        e.target.style.borderColor = 'var(--primary-gold)';
-                        e.target.style.backgroundColor = 'white';
-                        e.target.style.boxShadow = '0 0 0 3px rgba(212, 175, 55, 0.1)';
-                      }}
-                      onBlur={(e) => {
-                        e.target.style.borderColor = '#e0e0e0';
-                        e.target.style.backgroundColor = '#fafafa';
-                        e.target.style.boxShadow = 'none';
-                      }}
+                      className="form-input"
                     >
-                      <option value="">Select a subject</option>
+                      <option value="">Select Subject</option>
                       <option value="general">General Inquiry</option>
                       <option value="feedback">Feedback</option>
                       <option value="prayer">Prayer Request</option>
                       <option value="collaboration">Collaboration</option>
-                      <option value="technical">Technical Support</option>
                     </select>
                   </div>
-
-                  <div style={{ marginBottom: '2rem' }}>
-                    <label style={{ display: 'block', marginBottom: '0.5rem', fontWeight: '500', fontSize: '0.9rem', color: 'var(--text-dark)' }}>
-                      Message *
-                    </label>
+                  
+                  <div className="form-group">
                     <textarea
                       name="message"
                       value={formData.message}
                       onChange={handleChange}
+                      placeholder="Your Message"
                       required
-                      rows="5"
-                      style={{
-                        width: '100%',
-                        padding: '14px 16px',
-                        border: '1px solid #e0e0e0',
-                        borderRadius: '8px',
-                        fontSize: '0.95rem',
-                        resize: 'vertical',
-                        transition: 'all 0.3s ease',
-                        backgroundColor: '#fafafa',
-                        fontFamily: 'Inter, sans-serif',
-                        minHeight: '120px'
-                      }}
-                      onFocus={(e) => {
-                        e.target.style.borderColor = 'var(--primary-gold)';
-                        e.target.style.backgroundColor = 'white';
-                        e.target.style.boxShadow = '0 0 0 3px rgba(212, 175, 55, 0.1)';
-                      }}
-                      onBlur={(e) => {
-                        e.target.style.borderColor = '#e0e0e0';
-                        e.target.style.backgroundColor = '#fafafa';
-                        e.target.style.boxShadow = 'none';
-                      }}
+                      rows="6"
+                      className="form-input"
                     />
                   </div>
-
-                  <button 
-                    type="submit" 
-                    className="btn"
-                    disabled={isSubmitting}
-                    style={{ 
-                      width: '100%',
-                      opacity: isSubmitting ? 0.7 : 1,
-                      cursor: isSubmitting ? 'not-allowed' : 'pointer'
-                    }}
-                  >
+                  
+                  <button type="submit" className="form-submit-btn" disabled={isSubmitting}>
                     {isSubmitting ? 'Sending...' : 'Send Message'}
                   </button>
-
+                  
                   {submitMessage && (
-                    <div style={{ 
-                      marginTop: '1rem', 
-                      padding: '1rem',
-                      backgroundColor: submitMessage.includes('error') ? '#ffebee' : '#e8f5e8',
-                      color: submitMessage.includes('error') ? '#c62828' : '#2e7d32',
-                      borderRadius: '5px',
-                      textAlign: 'center'
-                    }}>
+                    <div className={`form-message ${submitMessage.includes('error') ? 'error' : 'success'}`}>
                       {submitMessage}
                     </div>
                   )}
                 </form>
               </div>
-            </motion.div>
-
-            {/* Contact Information */}
-            <motion.div
-              className="contact-info-section"
-              initial={{ opacity: 0, x: 50 }}
-              animate={{ opacity: 1, x: 0 }}
-              transition={{ duration: 0.8, delay: 0.4 }}
-            >
-              <div className="contact-card">
-                <h2>Contact Information</h2>
-                
-                <div className="contact-info-item">
-                  <h3>Email</h3>
-                  <p>info@abbaswhispers.com</p>
-                  <p>prayer@abbaswhispers.com</p>
-                </div>
-
-                <div className="contact-info-item">
-                  <h3>Phone</h3>
-                  <p>+1 (555) 123-4567</p>
-                  <p className="contact-hours">Mon-Fri, 9 AM - 5 PM EST</p>
-                </div>
-
-                <div className="contact-info-item">
-                  <h3>Follow Us</h3>
-                  <div style={{ display: 'flex', gap: '0.75rem' }}>
-                    <a href="https://facebook.com/abbaswhispers" target="_blank" rel="noopener noreferrer" style={{ 
-                      display: 'inline-block',
-                      padding: '8px 12px',
-                      background: '#1877F2',
-                      borderRadius: '6px',
-                      color: 'white',
-                      textDecoration: 'none',
-                      fontSize: '14px',
-                      fontWeight: '500',
-                      transition: 'transform 0.3s ease',
-                      marginRight: '8px',
-                      marginBottom: '8px'
-                    }} onMouseEnter={(e) => e.target.style.transform = 'scale(1.05)'} onMouseLeave={(e) => e.target.style.transform = 'scale(1)'}>Facebook</a>
-                    <a href="https://twitter.com/abbaswhispers" target="_blank" rel="noopener noreferrer" style={{ 
-                      display: 'inline-block',
-                      padding: '8px 12px',
-                      background: '#1DA1F2',
-                      borderRadius: '6px',
-                      color: 'white',
-                      textDecoration: 'none',
-                      fontSize: '14px',
-                      fontWeight: '500',
-                      transition: 'transform 0.3s ease',
-                      marginRight: '8px',
-                      marginBottom: '8px'
-                    }} onMouseEnter={(e) => e.target.style.transform = 'scale(1.05)'} onMouseLeave={(e) => e.target.style.transform = 'scale(1)'}>Twitter</a>
-                    <a href="https://instagram.com/abbaswhispers" target="_blank" rel="noopener noreferrer" style={{ 
-                      display: 'inline-block',
-                      padding: '8px 12px',
-                      background: 'linear-gradient(45deg, #F56040, #E1306C, #C13584)',
-                      borderRadius: '6px',
-                      color: 'white',
-                      textDecoration: 'none',
-                      fontSize: '14px',
-                      fontWeight: '500',
-                      transition: 'transform 0.3s ease',
-                      marginRight: '8px',
-                      marginBottom: '8px'
-                    }} onMouseEnter={(e) => e.target.style.transform = 'scale(1.05)'} onMouseLeave={(e) => e.target.style.transform = 'scale(1)'}>Instagram</a>
-                    <a href="https://youtube.com/@abbaswhispers" target="_blank" rel="noopener noreferrer" style={{ 
-                      display: 'inline-block',
-                      padding: '8px 12px',
-                      background: '#FF0000',
-                      borderRadius: '6px',
-                      color: 'white',
-                      textDecoration: 'none',
-                      fontSize: '14px',
-                      fontWeight: '500',
-                      transition: 'transform 0.3s ease',
-                      marginRight: '8px',
-                      marginBottom: '8px'
-                    }} onMouseEnter={(e) => e.target.style.transform = 'scale(1.05)'} onMouseLeave={(e) => e.target.style.transform = 'scale(1)'}>YouTube</a>
+              
+              <div className="contact-info-sidebar">
+                <div className="info-section">
+                  <h3>Get in Touch</h3>
+                  <div className="info-item">
+                    <div>
+                      <p><strong>Email</strong></p>
+                      <p>info@abbawhispers.com</p>
+                      <p>prayer@abbawhispers.com</p>
+                    </div>
+                  </div>
+                  <div className="info-item">
+                    <div>
+                      <p><strong>Phone</strong></p>
+                      <p>+1 (555) 123-4567</p>
+                      <small>Mon-Fri, 9 AM - 5 PM EST</small>
+                    </div>
+                  </div>
+                  <div className="info-item">
+                    <div>
+                      <p><strong>Response Time</strong></p>
+                      <small>Within 24-48 hours</small>
+                    </div>
                   </div>
                 </div>
-
-                <div className="contact-info-item">
-                  <h3>Response Time</h3>
-                  <p>We respond within 24-48 hours on business days.</p>
+                
+                <div className="social-section">
+                  <h4>Follow Us</h4>
+                  <div className="social-links">
+                    <a href="https://facebook.com/abbaswhispers" target="_blank" rel="noopener noreferrer" title="Facebook" className="social-link facebook">
+                      <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
+                        <path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z"/>
+                      </svg>
+                    </a>
+                    <a href="https://twitter.com/abbaswhispers" target="_blank" rel="noopener noreferrer" title="Twitter" className="social-link twitter">
+                      <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
+                        <path d="M23.953 4.57a10 10 0 01-2.825.775 4.958 4.958 0 002.163-2.723c-.951.555-2.005.959-3.127 1.184a4.92 4.92 0 00-8.384 4.482C7.69 8.095 4.067 6.13 1.64 3.162a4.822 4.822 0 00-.666 2.475c0 1.71.87 3.213 2.188 4.096a4.904 4.904 0 01-2.228-.616v.06a4.923 4.923 0 003.946 4.827 4.996 4.996 0 01-2.212.085 4.936 4.936 0 004.604 3.417 9.867 9.867 0 01-6.102 2.105c-.39 0-.779-.023-1.17-.067a13.995 13.995 0 007.557 2.209c9.053 0 13.998-7.496 13.998-13.985 0-.21 0-.42-.015-.63A9.935 9.935 0 0024 4.59z"/>
+                      </svg>
+                    </a>
+                    <a href="https://instagram.com/abbaswhispers" target="_blank" rel="noopener noreferrer" title="Instagram" className="social-link instagram">
+                      <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
+                        <path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z"/>
+                      </svg>
+                    </a>
+                    <a href="https://youtube.com/@abbaswhispers" target="_blank" rel="noopener noreferrer" title="YouTube" className="social-link youtube">
+                      <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
+                        <path d="M23.498 6.186a3.016 3.016 0 0 0-2.122-2.136C19.505 3.545 12 3.545 12 3.545s-7.505 0-9.377.505A3.017 3.017 0 0 0 .502 6.186C0 8.07 0 12 0 12s0 3.93.502 5.814a3.016 3.016 0 0 0 2.122 2.136c1.871.505 9.376.505 9.376.505s7.505 0 9.377-.505a3.015 3.015 0 0 0 2.122-2.136C24 15.93 24 12 24 12s0-3.93-.502-5.814zM9.545 15.568V8.432L15.818 12l-6.273 3.568z"/>
+                      </svg>
+                    </a>
+                  </div>
                 </div>
-              </div>
-
-              {/* Newsletter Signup */}
-              <div className="card" style={{ marginTop: '1.5rem', background: 'linear-gradient(135deg, var(--warm-cream) 0%, var(--cream) 100%)', padding: '1.5rem' }}>
-                <h3 style={{ fontSize: '1.1rem', marginBottom: '0.75rem', color: 'var(--primary-gold)' }}>Newsletter</h3>
-                <p style={{ fontSize: '0.9rem', marginBottom: '1rem' }}>Receive weekly inspirations and updates.</p>
-                <form style={{ display: 'flex', gap: '0.5rem' }}>
-                  <input
-                    type="email"
-                    placeholder="Your email address"
-                    style={{
-                      flex: 1,
-                      padding: '12px 14px',
-                      border: '1px solid #e0e0e0',
-                      borderRadius: '6px',
-                      fontSize: '0.9rem',
-                      backgroundColor: 'white'
-                    }}
-                  />
-                  <button type="submit" className="btn" style={{ fontSize: '0.85rem', padding: '12px 20px' }}>Subscribe</button>
-                </form>
               </div>
             </motion.div>
           </div>
         </div>
       </section>
 
-      {/* FAQ Section */}
-      <section className="section" style={{ background: 'var(--cream)' }}>
+      {/* Modern FAQ Section */}
+      <section className="section faq-transparent-section">
         <div className="container">
           <motion.div
-            className="text-center"
+            className="faq-container"
             initial={{ opacity: 0, y: 30 }}
             whileInView={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.8 }}
             viewport={{ once: true }}
           >
-            <h2 style={{ fontSize: '1.8rem', marginBottom: '1rem' }}>Frequently Asked Questions</h2>
+            <div className="faq-header">
+              <h2>Frequently Asked Questions</h2>
+              <p>Quick answers to common questions about our ministry and services</p>
+            </div>
+            
+            <div className="faq-grid">
+              {[
+                {
+                  question: "How often do you publish new content?",
+                  answer: "We publish new blog posts weekly and release new volumes monthly. Subscribe to stay updated!"
+                },
+                {
+                  question: "Are your volumes available in print?",
+                  answer: "Currently digital only, but we're exploring print options for the future."
+                },
+                {
+                  question: "Can I request prayer for specific situations?",
+                  answer: "Absolutely! Visit our Prayer Request page. All requests are kept confidential."
+                },
+                {
+                  question: "Do you offer speaking engagements?",
+                  answer: "Yes, we're available for churches, conferences, and retreats. Contact us for details."
+                }
+              ].map((faq, index) => (
+                <motion.div
+                  key={index}
+                  className="faq-item"
+                  initial={{ opacity: 0, y: 20 }}
+                  whileInView={{ opacity: 1, y: 0 }}
+                  transition={{ duration: 0.6, delay: index * 0.1 }}
+                  viewport={{ once: true }}
+                >
+                  <h4>{faq.question}</h4>
+                  <p>{faq.answer}</p>
+                </motion.div>
+              ))}
+            </div>
           </motion.div>
-
-          <div style={{ maxWidth: '800px', margin: '3rem auto 0' }}>
-            {[
-              {
-                question: "How often do you publish new content?",
-                answer: "We publish new blog posts weekly and release new volumes monthly. Subscribe to our newsletter to stay updated!"
-              },
-              {
-                question: "Are your volumes available in print?",
-                answer: "Currently, our volumes are available as digital downloads. We're exploring print options for the future."
-              },
-              {
-                question: "Can I request prayer for specific situations?",
-                answer: "Absolutely! Visit our Prayer Request page to submit your prayer needs. All requests are kept confidential."
-              },
-              {
-                question: "Do you offer speaking engagements?",
-                answer: "Yes, we're available for speaking at churches, conferences, and retreats. Please contact us for more information."
-              }
-            ].map((faq, index) => (
-              <motion.div
-                key={index}
-                className="card"
-                style={{ marginBottom: '1rem' }}
-                initial={{ opacity: 0, y: 20 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.6, delay: index * 0.1 }}
-                viewport={{ once: true }}
-              >
-                <h3 style={{ color: 'var(--primary-gold)', marginBottom: '0.75rem', fontSize: '1.1rem' }}>
-                  {faq.question}
-                </h3>
-                <p style={{ margin: 0, fontSize: '0.95rem', lineHeight: '1.6' }}>{faq.answer}</p>
-              </motion.div>
-            ))}
-          </div>
         </div>
       </section>
+
+
     </>
   );
 };

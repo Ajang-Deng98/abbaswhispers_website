@@ -1,0 +1,25 @@
+from django.urls import path, include
+from rest_framework.routers import DefaultRouter
+from rest_framework_simplejwt.views import TokenObtainPairView, TokenRefreshView
+from . import views
+
+router = DefaultRouter()
+router.register(r'blog', views.BlogPostViewSet)
+router.register(r'volumes', views.VolumeViewSet)
+router.register(r'books', views.BookViewSet)
+router.register(r'prayers', views.PrayerRequestViewSet)
+router.register(r'contact', views.ContactMessageViewSet)
+router.register(r'subscribers', views.SubscriberViewSet)
+router.register(r'comments', views.CommentViewSet)
+router.register(r'testimonials', views.TestimonialViewSet)
+router.register(r'prayer-testimonials', views.PrayerTestimonialViewSet)
+
+urlpatterns = [
+    path('', include(router.urls)),
+    path('auth/login/', TokenObtainPairView.as_view(), name='token_obtain_pair'),
+    path('auth/refresh/', TokenRefreshView.as_view(), name='token_refresh'),
+    path('health/', views.health_check, name='health_check'),
+    path('subscribers/subscribe/', views.subscribe_newsletter, name='subscribe_newsletter'),
+    path('blog/<int:pk>/comments/', views.get_post_comments, name='post_comments'),
+    path('volumes/<int:pk>/download/', views.track_download, name='track_download'),
+]

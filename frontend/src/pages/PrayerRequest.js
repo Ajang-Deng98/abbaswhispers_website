@@ -1,7 +1,7 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
 import { Helmet } from 'react-helmet';
-import { prayerAPI } from '../utils/api';
+import { prayerAPI, prayerTestimonialAPI } from '../utils/api';
 
 const PrayerRequest = () => {
   const [formData, setFormData] = useState({
@@ -14,6 +14,29 @@ const PrayerRequest = () => {
   });
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [submitMessage, setSubmitMessage] = useState('');
+  const [prayerTestimonials, setPrayerTestimonials] = useState([]);
+
+  useEffect(() => {
+    loadPrayerTestimonials();
+  }, []);
+
+  const loadPrayerTestimonials = async () => {
+    try {
+      const response = await prayerTestimonialAPI.getAllPrayerTestimonials({ limit: 3 });
+      let testimonialsData = [];
+      if (response.data) {
+        if (Array.isArray(response.data)) {
+          testimonialsData = response.data;
+        } else if (response.data.results && Array.isArray(response.data.results)) {
+          testimonialsData = response.data.results;
+        }
+      }
+      setPrayerTestimonials(testimonialsData);
+    } catch (error) {
+      console.error('Error loading prayer testimonials:', error);
+      setPrayerTestimonials([]);
+    }
+  };
 
   const handleChange = (e) => {
     const { name, value, type, checked } = e.target;
@@ -53,138 +76,101 @@ const PrayerRequest = () => {
         <meta name="description" content="Submit your prayer requests to Abbaswhispers. Our prayer team is committed to lifting up your needs in prayer. All requests are kept confidential." />
       </Helmet>
 
-      <section className="section">
+      <section className="prayer-hero">
         <div className="container">
           <motion.div
-            className="text-center"
+            className="prayer-hero-content"
             initial={{ opacity: 0, y: 30 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.8 }}
           >
-            <h1>Prayer Request</h1>
-            <p style={{ fontSize: '1.2rem', maxWidth: '800px', margin: '0 auto' }}>
-              "Therefore I tell you, whatever you ask for in prayer, believe that you have 
-              received it, and it will be yours." - Mark 11:24
-            </p>
+            <div className="hero-badge">Sacred Prayer Ministry</div>
+            <h1>Share Your Heart with God</h1>
+            <p>Submit your prayer requests with confidence. Our dedicated prayer team stands ready to lift your needs before the throne of grace. Every prayer matters, every heart is heard.</p>
+            <div className="prayer-stats">
+              <div className="stat-item">
+                <span className="stat-number">24/7</span>
+                <span className="stat-label">Prayer Coverage</span>
+              </div>
+              <div className="stat-item">
+                <span className="stat-number">100%</span>
+                <span className="stat-label">Confidential</span>
+              </div>
+              <div className="stat-item">
+                <span className="stat-number">Immediate</span>
+                <span className="stat-label">Response</span>
+              </div>
+            </div>
           </motion.div>
+        </div>
+      </section>
 
-          <div className="prayer-grid">
-            {/* Prayer Request Form */}
+      <section className="section">
+        <div className="container">
+
+          <div className="modern-prayer-layout">
             <motion.div
-              className="prayer-form-section"
-              initial={{ opacity: 0, x: -50 }}
+              className="prayer-main-card"
+              initial={{ opacity: 0, x: -30 }}
               animate={{ opacity: 1, x: 0 }}
               transition={{ duration: 0.8, delay: 0.2 }}
             >
-              <div className="prayer-card">
-                <h2>Prayer Request</h2>
-                <p style={{ marginBottom: '2rem', color: 'var(--text-light)' }}>
-                  We believe in the power of prayer and would be honored to pray for you. 
-                  All requests are kept confidential and handled with care.
-                </p>
+              <div className="prayer-form-wrapper">
+                <h2>Submit Your Prayer Request</h2>
+                <p>Share your heart with our prayer team. Every request is treated with love, respect, and complete confidentiality.</p>
 
-                <form onSubmit={handleSubmit}>
-                  <div style={{ marginBottom: '1.5rem' }}>
-                    <label style={{ display: 'block', marginBottom: '0.5rem', fontWeight: '500' }}>
-                      Name (Optional)
-                    </label>
+                <form onSubmit={handleSubmit} className="modern-prayer-form">
+                  <div className="form-group">
                     <input
                       type="text"
                       name="name"
                       value={formData.name}
                       onChange={handleChange}
-                      placeholder="Your name or 'Anonymous'"
-                      style={{
-                        width: '100%',
-                        padding: '12px',
-                        border: '2px solid var(--cream)',
-                        borderRadius: '5px',
-                        fontSize: '1rem',
-                        transition: 'border-color 0.3s ease'
-                      }}
-                      onFocus={(e) => e.target.style.borderColor = 'var(--primary-gold)'}
-                      onBlur={(e) => e.target.style.borderColor = 'var(--cream)'}
+                      placeholder="Your Name (Optional)"
+                      className="prayer-input"
                     />
                   </div>
 
-                  <div style={{ marginBottom: '1.5rem' }}>
-                    <label style={{ display: 'block', marginBottom: '0.5rem', fontWeight: '500' }}>
-                      Email (Optional)
-                    </label>
+                  <div className="form-group">
                     <input
                       type="email"
                       name="email"
                       value={formData.email}
                       onChange={handleChange}
-                      placeholder="For prayer updates (optional)"
-                      style={{
-                        width: '100%',
-                        padding: '12px',
-                        border: '2px solid var(--cream)',
-                        borderRadius: '5px',
-                        fontSize: '1rem',
-                        transition: 'border-color 0.3s ease'
-                      }}
-                      onFocus={(e) => e.target.style.borderColor = 'var(--primary-gold)'}
-                      onBlur={(e) => e.target.style.borderColor = 'var(--cream)'}
+                      placeholder="Email for Updates (Optional)"
+                      className="prayer-input"
                     />
                   </div>
 
-                  <div style={{ marginBottom: '1.5rem' }}>
-                    <label style={{ display: 'block', marginBottom: '0.5rem', fontWeight: '500' }}>
-                      Prayer Category
-                    </label>
+                  <div className="form-group">
                     <select
                       name="category"
                       value={formData.category}
                       onChange={handleChange}
                       required
-                      style={{
-                        width: '100%',
-                        padding: '12px',
-                        border: '2px solid var(--cream)',
-                        borderRadius: '5px',
-                        fontSize: '1rem',
-                        backgroundColor: 'white',
-                        transition: 'border-color 0.3s ease'
-                      }}
-                      onFocus={(e) => e.target.style.borderColor = 'var(--primary-gold)'}
-                      onBlur={(e) => e.target.style.borderColor = 'var(--cream)'}
+                      className="prayer-input"
                     >
-                      <option value="">Select a category</option>
+                      <option value="">Select Prayer Category</option>
                       <option value="healing">Healing & Health</option>
                       <option value="family">Family & Relationships</option>
-                      <option value="financial">Financial Needs</option>
+                      <option value="financial">Financial Provision</option>
                       <option value="guidance">Guidance & Direction</option>
-                      <option value="salvation">Salvation</option>
-                      <option value="grief">Grief & Loss</option>
+                      <option value="salvation">Salvation & Faith</option>
+                      <option value="grief">Grief & Comfort</option>
                       <option value="thanksgiving">Thanksgiving & Praise</option>
                       <option value="other">Other</option>
                     </select>
                   </div>
 
-                  <div style={{ marginBottom: '1.5rem' }}>
-                    <label style={{ display: 'block', marginBottom: '0.5rem', fontWeight: '500' }}>
-                      Prayer Request *
-                    </label>
+                  <div className="form-group">
                     <textarea
                       name="request"
                       value={formData.request}
                       onChange={handleChange}
                       required
                       rows="6"
-                      placeholder="Please share your prayer request. Be as specific or general as you feel comfortable."
-                      style={{
-                        width: '100%',
-                        padding: '12px',
-                        border: '2px solid var(--cream)',
-                        borderRadius: '5px',
-                        fontSize: '1rem',
-                        resize: 'vertical',
-                        transition: 'border-color 0.3s ease'
-                      }}
-                      onFocus={(e) => e.target.style.borderColor = 'var(--primary-gold)'}
-                      onBlur={(e) => e.target.style.borderColor = 'var(--cream)'}
+                      placeholder="Share your prayer request with our team. Every word matters to us and to God."
+                      className="prayer-input prayer-textarea"
                     />
                   </div>
 
@@ -216,15 +202,11 @@ const PrayerRequest = () => {
 
                   <button 
                     type="submit" 
-                    className="btn"
+                    className="prayer-submit-btn"
                     disabled={isSubmitting}
-                    style={{ 
-                      width: '100%',
-                      opacity: isSubmitting ? 0.7 : 1,
-                      cursor: isSubmitting ? 'not-allowed' : 'pointer'
-                    }}
+                    style={{ width: '100%' }}
                   >
-                    {isSubmitting ? 'Submitting...' : 'Submit Prayer Request'}
+                    {isSubmitting ? 'Submitting Prayer...' : 'Submit Prayer Request'}
                   </button>
 
                   {submitMessage && (
@@ -243,75 +225,45 @@ const PrayerRequest = () => {
               </div>
             </motion.div>
 
-            {/* Prayer Information */}
             <motion.div
-              className="prayer-info-section"
-              initial={{ opacity: 0, x: 50 }}
+              className="prayer-info-sidebar"
+              initial={{ opacity: 0, x: 30 }}
               animate={{ opacity: 1, x: 0 }}
               transition={{ duration: 0.8, delay: 0.4 }}
             >
-              <div className="prayer-card">
-                <h2>Our Commitment</h2>
-                <div style={{ marginBottom: '2rem' }}>
-                  <h3 style={{ color: 'var(--primary-gold)', marginBottom: '0.5rem' }}>Dedicated Prayer Team</h3>
-                  <p>
-                    Our prayer team meets regularly to lift up every request we receive. 
-                    Your needs become our prayers.
-                  </p>
+              <div className="prayer-info-card">
+                <h3>Our Promise</h3>
+                <div className="info-item">
+                  <div>
+                    <h4>Immediate Prayer</h4>
+                    <p>We pray as soon as we receive your request</p>
+                  </div>
                 </div>
-
-                <div style={{ marginBottom: '2rem' }}>
-                  <h3 style={{ color: 'var(--primary-gold)', marginBottom: '0.5rem' }}>Complete Confidentiality</h3>
-                  <p>
-                    All prayer requests are kept strictly confidential. Only our prayer 
-                    team has access to your requests.
-                  </p>
+                <div className="info-item">
+                  <div>
+                    <h4>Complete Privacy</h4>
+                    <p>All requests kept strictly confidential</p>
+                  </div>
                 </div>
-
-                <div style={{ marginBottom: '2rem' }}>
-                  <h3 style={{ color: 'var(--primary-gold)', marginBottom: '0.5rem' }}>Immediate Prayer</h3>
-                  <p>
-                    We begin praying for your request as soon as we receive it. 
-                    God hears every prayer immediately.
-                  </p>
-                </div>
-
-                <div>
-                  <h3 style={{ color: 'var(--primary-gold)', marginBottom: '0.5rem' }}>Follow-up (Optional)</h3>
-                  <p>
-                    If you provide your email, we may send encouraging messages 
-                    or prayer updates, but this is completely optional.
-                  </p>
+                <div className="info-item">
+                  <div>
+                    <h4>Caring Team</h4>
+                    <p>Dedicated prayer warriors lift you up</p>
+                  </div>
                 </div>
               </div>
-
-              {/* Scripture Encouragement */}
-              <div className="prayer-card scripture-card">
-                <h3>Scripture</h3>
-                <blockquote style={{ 
-                  fontStyle: 'italic', 
-                  fontSize: '1.1rem',
-                  color: 'var(--deep-blue)',
-                  textAlign: 'center',
-                  margin: '1rem 0'
-                }}>
-                  "Do not be anxious about anything, but in every situation, by prayer 
-                  and petition, with thanksgiving, present your requests to God. And the 
-                  peace of God, which transcends all understanding, will guard your hearts 
-                  and your minds in Christ Jesus."
-                  <br />
-                  <strong>- Philippians 4:6-7</strong>
+              
+              <div className="scripture-card">
+                <h4>Scripture Promise</h4>
+                <blockquote>
+                  "Ask and it will be given to you; seek and you will find; knock and the door will be opened to you."
                 </blockquote>
+                <cite>- Matthew 7:7</cite>
               </div>
-
-              {/* Emergency Prayer */}
-              <div className="prayer-card urgent-card">
-                <h3>Urgent Needs?</h3>
-                <p>
-                  For urgent prayer requests, you can also call our prayer line at 
-                  <strong> +1 (555) PRAY-NOW</strong> or email us directly at 
-                  <strong> urgent@abbaswhispers.com</strong>
-                </p>
+              
+              <div className="urgent-card">
+                <h4>Urgent Needs?</h4>
+                <p>For urgent prayer requests, you can also call our prayer line at <strong>+1 (555) PRAY-NOW</strong> or email us directly at <strong>urgent@abbawhispers.com</strong></p>
               </div>
             </motion.div>
           </div>
@@ -332,38 +284,43 @@ const PrayerRequest = () => {
             <p>See how God has answered prayers in our community</p>
           </motion.div>
 
-          <div className="grid grid-3" style={{ marginTop: '3rem' }}>
-            {[
-              {
-                text: "I submitted a prayer request for my job situation, and within two weeks, I received an unexpected job offer. God is faithful!",
-                author: "Sarah M."
-              },
-              {
-                text: "The prayer team prayed for my mother's healing, and her doctors were amazed at her recovery. Thank you for your faithful prayers.",
-                author: "David L."
-              },
-              {
-                text: "During my darkest hour, knowing that people were praying for me gave me hope and strength to continue. Prayer changes everything.",
-                author: "Anonymous"
-              }
-            ].map((testimonial, index) => (
-              <motion.div
-                key={index}
-                className="card"
-                initial={{ opacity: 0, y: 30 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.6, delay: index * 0.2 }}
-                viewport={{ once: true }}
-              >
-                <p style={{ fontStyle: 'italic', marginBottom: '1rem' }}>
-                  "{testimonial.text}"
-                </p>
-                <div style={{ textAlign: 'right', fontWeight: '500', color: 'var(--primary-gold)' }}>
-                  - {testimonial.author}
-                </div>
-              </motion.div>
-            ))}
-          </div>
+          {prayerTestimonials.length > 0 ? (
+            <div className="grid grid-3" style={{ marginTop: '3rem' }}>
+              {prayerTestimonials.slice(0, 3).map((testimonial, index) => (
+                <motion.div
+                  key={testimonial.id}
+                  className="card"
+                  initial={{ opacity: 0, y: 30 }}
+                  whileInView={{ opacity: 1, y: 0 }}
+                  transition={{ duration: 0.6, delay: index * 0.2 }}
+                  viewport={{ once: true }}
+                >
+                  <div style={{
+                    background: 'rgba(212, 175, 55, 0.1)',
+                    color: 'var(--primary-gold)',
+                    padding: '0.3rem 0.8rem',
+                    borderRadius: '15px',
+                    fontSize: '0.8rem',
+                    fontWeight: '500',
+                    display: 'inline-block',
+                    marginBottom: '1rem'
+                  }}>
+                    {testimonial.category}
+                  </div>
+                  <p style={{ fontStyle: 'italic', marginBottom: '1rem', lineHeight: '1.6' }}>
+                    "{testimonial.testimony}"
+                  </p>
+                  <div style={{ textAlign: 'right', fontWeight: '500', color: 'var(--primary-gold)' }}>
+                    - {testimonial.author_name}
+                  </div>
+                </motion.div>
+              ))}
+            </div>
+          ) : (
+            <div style={{ textAlign: 'center', padding: '2rem', color: '#666' }}>
+              <p>Prayer testimonials will appear here as they are shared by our community.</p>
+            </div>
+          )}
         </div>
       </section>
     </>
