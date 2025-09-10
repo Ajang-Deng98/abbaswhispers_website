@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import { motion } from 'framer-motion';
 import { Helmet } from 'react-helmet';
 import { volumeAPI } from '../utils/api';
@@ -11,9 +11,9 @@ const Volumes = () => {
 
   useEffect(() => {
     loadVolumes();
-  }, [selectedCategory]);
+  }, [selectedCategory, loadVolumes]);
 
-  const loadVolumes = async () => {
+  const loadVolumes = useCallback(async () => {
     try {
       const params = selectedCategory === 'all' ? {} : { category: selectedCategory };
       const response = await volumeAPI.getAllVolumes(params);
@@ -34,7 +34,7 @@ const Volumes = () => {
       console.error('Error loading volumes:', error);
       setVolumes([]);
     }
-  };
+  }, [selectedCategory]);
 
   const categories = [
     { value: 'all', label: 'All Collections' },

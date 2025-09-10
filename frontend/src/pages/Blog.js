@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import { Link } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import { Helmet } from 'react-helmet';
@@ -13,9 +13,9 @@ const Blog = () => {
 
   useEffect(() => {
     loadPosts();
-  }, [searchTerm, selectedCategory, currentPage]);
+  }, [searchTerm, selectedCategory, currentPage, loadPosts]);
 
-  const loadPosts = async () => {
+  const loadPosts = useCallback(async () => {
     try {
       const response = await blogAPI.getAllPosts({
         search: searchTerm,
@@ -32,7 +32,7 @@ const Blog = () => {
       console.error('Error loading posts:', error);
       setPosts([]);
     }
-  };
+  }, [searchTerm, selectedCategory, currentPage]);
 
   const categories = [
     { value: 'all', label: 'All Posts' },

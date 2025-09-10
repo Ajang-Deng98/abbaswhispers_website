@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import { useParams, Link } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import { Helmet } from 'react-helmet';
@@ -17,9 +17,9 @@ const BlogPost = () => {
     loadPost();
     loadRelatedPosts();
     loadComments();
-  }, [id]);
+  }, [id, loadPost, loadRelatedPosts, loadComments]);
 
-  const loadComments = async () => {
+  const loadComments = useCallback(async () => {
     try {
       const response = await commentAPI.getPostComments(id);
       setComments(response.data || []);
@@ -27,9 +27,9 @@ const BlogPost = () => {
       console.error('Error loading comments:', error);
       setComments([]);
     }
-  };
+  }, [id]);
 
-  const loadPost = async () => {
+  const loadPost = useCallback(async () => {
     try {
       const response = await blogAPI.getPost(id);
       setPost(response.data);
@@ -37,9 +37,9 @@ const BlogPost = () => {
       console.error('Error loading post:', error);
       setPost(null);
     }
-  };
+  }, [id]);
 
-  const loadRelatedPosts = async () => {
+  const loadRelatedPosts = useCallback(async () => {
     try {
       const response = await blogAPI.getAllPosts({ limit: 2 });
       const posts = response.data?.posts || response.data || [];
@@ -48,7 +48,7 @@ const BlogPost = () => {
       console.error('Error loading related posts:', error);
       setRelatedPosts([]);
     }
-  };
+  }, [id]);
 
   const handleCommentSubmit = async (e) => {
     e.preventDefault();
