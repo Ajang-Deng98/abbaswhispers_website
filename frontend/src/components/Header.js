@@ -30,7 +30,6 @@ const Header = () => {
         { path: '/volumes?category=reflection', label: 'Reflection' }
       ]
     },
-
     { 
       path: '/blog', 
       label: 'Blog',
