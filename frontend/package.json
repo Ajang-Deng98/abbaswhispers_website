@@ -25,6 +25,10 @@
     "eject": "react-scripts eject",
     "build:prod": "REACT_APP_API_URL=https://yourdomain.com/api npm run build"
   },
+  "engines": {
+    "node": "18.x",
+    "npm": "9.x"
+  },
   "eslintConfig": {
     "extends": [
       "react-app",
