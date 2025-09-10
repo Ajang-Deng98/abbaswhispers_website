@@ -33,6 +33,15 @@ class CommentSerializer(serializers.ModelSerializer):
     class Meta:
         model = Comment
         fields = '__all__'
+    
+    def validate(self, data):
+        if not data.get('author_name'):
+            raise serializers.ValidationError({'author_name': 'Name is required'})
+        if not data.get('content'):
+            raise serializers.ValidationError({'content': 'Comment content is required'})
+        if not data.get('post'):
+            raise serializers.ValidationError({'post': 'Blog post ID is required'})
+        return data
 
 class TestimonialSerializer(serializers.ModelSerializer):
     class Meta:

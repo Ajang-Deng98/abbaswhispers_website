@@ -30,7 +30,7 @@ const Header = () => {
         { path: '/volumes?category=reflection', label: 'Reflection' }
       ]
     },
-    { path: '/books', label: 'Books' },
+
     { 
       path: '/blog', 
       label: 'Blog',

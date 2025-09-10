@@ -1,0 +1,19 @@
+RewriteEngine On
+
+# Handle React Router
+RewriteCond %{REQUEST_FILENAME} !-f
+RewriteCond %{REQUEST_FILENAME} !-d
+RewriteCond %{REQUEST_URI} !^/api/
+RewriteRule . /index.html [L]
+
+# API requests to Django
+RewriteCond %{REQUEST_URI} ^/api/
+RewriteRule ^api/(.*)$ /django_backend/wsgi.py/$1 [L]
+
+# Static files
+RewriteCond %{REQUEST_URI} ^/static/
+RewriteRule ^static/(.*)$ /django_backend/staticfiles/$1 [L]
+
+# Media files
+RewriteCond %{REQUEST_URI} ^/media/
+RewriteRule ^media/(.*)$ /django_backend/media/$1 [L]

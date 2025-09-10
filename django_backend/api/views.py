@@ -67,6 +67,27 @@ class CommentViewSet(viewsets.ModelViewSet):
         if self.action == 'create':
             return [AllowAny()]
         return [IsAuthenticated()]
+    
+    def create(self, request, *args, **kwargs):
+        # Ensure required fields are present
+        required_fields = ['post', 'author_name', 'content']
+        for field in required_fields:
+            if field not in request.data or not request.data[field]:
+                return Response(
+                    {'error': f'{field} is required'}, 
+                    status=status.HTTP_400_BAD_REQUEST
+                )
+        
+        # Validate that the blog post exists
+        try:
+            BlogPost.objects.get(id=request.data['post'])
+        except BlogPost.DoesNotExist:
+            return Response(
+                {'error': 'Blog post not found'}, 
+                status=status.HTTP_400_BAD_REQUEST
+            )
+        
+        return super().create(request, *args, **kwargs)
 
 @api_view(['GET'])
 @permission_classes([AllowAny])
@@ -133,3 +154,35 @@ def track_download(request, pk):
         return Response({'message': 'Download tracked', 'downloads': volume.downloads})
     except Volume.DoesNotExist:
         return Response({'error': 'Volume not found'}, status=status.HTTP_404_NOT_FOUND)
+
+@api_view(['POST'])
+@permission_classes([AllowAny])
+def create_comment(request):
+    """Debug endpoint for comment creation"""
+    print(f"Comment data received: {request.data}")
+    
+    # Check required fields
+    required_fields = ['post', 'author_name', 'content']
+    missing_fields = [field for field in required_fields if not request.data.get(field)]
+    
+    if missing_fields:
+        return Response(
+            {'error': f'Missing required fields: {missing_fields}'}, 
+            status=status.HTTP_400_BAD_REQUEST
+        )
+    
+    # Validate blog post exists
+    try:
+        post = BlogPost.objects.get(id=request.data['post'])
+    except BlogPost.DoesNotExist:
+        return Response(
+            {'error': 'Blog post not found'}, 
+            status=status.HTTP_400_BAD_REQUEST
+        )
+    
+    serializer = CommentSerializer(data=request.data)
+    if serializer.is_valid():
+        serializer.save()
+        return Response(serializer.data, status=status.HTTP_201_CREATED)
+    
+    return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)

@@ -54,10 +54,10 @@ const BlogPost = () => {
     e.preventDefault();
     if (comment.trim()) {
       try {
-        console.log('Submitting comment:', { post_id: id, author: "Anonymous", content: comment });
+        console.log('Submitting comment:', { post: id, author_name: "Anonymous", content: comment });
         const response = await commentAPI.addComment({
-          post_id: id,
-          author: isAnonymous ? "Anonymous" : (commentAuthor.trim() || "Anonymous"),
+          post: id,
+          author_name: isAnonymous ? "Anonymous" : (commentAuthor.trim() || "Anonymous"),
           content: comment
         });
         console.log('Comment response:', response);
@@ -338,7 +338,7 @@ const BlogPost = () => {
                     fontSize: '0.9rem',
                     color: 'var(--text-light)'
                   }}>
-                    <strong>{comment.author}</strong>
+                    <strong>{comment.author_name}</strong>
                     <span>{new Date(comment.created_at).toLocaleDateString()}</span>
                   </div>
                   <p style={{ margin: 0 }}>{comment.content}</p>
