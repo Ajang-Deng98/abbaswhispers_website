@@ -76,7 +76,12 @@ const PrayerRequest = () => {
         <meta name="description" content="Submit your prayer requests to Abbaswhispers. Our prayer team is committed to lifting up your needs in prayer. All requests are kept confidential." />
       </Helmet>
 
-      <section className="prayer-hero">
+      <section className="prayer-hero" style={{
+        background: 'linear-gradient(rgba(0, 0, 0, 0.4), rgba(0, 0, 0, 0.4)), url("https://images.unsplash.com/photo-1518837695005-2083093ee35b?ixlib=rb-4.0.3&w=2000&q=80") center/cover no-repeat',
+        padding: 'clamp(2rem, 5vw, 3rem) 1rem',
+        textAlign: 'center',
+        color: 'white'
+      }}>
         <div className="container">
           <motion.div
             className="prayer-hero-content"
@@ -85,9 +90,28 @@ const PrayerRequest = () => {
             transition={{ duration: 0.8 }}
           >
             <div className="hero-badge">Sacred Prayer Ministry</div>
-            <h1>Share Your Heart with God</h1>
-            <p>Submit your prayer requests with confidence. Our dedicated prayer team stands ready to lift your needs before the throne of grace. Every prayer matters, every heart is heard.</p>
-            <div className="prayer-stats">
+            <h1 style={{
+              fontSize: 'clamp(1.8rem, 4vw, 2.5rem)',
+              color: 'white',
+              textShadow: '2px 2px 4px rgba(0,0,0,0.5)',
+              marginBottom: '1rem'
+            }}>Share Your Heart with God</h1>
+            <p style={{
+              fontSize: 'clamp(0.9rem, 2vw, 1.1rem)',
+              maxWidth: '800px',
+              margin: '0 auto 2rem',
+              lineHeight: '1.6',
+              color: 'white',
+              textShadow: '1px 1px 2px rgba(0,0,0,0.5)',
+              padding: '0 1rem'
+            }}>Submit your prayer requests with confidence. Our dedicated prayer team stands ready to lift your needs before the throne of grace. Every prayer matters, every heart is heard.</p>
+            <div className="prayer-stats" style={{
+              display: 'grid',
+              gridTemplateColumns: 'repeat(auto-fit, minmax(120px, 1fr))',
+              gap: 'clamp(1rem, 3vw, 2rem)',
+              maxWidth: '600px',
+              margin: '0 auto'
+            }}>
               <div className="stat-item">
                 <span className="stat-number">24/7</span>
                 <span className="stat-label">Prayer Coverage</span>
@@ -108,14 +132,23 @@ const PrayerRequest = () => {
       <section className="section">
         <div className="container">
 
-          <div className="modern-prayer-layout">
+          <div className="modern-prayer-layout" style={{
+            display: 'grid',
+            gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))',
+            gap: 'clamp(1.5rem, 4vw, 3rem)',
+            alignItems: 'start'
+          }}>
             <motion.div
               className="prayer-main-card"
               initial={{ opacity: 0, x: -30 }}
               animate={{ opacity: 1, x: 0 }}
               transition={{ duration: 0.8, delay: 0.2 }}
             >
-              <div className="prayer-form-wrapper">
+              <div className="prayer-form-wrapper" style={{
+                padding: 'clamp(1.5rem, 4vw, 2rem)',
+                background: 'white',
+                borderRadius: '16px'
+              }}>
                 <h2>Submit Your Prayer Request</h2>
                 <p>Share your heart with our prayer team. Every request is treated with love, respect, and complete confidentiality.</p>
 
@@ -230,6 +263,11 @@ const PrayerRequest = () => {
               initial={{ opacity: 0, x: 30 }}
               animate={{ opacity: 1, x: 0 }}
               transition={{ duration: 0.8, delay: 0.4 }}
+              style={{
+                display: 'flex',
+                flexDirection: 'column',
+                gap: '1.5rem'
+              }}
             >
               <div className="prayer-info-card">
                 <h3>Our Promise</h3>
@@ -285,7 +323,12 @@ const PrayerRequest = () => {
           </motion.div>
 
           {prayerTestimonials.length > 0 ? (
-            <div className="grid grid-3" style={{ marginTop: '3rem' }}>
+            <div className="grid grid-3" style={{ 
+              marginTop: '3rem',
+              display: 'grid',
+              gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))',
+              gap: 'clamp(1rem, 3vw, 2rem)'
+            }}>
               {prayerTestimonials.slice(0, 3).map((testimonial, index) => (
                 <motion.div
                   key={testimonial.id}

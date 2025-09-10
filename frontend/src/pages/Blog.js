@@ -69,7 +69,7 @@ const Blog = () => {
       <div style={{
         maxWidth: '1200px',
         margin: '0 auto',
-        padding: '1rem 2rem',
+        padding: 'clamp(0.5rem, 2vw, 1rem) clamp(1rem, 3vw, 2rem)',
         background: 'rgba(255, 255, 255, 0.8)',
         minHeight: '100vh',
         fontFamily: 'Space Grotesk, sans-serif'
@@ -83,7 +83,7 @@ const Blog = () => {
           style={{
             textAlign: 'center',
             marginBottom: '2rem',
-            padding: '2rem 0 1rem 0',
+            padding: 'clamp(1rem, 3vw, 2rem) 0 1rem 0',
             borderBottom: '2px solid var(--primary-gold)'
           }}
         >
@@ -112,7 +112,7 @@ const Blog = () => {
           style={{
             marginBottom: '2rem',
             background: 'rgba(255, 255, 255, 0.9)',
-            padding: '1.5rem',
+            padding: 'clamp(1rem, 3vw, 1.5rem)',
             borderRadius: '15px',
             boxShadow: '0 5px 15px rgba(0, 0, 0, 0.1)',
             border: '1px solid rgba(212, 175, 55, 0.2)'
@@ -188,8 +188,8 @@ const Blog = () => {
           
           <div style={{
             display: 'grid',
-            gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))',
-            gap: '1.5rem'
+            gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))',
+            gap: 'clamp(1rem, 3vw, 1.5rem)'
           }}>
             {currentPosts.map((post, index) => (
               <motion.article
@@ -199,12 +199,12 @@ const Blog = () => {
                 transition={{ duration: 0.6, delay: index * 0.1 }}
                 style={{
                   background: 'white',
-                  padding: '1.5rem',
+                  padding: 'clamp(1rem, 3vw, 1.5rem)',
                   borderRadius: '15px',
                   border: '1px solid rgba(212, 175, 55, 0.2)',
                   boxShadow: '0 5px 15px rgba(0, 0, 0, 0.1)',
                   transition: 'all 0.3s ease',
-                  minHeight: '400px',
+                  minHeight: 'clamp(350px, 50vw, 400px)',
                   display: 'flex',
                   flexDirection: 'column'
                 }}
@@ -252,7 +252,7 @@ const Blog = () => {
                 )}
                 
                 <h3 style={{
-                  fontSize: '1.2rem',
+                  fontSize: 'clamp(1.1rem, 2.5vw, 1.2rem)',
                   marginBottom: '0.75rem',
                   lineHeight: '1.4',
                   fontWeight: '600'
@@ -267,7 +267,7 @@ const Blog = () => {
                 </h3>
                 
                 <p style={{
-                  fontSize: '1rem',
+                  fontSize: 'clamp(0.9rem, 2vw, 1rem)',
                   lineHeight: '1.6',
                   color: 'var(--text-medium)',
                   marginBottom: 'auto',
@@ -325,7 +325,7 @@ const Blog = () => {
             animate={{ opacity: 1 }}
             transition={{ duration: 0.5, delay: 0.3 }}
           >
-            <div style={{ display: 'flex', justifyContent: 'center', gap: '0.5rem', flexWrap: 'wrap' }}>
+            <div style={{ display: 'flex', justifyContent: 'center', gap: 'clamp(0.25rem, 1vw, 0.5rem)', flexWrap: 'wrap' }}>
               {Array.from({ length: totalPages }, (_, i) => i + 1).map(page => (
                 <button
                   key={page}

@@ -45,7 +45,7 @@ const Contact = () => {
 
       <section className="contact-hero" style={{
         background: 'linear-gradient(rgba(0, 0, 0, 0.4), rgba(0, 0, 0, 0.4)), url("https://images.unsplash.com/photo-1470071459604-3b5ec3a7fe05?ixlib=rb-4.0.3&w=2000&q=80") center/cover no-repeat',
-        padding: '4rem 0',
+        padding: 'clamp(2rem, 5vw, 4rem) 1rem',
         color: 'white',
         textAlign: 'center'
       }}>
@@ -60,7 +60,7 @@ const Contact = () => {
               Let's Connect
             </div>
             <h1 style={{ color: 'white', textShadow: '2px 2px 4px rgba(0,0,0,0.5)' }}>We'd Love to Hear From You</h1>
-            <p style={{ fontSize: '1.3rem', maxWidth: '900px', margin: '0 auto', lineHeight: '1.6', color: 'white', textShadow: '1px 1px 2px rgba(0,0,0,0.5)' }}>
+            <p style={{ fontSize: 'clamp(1rem, 2.5vw, 1.3rem)', maxWidth: '900px', margin: '0 auto', lineHeight: '1.6', color: 'white', textShadow: '1px 1px 2px rgba(0,0,0,0.5)', padding: '0 1rem' }}>
               Your story matters to us. Whether you have questions about our writings, need prayer support, 
               or want to share how the SELAH series has touched your heart, we're here to listen and connect.
             </p>
@@ -76,13 +76,28 @@ const Contact = () => {
               initial={{ opacity: 0, y: 30 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.8 }}
+              style={{
+                display: 'grid',
+                gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))',
+                gap: '0',
+                borderRadius: '16px',
+                overflow: 'hidden',
+                boxShadow: '0 8px 30px rgba(0,0,0,0.1)'
+              }}
             >
-              <div className="contact-form-wrapper">
+              <div className="contact-form-wrapper" style={{
+                padding: 'clamp(1.5rem, 4vw, 3rem)',
+                background: 'white'
+              }}>
                 <h2>Send us a Message</h2>
                 <p>We'd love to hear from you. Send us a message and we'll respond as soon as possible.</p>
                 
                 <form onSubmit={handleSubmit} className="modern-form">
-                  <div className="form-row">
+                  <div className="form-row" style={{
+                    display: 'grid',
+                    gridTemplateColumns: 'repeat(auto-fit, minmax(250px, 1fr))',
+                    gap: '1rem'
+                  }}>
                     <div className="form-group">
                       <input
                         type="text"
@@ -147,7 +162,11 @@ const Contact = () => {
                 </form>
               </div>
               
-              <div className="contact-info-sidebar">
+              <div className="contact-info-sidebar" style={{
+                background: 'linear-gradient(135deg, rgba(212, 175, 55, 0.9) 0%, rgba(218, 165, 32, 0.9) 100%)',
+                color: 'white',
+                padding: 'clamp(1.5rem, 4vw, 2rem)'
+              }}>
                 <div className="info-section">
                   <h3>Get in Touch</h3>
                   <div className="info-item">
@@ -218,7 +237,11 @@ const Contact = () => {
               <p>Quick answers to common questions about our ministry and services</p>
             </div>
             
-            <div className="faq-grid">
+            <div className="faq-grid" style={{
+              display: 'grid',
+              gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))',
+              gap: '1.5rem'
+            }}>
               {[
                 {
                   question: "How often do you publish new content?",

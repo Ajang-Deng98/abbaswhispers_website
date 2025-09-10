@@ -62,7 +62,15 @@ const Volumes = () => {
       </Helmet>
 
       {/* Hero Section */}
-      <section className="volumes-hero">
+      <section className="volumes-hero" style={{
+        background: 'linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)), url("https://images.unsplash.com/photo-1441974231531-c6227db76b6e?ixlib=rb-4.0.3&w=2071&q=80") center/cover no-repeat',
+        color: '#ffffff',
+        padding: 'clamp(2rem, 5vw, 4rem) 1rem',
+        textAlign: 'center',
+        minHeight: '50vh',
+        display: 'flex',
+        alignItems: 'center'
+      }}>
         <div className="container">
           <motion.div
             className="volumes-hero-content"
@@ -73,9 +81,29 @@ const Volumes = () => {
             <div className="hero-badge" style={{ background: 'var(--primary-gold)', color: 'white', padding: '0.5rem 1.5rem', borderRadius: '25px', display: 'inline-block', marginBottom: '2rem' }}>
               Premium Poetry Collection
             </div>
-            <h1>SELAH - My Debut Poetry Series</h1>
-            <p>Immerse yourself in my debut collection of inspirational poetry, each piece carefully crafted from a journey through grief into grace. Experience the power of spoken word with professional audio narrations that bring every emotion to life.</p>
-            <div className="volumes-stats">
+            <h1 style={{
+              fontSize: 'clamp(2rem, 5vw, 2.5rem)',
+              marginBottom: '1rem',
+              color: 'white',
+              textShadow: '2px 2px 4px rgba(0, 0, 0, 0.5)'
+            }}>SELAH - My Debut Poetry Series</h1>
+            <p style={{
+              fontSize: 'clamp(0.9rem, 2vw, 1rem)',
+              marginBottom: '2rem',
+              color: 'white',
+              textShadow: '1px 1px 2px rgba(0, 0, 0, 0.5)',
+              maxWidth: '800px',
+              margin: '0 auto 2rem',
+              lineHeight: '1.6',
+              padding: '0 1rem'
+            }}>Immerse yourself in my debut collection of inspirational poetry, each piece carefully crafted from a journey through grief into grace. Experience the power of spoken word with professional audio narrations that bring every emotion to life.</p>
+            <div className="volumes-stats" style={{
+              display: 'grid',
+              gridTemplateColumns: 'repeat(auto-fit, minmax(100px, 1fr))',
+              gap: 'clamp(1rem, 3vw, 3rem)',
+              maxWidth: '500px',
+              margin: '0 auto'
+            }}>
               <div className="stat-item">
                 <span className="stat-number">{volumes.length}</span>
                 <span className="stat-label">Poems</span>
@@ -103,7 +131,13 @@ const Volumes = () => {
             transition={{ duration: 0.6, delay: 0.2 }}
           >
             <h2>Browse Collections</h2>
-            <div className="category-grid">
+            <div className="category-grid" style={{
+              display: 'grid',
+              gridTemplateColumns: 'repeat(auto-fit, minmax(180px, 1fr))',
+              gap: '1rem',
+              maxWidth: '1000px',
+              margin: '0 auto'
+            }}>
               {categories.map((category) => (
                 <button
                   key={category.value}
@@ -133,7 +167,13 @@ const Volumes = () => {
               </p>
             </div>
           ) : (
-            <div className="volumes-grid">
+            <div className="volumes-grid" style={{
+              display: 'grid',
+              gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))',
+              gap: 'clamp(1rem, 3vw, 2rem)',
+              maxWidth: '1200px',
+              margin: '0 auto'
+            }}>
               {filteredVolumes.map((volume, index) => (
               <motion.div
                 key={volume.id}
@@ -166,7 +206,11 @@ const Volumes = () => {
                   <div className="volume-description">
                     {volume.description}
                   </div>
-                  <div className="volume-actions">
+                  <div className="volume-actions" style={{
+                    display: 'flex',
+                    gap: '0.75rem',
+                    flexWrap: 'wrap'
+                  }}>
                     <button 
                       className="btn-primary"
                       onClick={() => setSelectedVolume(volume)}
@@ -249,8 +293,29 @@ const Volumes = () => {
 
       {/* Modal */}
       {selectedVolume && (
-        <div className="volume-modal" onClick={() => setSelectedVolume(null)}>
-          <div className="modal-content" onClick={(e) => e.stopPropagation()}>
+        <div className="volume-modal" onClick={() => setSelectedVolume(null)} style={{
+          position: 'fixed',
+          top: 0,
+          left: 0,
+          width: '100%',
+          height: '100%',
+          background: 'rgba(0, 0, 0, 0.8)',
+          display: 'flex',
+          alignItems: 'center',
+          justifyContent: 'center',
+          zIndex: 1000,
+          padding: '1rem'
+        }}>
+          <div className="modal-content" onClick={(e) => e.stopPropagation()} style={{
+            background: 'white',
+            borderRadius: '16px',
+            padding: 'clamp(1.5rem, 4vw, 2rem)',
+            maxWidth: '700px',
+            width: '100%',
+            maxHeight: '80vh',
+            overflowY: 'auto',
+            position: 'relative'
+          }}>
             <button className="modal-close" onClick={() => setSelectedVolume(null)}>×</button>
             <h2>{selectedVolume.title}</h2>
             <div className="modal-poem">
