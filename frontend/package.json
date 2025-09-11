@@ -23,7 +23,8 @@
     "build": "react-scripts build",
     "test": "react-scripts test",
     "eject": "react-scripts eject",
-    "build:prod": "REACT_APP_API_URL=https://yourdomain.com/api npm run build"
+    "build:prod": "REACT_APP_API_URL=https://abbawhispers-backend.herokuapp.com/api GENERATE_SOURCEMAP=false npm run build",
+    "build:netlify": "CI=false GENERATE_SOURCEMAP=false npm run build"
   },
   "engines": {
     "node": "18.x",

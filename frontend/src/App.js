@@ -1,5 +1,5 @@
 import React from 'react';
-import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
+import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import Header from './components/Header';
 import Footer from './components/Footer';
@@ -45,7 +45,7 @@ function App() {
         <Route path="/prayer-request" element={<Layout><PrayerRequest /></Layout>} />
         <Route path="/privacy" element={<Layout><PrivacyPolicy /></Layout>} />
         <Route path="/terms" element={<Layout><TermsOfService /></Layout>} />
-
+        <Route path="*" element={<Navigate to="/" replace />} />
       </Routes>
     </Router>
   );

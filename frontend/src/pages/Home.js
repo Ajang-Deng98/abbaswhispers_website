@@ -181,12 +181,18 @@ const Home = () => {
                 {post.image && (
                   <div className="blog-image" style={{ height: '200px', overflow: 'hidden', borderRadius: '8px 8px 0 0', marginBottom: '1rem' }}>
                     <img 
-                      src={post.image.startsWith('http') ? post.image : `http://localhost:8000${post.image}`}
+                      src={post.image.startsWith('http') ? post.image : `${process.env.REACT_APP_API_URL?.replace('/api', '') || 'http://localhost:8000'}${post.image}`}
                       alt={post.title}
                       style={{ width: '100%', height: '100%', objectFit: 'cover', transition: 'transform 0.3s ease' }}
                       onMouseEnter={(e) => e.target.style.transform = 'scale(1.05)'}
                       onMouseLeave={(e) => e.target.style.transform = 'scale(1)'}
-                      onError={(e) => e.target.parentElement.style.display = 'none'}
+                      onError={(e) => {
+                        e.target.style.display = 'none';
+                        const fallback = document.createElement('div');
+                        fallback.style.cssText = 'width: 100%; height: 200px; background: linear-gradient(135deg, #f3f4f6 0%, #e5e7eb 100%); display: flex; align-items: center; justify-content: center; color: #6b7280; font-size: 14px; border-radius: 8px;';
+                        fallback.textContent = 'Image not available';
+                        e.target.parentElement.appendChild(fallback);
+                      }}
                     />
                   </div>
                 )}
