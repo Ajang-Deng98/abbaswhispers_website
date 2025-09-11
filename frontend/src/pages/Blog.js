@@ -2,7 +2,7 @@ import React, { useState, useEffect, useCallback } from 'react';
 import { Link } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import { Helmet } from 'react-helmet';
-import { blogAPI } from '../utils/api';
+// import { blogAPI } from '../utils/api';
 import LoadingSpinner from '../components/LoadingSpinner';
 
 const Blog = () => {
@@ -17,11 +17,11 @@ const Blog = () => {
     loadPosts();
   }, [searchTerm, selectedCategory, currentPage, loadPosts]);
 
-  const loadPosts = useCallback(async () => {
+  const loadPosts = useCallback(() => {
     setLoading(true);
     
-    // Always show fallback data for now
-    const fallbackPosts = [
+    // Static data - no API calls
+    const staticPosts = [
       {
         id: 1,
         title: "Finding Peace in the Psalms",
@@ -72,30 +72,11 @@ const Blog = () => {
       }
     ];
     
-    try {
-      const response = await blogAPI.getAllPosts({
-        search: searchTerm,
-        category: selectedCategory,
-        page: currentPage,
-        limit: postsPerPage
-      });
-      
-      let postsData = [];
-      if (response.data && Array.isArray(response.data) && response.data.length > 0) {
-        postsData = response.data;
-      } else if (response.data?.results && Array.isArray(response.data.results) && response.data.results.length > 0) {
-        postsData = response.data.results;
-      } else {
-        postsData = fallbackPosts;
-      }
-      
-      setPosts(postsData);
-    } catch (error) {
-      console.error('Error loading posts, using fallback data:', error);
-      setPosts(fallbackPosts);
-    } finally {
+    // Simulate loading delay
+    setTimeout(() => {
+      setPosts(staticPosts);
       setLoading(false);
-    }
+    }, 500);
   }, [searchTerm, selectedCategory, currentPage]);
 
   const categories = [

@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useCallback } from 'react';
 import { motion } from 'framer-motion';
 import { Helmet } from 'react-helmet';
-import { volumeAPI } from '../utils/api';
+// import { volumeAPI } from '../utils/api';
 import LoadingSpinner from '../components/LoadingSpinner';
 
 const Volumes = () => {
@@ -15,11 +15,11 @@ const Volumes = () => {
     loadVolumes();
   }, [selectedCategory, loadVolumes]);
 
-  const loadVolumes = useCallback(async () => {
+  const loadVolumes = useCallback(() => {
     setLoading(true);
     
-    // Always show fallback data for now
-    const fallbackVolumes = [
+    // Static data - no API calls
+    const staticVolumes = [
       {
         id: 1,
         title: "SELAH - Volume 1: Thanksgiving",
@@ -57,26 +57,11 @@ const Volumes = () => {
       }
     ];
     
-    try {
-      const params = selectedCategory === 'all' ? {} : { category: selectedCategory };
-      const response = await volumeAPI.getAllVolumes(params);
-      
-      let volumesData = [];
-      if (response.data && Array.isArray(response.data) && response.data.length > 0) {
-        volumesData = response.data;
-      } else if (response.data?.results && Array.isArray(response.data.results) && response.data.results.length > 0) {
-        volumesData = response.data.results;
-      } else {
-        volumesData = fallbackVolumes;
-      }
-      
-      setVolumes(volumesData);
-    } catch (error) {
-      console.error('Error loading volumes, using fallback data:', error);
-      setVolumes(fallbackVolumes);
-    } finally {
+    // Simulate loading delay
+    setTimeout(() => {
+      setVolumes(staticVolumes);
       setLoading(false);
-    }
+    }, 500);
   }, [selectedCategory]);
 
   const categories = [
