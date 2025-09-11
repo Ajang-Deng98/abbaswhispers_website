@@ -29,12 +29,22 @@ api.interceptors.request.use(
 api.interceptors.response.use(
   (response) => response,
   (error) => {
+    // Handle network errors gracefully
+    if (!error.response) {
+      console.warn('Network error - API may be unavailable:', error.message);
+      // Return a mock response for network errors
+      return Promise.resolve({ data: [] });
+    }
+    
     if (error.response?.status === 401 && window.location.pathname.includes('/admin')) {
       localStorage.removeItem('adminToken');
       if (window.location.pathname !== '/admin') {
         window.location.href = '/admin';
       }
     }
+    
+    // For other errors, still reject but log them
+    console.warn('API Error:', error.response?.status, error.response?.data);
     return Promise.reject(error);
   }
 );

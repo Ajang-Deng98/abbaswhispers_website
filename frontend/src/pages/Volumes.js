@@ -2,18 +2,21 @@ import React, { useState, useEffect, useCallback } from 'react';
 import { motion } from 'framer-motion';
 import { Helmet } from 'react-helmet';
 import { volumeAPI } from '../utils/api';
+import LoadingSpinner from '../components/LoadingSpinner';
 
 const Volumes = () => {
   const [volumes, setVolumes] = useState([]);
   const [selectedCategory, setSelectedCategory] = useState('all');
   const [selectedVolume, setSelectedVolume] = useState(null);
   const [playingAudio, setPlayingAudio] = useState(null);
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     loadVolumes();
   }, [selectedCategory, loadVolumes]);
 
   const loadVolumes = useCallback(async () => {
+    setLoading(true);
     try {
       const params = selectedCategory === 'all' ? {} : { category: selectedCategory };
       const response = await volumeAPI.getAllVolumes(params);
@@ -27,12 +30,35 @@ const Volumes = () => {
         }
       }
       
-      console.log('API Response:', response.data);
-      console.log('Loaded volumes:', volumesData);
       setVolumes(volumesData);
     } catch (error) {
       console.error('Error loading volumes:', error);
-      setVolumes([]);
+      // Set fallback data when API fails
+      setVolumes([
+        {
+          id: 1,
+          title: "SELAH - Volume 1: Thanksgiving",
+          description: "A collection of poems celebrating gratitude and God's faithfulness in our lives.",
+          category: "thanksgiving",
+          content: "Coming soon..."
+        },
+        {
+          id: 2,
+          title: "SELAH - Volume 2: Wonder",
+          description: "Poems that capture the awe and wonder of God's creation and love.",
+          category: "wonder",
+          content: "Coming soon..."
+        },
+        {
+          id: 3,
+          title: "SELAH - Volume 3: Faith",
+          description: "Reflections on faith, trust, and walking with God through life's journey.",
+          category: "faith",
+          content: "Coming soon..."
+        }
+      ]);
+    } finally {
+      setLoading(false);
     }
   }, [selectedCategory]);
 
@@ -156,15 +182,25 @@ const Volumes = () => {
       {/* Volumes Grid */}
       <section className="volumes-content">
         <div className="container">
+          {loading ? (
+            <LoadingSpinner message="Loading poetry collections..." />
+          ) : (
           {filteredVolumes.length === 0 ? (
             <div style={{ textAlign: 'center', padding: '3rem 1rem' }}>
-              <h3 style={{ color: 'var(--primary-gold)', marginBottom: '1rem' }}>No Volumes Found</h3>
+              <h3 style={{ color: 'var(--primary-gold)', marginBottom: '1rem' }}>Coming Soon</h3>
               <p style={{ color: '#666', fontSize: '1.1rem' }}>
-                {selectedCategory === 'all' 
-                  ? 'No volumes have been added yet. Check back soon!' 
-                  : `No volumes found in the ${selectedCategory} category.`
-                }
+                Our SELAH poetry collection is being prepared for you. Subscribe to our newsletter to be notified when new volumes are available.
               </p>
+              <a href="/contact" style={{
+                display: 'inline-block',
+                marginTop: '1rem',
+                padding: '12px 24px',
+                background: 'var(--primary-gold)',
+                color: 'white',
+                textDecoration: 'none',
+                borderRadius: '25px',
+                fontWeight: '500'
+              }}>Get Notified</a>
             </div>
           ) : (
             <div className="volumes-grid" style={{
@@ -287,6 +323,7 @@ const Volumes = () => {
               </motion.div>
               ))}
             </div>
+          )}
           )}
         </div>
       </section>

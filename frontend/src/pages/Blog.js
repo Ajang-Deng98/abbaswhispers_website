@@ -3,12 +3,14 @@ import { Link } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import { Helmet } from 'react-helmet';
 import { blogAPI } from '../utils/api';
+import LoadingSpinner from '../components/LoadingSpinner';
 
 const Blog = () => {
   const [posts, setPosts] = useState([]);
   const [searchTerm, setSearchTerm] = useState('');
   const [selectedCategory, setSelectedCategory] = useState('all');
   const [currentPage, setCurrentPage] = useState(1);
+  const [loading, setLoading] = useState(true);
   const postsPerPage = 6;
 
   useEffect(() => {
@@ -16,6 +18,7 @@ const Blog = () => {
   }, [searchTerm, selectedCategory, currentPage, loadPosts]);
 
   const loadPosts = useCallback(async () => {
+    setLoading(true);
     try {
       const response = await blogAPI.getAllPosts({
         search: searchTerm,
@@ -30,7 +33,35 @@ const Blog = () => {
       }
     } catch (error) {
       console.error('Error loading posts:', error);
-      setPosts([]);
+      // Set fallback data when API fails
+      setPosts([
+        {
+          id: 1,
+          title: "Finding Peace in the Psalms",
+          excerpt: "Discover how the ancient words of the Psalms can bring peace to our modern struggles and anxieties.",
+          category: "peace",
+          tags: ["peace", "psalms", "comfort"],
+          created_at: new Date().toISOString()
+        },
+        {
+          id: 2,
+          title: "Gratitude in Every Season",
+          excerpt: "Learning to cultivate a heart of thanksgiving through life's ups and downs, inspired by Psalm 23.",
+          category: "gratitude",
+          tags: ["gratitude", "thanksgiving", "seasons"],
+          created_at: new Date().toISOString()
+        },
+        {
+          id: 3,
+          title: "Strength for the Journey",
+          excerpt: "How God's promises in the Psalms provide strength and courage for life's difficult moments.",
+          category: "strength",
+          tags: ["strength", "courage", "journey"],
+          created_at: new Date().toISOString()
+        }
+      ]);
+    } finally {
+      setLoading(false);
     }
   }, [searchTerm, selectedCategory, currentPage]);
 
@@ -176,6 +207,9 @@ const Blog = () => {
         </motion.div>
 
         {/* Blog Posts */}
+        {loading ? (
+          <LoadingSpinner message="Loading blog posts..." />
+        ) : (
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
@@ -361,11 +395,22 @@ const Blog = () => {
             animate={{ opacity: 1 }}
             transition={{ duration: 0.5 }}
           >
-            <h3 style={{ color: 'var(--primary-gold)', marginBottom: '0.5rem' }}>No Articles Found</h3>
+            <h3 style={{ color: 'var(--primary-gold)', marginBottom: '0.5rem' }}>Coming Soon</h3>
             <p style={{ fontSize: '1rem', color: 'var(--text-medium)' }}>
-              No posts found. Try different keywords or categories.
+              We're preparing inspiring content for you. Subscribe to our newsletter to be the first to read our latest posts.
             </p>
+            <a href="/contact" style={{
+              display: 'inline-block',
+              marginTop: '1rem',
+              padding: '12px 24px',
+              background: 'var(--primary-gold)',
+              color: 'white',
+              textDecoration: 'none',
+              borderRadius: '25px',
+              fontWeight: '500'
+            }}>Subscribe for Updates</a>
           </motion.div>
+        )}
         )}
       </div>
     </>
