@@ -17,46 +17,63 @@ const Volumes = () => {
 
   const loadVolumes = useCallback(async () => {
     setLoading(true);
+    
+    // Always show fallback data for now
+    const fallbackVolumes = [
+      {
+        id: 1,
+        title: "SELAH - Volume 1: Thanksgiving",
+        description: "A collection of poems celebrating gratitude and God's faithfulness in our lives. Each piece reflects on the beauty of thanksgiving in both joyful and challenging seasons.",
+        category: "thanksgiving",
+        content: "In every breath I take today,\nI find a reason to give praise.\nFor morning light that breaks the dawn,\nFor strength to face what lies beyond.\n\nSelah - pause and reflect\n\nYour faithfulness, O Lord, endures,\nThrough every storm, Your love ensures\nThat I am held, that I am known,\nNever walking this path alone."
+      },
+      {
+        id: 2,
+        title: "SELAH - Volume 2: Wonder",
+        description: "Poems that capture the awe and wonder of God's creation and love. From the vastness of the sky to the intimacy of His presence.",
+        category: "wonder",
+        content: "I stand beneath the starlit sky,\nAnd wonder at Your majesty.\nEach twinkling light, a testament\nTo power beyond what I can see.\n\nSelah - pause and reflect\n\nHow can it be that You who made\nThe galaxies with just Your word,\nWould bend Your ear to hear my prayer,\nAnd call me precious, call me heard?"
+      },
+      {
+        id: 3,
+        title: "SELAH - Volume 3: Faith",
+        description: "Reflections on faith, trust, and walking with God through life's journey. These poems explore the depths of believing when we cannot see.",
+        category: "faith",
+        content: "When shadows fall and doubts arise,\nAnd faith feels fragile in my chest,\nI choose to trust what I cannot see,\nTo find in You my place of rest.\n\nSelah - pause and reflect\n\nFor faith is not the absence of fear,\nBut courage to believe You're near.\nIn every valley, every height,\nYou are my anchor, You are my light."
+      },
+      {
+        id: 4,
+        title: "SELAH - Volume 4: Contemplation",
+        description: "Deep reflections on life's mysteries and God's unchanging character through seasons of questioning and discovery.",
+        category: "contemplation",
+        content: "In quiet moments of the soul,\nWhen words seem far too small,\nI sit in wonder at Your grace\nThat covers, heals, and calls.\n\nSelah - pause and reflect\n\nYour ways are higher than my ways,\nYour thoughts beyond my reach,\nYet in the silence You draw near\nAnd let Your presence teach."
+      },
+      {
+        id: 5,
+        title: "SELAH - Volume 5: Reflection",
+        description: "Contemplative verses that invite us to pause and consider God's goodness in the ordinary moments of life.",
+        category: "reflection",
+        content: "Look back and see His faithfulness\nIn every twist and turn,\nThe lessons that the heart has learned\nThrough seasons that would burn.\n\nSelah - pause and reflect\n\nWhat seemed like endings were beginnings,\nWhat felt like loss was gain,\nFor in His hands our broken pieces\nBecome beautiful again."
+      }
+    ];
+    
     try {
       const params = selectedCategory === 'all' ? {} : { category: selectedCategory };
       const response = await volumeAPI.getAllVolumes(params);
       
       let volumesData = [];
-      if (response.data) {
-        if (Array.isArray(response.data)) {
-          volumesData = response.data;
-        } else if (response.data.results && Array.isArray(response.data.results)) {
-          volumesData = response.data.results;
-        }
+      if (response.data && Array.isArray(response.data) && response.data.length > 0) {
+        volumesData = response.data;
+      } else if (response.data?.results && Array.isArray(response.data.results) && response.data.results.length > 0) {
+        volumesData = response.data.results;
+      } else {
+        volumesData = fallbackVolumes;
       }
       
       setVolumes(volumesData);
     } catch (error) {
-      console.error('Error loading volumes:', error);
-      // Set fallback data when API fails
-      setVolumes([
-        {
-          id: 1,
-          title: "SELAH - Volume 1: Thanksgiving",
-          description: "A collection of poems celebrating gratitude and God's faithfulness in our lives.",
-          category: "thanksgiving",
-          content: "Coming soon..."
-        },
-        {
-          id: 2,
-          title: "SELAH - Volume 2: Wonder",
-          description: "Poems that capture the awe and wonder of God's creation and love.",
-          category: "wonder",
-          content: "Coming soon..."
-        },
-        {
-          id: 3,
-          title: "SELAH - Volume 3: Faith",
-          description: "Reflections on faith, trust, and walking with God through life's journey.",
-          category: "faith",
-          content: "Coming soon..."
-        }
-      ]);
+      console.error('Error loading volumes, using fallback data:', error);
+      setVolumes(fallbackVolumes);
     } finally {
       setLoading(false);
     }

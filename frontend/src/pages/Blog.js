@@ -19,6 +19,59 @@ const Blog = () => {
 
   const loadPosts = useCallback(async () => {
     setLoading(true);
+    
+    // Always show fallback data for now
+    const fallbackPosts = [
+      {
+        id: 1,
+        title: "Finding Peace in the Psalms",
+        excerpt: "Discover how the ancient words of the Psalms can bring peace to our modern struggles and anxieties. When David wrote 'The Lord is my shepherd,' he was declaring a truth that transcends time.",
+        category: "peace",
+        tags: ["peace", "psalms", "comfort"],
+        created_at: new Date().toISOString()
+      },
+      {
+        id: 2,
+        title: "Gratitude in Every Season",
+        excerpt: "Learning to cultivate a heart of thanksgiving through life's ups and downs, inspired by Psalm 23. Even in difficult seasons, we can find reasons to praise.",
+        category: "gratitude",
+        tags: ["gratitude", "thanksgiving", "seasons"],
+        created_at: new Date().toISOString()
+      },
+      {
+        id: 3,
+        title: "Strength for the Journey",
+        excerpt: "How God's promises in the Psalms provide strength and courage for life's difficult moments. His strength is made perfect in our weakness.",
+        category: "strength",
+        tags: ["strength", "courage", "journey"],
+        created_at: new Date().toISOString()
+      },
+      {
+        id: 4,
+        title: "Walking in His Faithfulness",
+        excerpt: "Exploring the unwavering faithfulness of God through the lens of the Psalms and personal testimony.",
+        category: "faithfulness",
+        tags: ["faithfulness", "trust", "testimony"],
+        created_at: new Date().toISOString()
+      },
+      {
+        id: 5,
+        title: "Songs of Worship from the Heart",
+        excerpt: "How the Psalms teach us to worship authentically, bringing our whole selves before God in praise and petition.",
+        category: "worship",
+        tags: ["worship", "praise", "authenticity"],
+        created_at: new Date().toISOString()
+      },
+      {
+        id: 6,
+        title: "Divine Guidance in Uncertain Times",
+        excerpt: "Finding direction and wisdom through God's word when the path ahead seems unclear.",
+        category: "guidance",
+        tags: ["guidance", "wisdom", "direction"],
+        created_at: new Date().toISOString()
+      }
+    ];
+    
     try {
       const response = await blogAPI.getAllPosts({
         search: searchTerm,
@@ -26,40 +79,20 @@ const Blog = () => {
         page: currentPage,
         limit: postsPerPage
       });
-      if (response.data) {
-        setPosts(Array.isArray(response.data) ? response.data : response.data.results || []);
+      
+      let postsData = [];
+      if (response.data && Array.isArray(response.data) && response.data.length > 0) {
+        postsData = response.data;
+      } else if (response.data?.results && Array.isArray(response.data.results) && response.data.results.length > 0) {
+        postsData = response.data.results;
       } else {
-        setPosts([]);
+        postsData = fallbackPosts;
       }
+      
+      setPosts(postsData);
     } catch (error) {
-      console.error('Error loading posts:', error);
-      // Set fallback data when API fails
-      setPosts([
-        {
-          id: 1,
-          title: "Finding Peace in the Psalms",
-          excerpt: "Discover how the ancient words of the Psalms can bring peace to our modern struggles and anxieties.",
-          category: "peace",
-          tags: ["peace", "psalms", "comfort"],
-          created_at: new Date().toISOString()
-        },
-        {
-          id: 2,
-          title: "Gratitude in Every Season",
-          excerpt: "Learning to cultivate a heart of thanksgiving through life's ups and downs, inspired by Psalm 23.",
-          category: "gratitude",
-          tags: ["gratitude", "thanksgiving", "seasons"],
-          created_at: new Date().toISOString()
-        },
-        {
-          id: 3,
-          title: "Strength for the Journey",
-          excerpt: "How God's promises in the Psalms provide strength and courage for life's difficult moments.",
-          category: "strength",
-          tags: ["strength", "courage", "journey"],
-          created_at: new Date().toISOString()
-        }
-      ]);
+      console.error('Error loading posts, using fallback data:', error);
+      setPosts(fallbackPosts);
     } finally {
       setLoading(false);
     }

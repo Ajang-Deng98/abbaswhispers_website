@@ -15,35 +15,100 @@ const Home = () => {
   }, []);
 
   const loadFeaturedContent = async () => {
+    // Set fallback data immediately
+    const fallbackPosts = [
+      {
+        id: 1,
+        title: "Finding Peace in the Psalms",
+        excerpt: "Discover how the ancient words of the Psalms can bring peace to our modern struggles.",
+        created_at: new Date().toISOString()
+      },
+      {
+        id: 2,
+        title: "Gratitude in Every Season",
+        excerpt: "Learning to cultivate a heart of thanksgiving through life's ups and downs.",
+        created_at: new Date().toISOString()
+      },
+      {
+        id: 3,
+        title: "Strength for the Journey",
+        excerpt: "How God's promises provide strength and courage for life's difficult moments.",
+        created_at: new Date().toISOString()
+      }
+    ];
+    
+    const fallbackVolumes = [
+      {
+        id: 1,
+        title: "SELAH - Volume 1: Thanksgiving",
+        description: "A collection of poems celebrating gratitude and God's faithfulness."
+      },
+      {
+        id: 2,
+        title: "SELAH - Volume 2: Wonder",
+        description: "Poems that capture the awe and wonder of God's creation and love."
+      },
+      {
+        id: 3,
+        title: "SELAH - Volume 3: Faith",
+        description: "Reflections on faith, trust, and walking with God through life's journey."
+      }
+    ];
+    
+    const fallbackTestimonials = [
+      {
+        id: 1,
+        author_name: "Sarah M.",
+        author_role: "Mother of Three",
+        quote: "The SELAH series has been a source of comfort during my darkest moments. These poems speak directly to the heart."
+      },
+      {
+        id: 2,
+        author_name: "David K.",
+        author_role: "Pastor",
+        quote: "Uzo's poetry captures the essence of the Psalms in a contemporary voice. I often share these with my congregation."
+      },
+      {
+        id: 3,
+        author_name: "Maria L.",
+        author_role: "Grief Counselor",
+        quote: "These poems offer hope and healing. The SELAH moments provide space for reflection and peace."
+      }
+    ];
+    
+    // Set fallback data first
+    setFeaturedPosts(fallbackPosts);
+    setFeaturedVolumes(fallbackVolumes);
+    setTestimonials(fallbackTestimonials);
+    
+    // Try to load from API in background
     try {
       const postsResponse = await blogAPI.getAllPosts({ limit: 3 });
       const posts = postsResponse.data;
-      if (Array.isArray(posts)) {
+      if (Array.isArray(posts) && posts.length > 0) {
         setFeaturedPosts(posts);
-      } else if (posts?.results && Array.isArray(posts.results)) {
+      } else if (posts?.results && Array.isArray(posts.results) && posts.results.length > 0) {
         setFeaturedPosts(posts.results);
       }
 
       const volumesResponse = await volumeAPI.getAllVolumes({ limit: 3 });
       const volumes = volumesResponse.data;
-      if (Array.isArray(volumes)) {
+      if (Array.isArray(volumes) && volumes.length > 0) {
         setFeaturedVolumes(volumes);
-      } else if (volumes?.results && Array.isArray(volumes.results)) {
+      } else if (volumes?.results && Array.isArray(volumes.results) && volumes.results.length > 0) {
         setFeaturedVolumes(volumes.results);
       }
 
       const testimonialsResponse = await testimonialAPI.getAllTestimonials({ limit: 3 });
       const testimonialsData = testimonialsResponse.data;
-      if (Array.isArray(testimonialsData)) {
+      if (Array.isArray(testimonialsData) && testimonialsData.length > 0) {
         setTestimonials(testimonialsData);
-      } else if (testimonialsData?.results && Array.isArray(testimonialsData.results)) {
+      } else if (testimonialsData?.results && Array.isArray(testimonialsData.results) && testimonialsData.results.length > 0) {
         setTestimonials(testimonialsData.results);
       }
     } catch (error) {
-      console.error('Error loading featured content:', error);
-      setFeaturedPosts([]);
-      setFeaturedVolumes([]);
-      setTestimonials([]);
+      console.log('API failed, using fallback data:', error);
+      // Fallback data already set above
     }
   };
 
