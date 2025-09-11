@@ -6,14 +6,13 @@ import Footer from './components/Footer';
 import ErrorBoundary from './components/ErrorBoundary';
 import Home from './pages/Home';
 import About from './pages/About';
-import Volumes from './pages/VolumesSimple';
-import Blog from './pages/BlogSimple';
+import Volumes from './pages/Volumes';
+import Blog from './pages/Blog';
 import BlogPost from './pages/BlogPost';
-import Contact from './pages/ContactSimple';
+import Contact from './pages/Contact';
 import PrayerRequest from './pages/PrayerRequest';
 import PrivacyPolicy from './pages/PrivacyPolicy';
 import TermsOfService from './pages/TermsOfService';
-import TestPage from './pages/TestPage';
 
 import './styles/App.css';
 import './styles/Mobile.css';
@@ -50,7 +49,6 @@ function App() {
           <Route path="/prayer-request" element={<Layout><PrayerRequest /></Layout>} />
           <Route path="/privacy" element={<Layout><PrivacyPolicy /></Layout>} />
           <Route path="/terms" element={<Layout><TermsOfService /></Layout>} />
-          <Route path="/test" element={<Layout><TestPage /></Layout>} />
           <Route path="*" element={<Navigate to="/" replace />} />
         </Routes>
       </Router>
