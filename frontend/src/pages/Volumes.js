@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useCallback } from 'react';
 import { motion } from 'framer-motion';
 import { Helmet } from 'react-helmet';
-// import { volumeAPI } from '../utils/api';
+import { volumeAPI } from '../utils/api';
 import LoadingSpinner from '../components/LoadingSpinner';
 
 const Volumes = () => {
@@ -57,9 +57,32 @@ const Volumes = () => {
       }
     ];
     
-    // Use static data for Netlify deployment
-    setVolumes(fallbackVolumes);
-    setLoading(false);
+    try {
+      console.log('Loading volumes with category:', selectedCategory);
+      const params = selectedCategory === 'all' ? {} : { category: selectedCategory };
+      const response = await volumeAPI.getAllVolumes(params);
+      
+      console.log('Volumes API response:', response);
+      
+      let volumesData = [];
+      if (response && response.data && Array.isArray(response.data) && response.data.length > 0) {
+        volumesData = response.data;
+        console.log('Using API data:', volumesData.length, 'volumes');
+      } else if (response && response.data?.results && Array.isArray(response.data.results) && response.data.results.length > 0) {
+        volumesData = response.data.results;
+        console.log('Using API paginated data:', volumesData.length, 'volumes');
+      } else {
+        volumesData = fallbackVolumes;
+        console.log('Using fallback data:', volumesData.length, 'volumes');
+      }
+      
+      setVolumes(volumesData);
+    } catch (error) {
+      console.error('Error loading volumes, using fallback data:', error);
+      setVolumes(fallbackVolumes);
+    } finally {
+      setLoading(false);
+    }
   }, [selectedCategory]);
 
   const categories = [

@@ -2,7 +2,7 @@ import React, { useState, useEffect, useCallback } from 'react';
 import { Link } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import { Helmet } from 'react-helmet';
-// import { blogAPI } from '../utils/api';
+import { blogAPI } from '../utils/api';
 import LoadingSpinner from '../components/LoadingSpinner';
 
 const Blog = () => {
@@ -72,9 +72,36 @@ const Blog = () => {
       }
     ];
     
-    // Use static data for Netlify deployment
-    setPosts(fallbackPosts);
-    setLoading(false);
+    try {
+      console.log('Loading posts with params:', { searchTerm, selectedCategory, currentPage });
+      const response = await blogAPI.getAllPosts({
+        search: searchTerm,
+        category: selectedCategory,
+        page: currentPage,
+        limit: postsPerPage
+      });
+      
+      console.log('Blog API response:', response);
+      
+      let postsData = [];
+      if (response && response.data && Array.isArray(response.data) && response.data.length > 0) {
+        postsData = response.data;
+        console.log('Using API data:', postsData.length, 'posts');
+      } else if (response && response.data?.results && Array.isArray(response.data.results) && response.data.results.length > 0) {
+        postsData = response.data.results;
+        console.log('Using API paginated data:', postsData.length, 'posts');
+      } else {
+        postsData = fallbackPosts;
+        console.log('Using fallback data:', postsData.length, 'posts');
+      }
+      
+      setPosts(postsData);
+    } catch (error) {
+      console.error('Error loading posts, using fallback data:', error);
+      setPosts(fallbackPosts);
+    } finally {
+      setLoading(false);
+    }
   }, [searchTerm, selectedCategory, currentPage]);
 
   const categories = [
