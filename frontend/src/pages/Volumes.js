@@ -346,7 +346,7 @@ const Volumes = () => {
               </motion.div>
               ))}
             </div>
-          ))
+          )
         )}
         </div>
       </section>

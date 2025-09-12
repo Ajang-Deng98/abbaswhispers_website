@@ -385,6 +385,7 @@ const Blog = () => {
             ))}
           </div>
         </motion.div>
+        )}
         
         {/* Pagination */}
         {totalPages > 1 && (
