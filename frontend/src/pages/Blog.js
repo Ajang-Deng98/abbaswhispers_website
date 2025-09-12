@@ -15,7 +15,7 @@ const Blog = () => {
 
   useEffect(() => {
     loadPosts();
-  }, [searchTerm, selectedCategory, currentPage, loadPosts]);
+  }, [searchTerm, selectedCategory, currentPage]);
 
   const loadPosts = useCallback(async () => {
     setLoading(true);
@@ -73,6 +73,7 @@ const Blog = () => {
     ];
     
     try {
+      console.log('Loading posts with params:', { searchTerm, selectedCategory, currentPage });
       const response = await blogAPI.getAllPosts({
         search: searchTerm,
         category: selectedCategory,
@@ -80,13 +81,18 @@ const Blog = () => {
         limit: postsPerPage
       });
       
+      console.log('Blog API response:', response);
+      
       let postsData = [];
-      if (response.data && Array.isArray(response.data) && response.data.length > 0) {
+      if (response && response.data && Array.isArray(response.data) && response.data.length > 0) {
         postsData = response.data;
-      } else if (response.data?.results && Array.isArray(response.data.results) && response.data.results.length > 0) {
+        console.log('Using API data:', postsData.length, 'posts');
+      } else if (response && response.data?.results && Array.isArray(response.data.results) && response.data.results.length > 0) {
         postsData = response.data.results;
+        console.log('Using API paginated data:', postsData.length, 'posts');
       } else {
         postsData = fallbackPosts;
+        console.log('Using fallback data:', postsData.length, 'posts');
       }
       
       setPosts(postsData);
@@ -443,7 +449,6 @@ const Blog = () => {
               fontWeight: '500'
             }}>Subscribe for Updates</a>
           </motion.div>
-        )}
         )}
       </div>
     </>

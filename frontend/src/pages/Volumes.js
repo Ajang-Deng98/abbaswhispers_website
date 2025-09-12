@@ -13,7 +13,7 @@ const Volumes = () => {
 
   useEffect(() => {
     loadVolumes();
-  }, [selectedCategory, loadVolumes]);
+  }, [selectedCategory]);
 
   const loadVolumes = useCallback(async () => {
     setLoading(true);
@@ -58,16 +58,22 @@ const Volumes = () => {
     ];
     
     try {
+      console.log('Loading volumes with category:', selectedCategory);
       const params = selectedCategory === 'all' ? {} : { category: selectedCategory };
       const response = await volumeAPI.getAllVolumes(params);
       
+      console.log('Volumes API response:', response);
+      
       let volumesData = [];
-      if (response.data && Array.isArray(response.data) && response.data.length > 0) {
+      if (response && response.data && Array.isArray(response.data) && response.data.length > 0) {
         volumesData = response.data;
-      } else if (response.data?.results && Array.isArray(response.data.results) && response.data.results.length > 0) {
+        console.log('Using API data:', volumesData.length, 'volumes');
+      } else if (response && response.data?.results && Array.isArray(response.data.results) && response.data.results.length > 0) {
         volumesData = response.data.results;
+        console.log('Using API paginated data:', volumesData.length, 'volumes');
       } else {
         volumesData = fallbackVolumes;
+        console.log('Using fallback data:', volumesData.length, 'volumes');
       }
       
       setVolumes(volumesData);
@@ -202,7 +208,7 @@ const Volumes = () => {
           {loading ? (
             <LoadingSpinner message="Loading poetry collections..." />
           ) : (
-          {filteredVolumes.length === 0 ? (
+            filteredVolumes.length === 0 ? (
             <div style={{ textAlign: 'center', padding: '3rem 1rem' }}>
               <h3 style={{ color: 'var(--primary-gold)', marginBottom: '1rem' }}>Coming Soon</h3>
               <p style={{ color: '#666', fontSize: '1.1rem' }}>
@@ -340,8 +346,8 @@ const Volumes = () => {
               </motion.div>
               ))}
             </div>
-          )}
-          )}
+          ))
+        )}
         </div>
       </section>
 
