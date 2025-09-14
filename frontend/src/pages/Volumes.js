@@ -1,117 +1,409 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
+import { motion } from 'framer-motion';
+import { Helmet } from 'react-helmet';
+import { volumeAPI } from '../utils/api';
+import LoadingSpinner from '../components/LoadingSpinner';
 
 const Volumes = () => {
   const [volumes, setVolumes] = useState([]);
+  const [selectedCategory, setSelectedCategory] = useState('all');
   const [selectedVolume, setSelectedVolume] = useState(null);
+  const [playingAudio, setPlayingAudio] = useState(null);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    // Set fallback data immediately
+    loadVolumes();
+  }, [selectedCategory]);
+
+  const loadVolumes = useCallback(async () => {
+    setLoading(true);
+    
+    // Always show fallback data for now
     const fallbackVolumes = [
       {
         id: 1,
         title: "SELAH - Volume 1: Thanksgiving",
-        description: "A collection of poems celebrating gratitude and God's faithfulness in our lives.",
+        description: "A collection of poems celebrating gratitude and God's faithfulness in our lives. Each piece reflects on the beauty of thanksgiving in both joyful and challenging seasons.",
         category: "thanksgiving",
         content: "In every breath I take today,\nI find a reason to give praise.\nFor morning light that breaks the dawn,\nFor strength to face what lies beyond.\n\nSelah - pause and reflect\n\nYour faithfulness, O Lord, endures,\nThrough every storm, Your love ensures\nThat I am held, that I am known,\nNever walking this path alone."
       },
       {
         id: 2,
         title: "SELAH - Volume 2: Wonder",
-        description: "Poems that capture the awe and wonder of God's creation and love.",
+        description: "Poems that capture the awe and wonder of God's creation and love. From the vastness of the sky to the intimacy of His presence.",
         category: "wonder",
         content: "I stand beneath the starlit sky,\nAnd wonder at Your majesty.\nEach twinkling light, a testament\nTo power beyond what I can see.\n\nSelah - pause and reflect\n\nHow can it be that You who made\nThe galaxies with just Your word,\nWould bend Your ear to hear my prayer,\nAnd call me precious, call me heard?"
       },
       {
         id: 3,
         title: "SELAH - Volume 3: Faith",
-        description: "Reflections on faith, trust, and walking with God through life's journey.",
+        description: "Reflections on faith, trust, and walking with God through life's journey. These poems explore the depths of believing when we cannot see.",
         category: "faith",
         content: "When shadows fall and doubts arise,\nAnd faith feels fragile in my chest,\nI choose to trust what I cannot see,\nTo find in You my place of rest.\n\nSelah - pause and reflect\n\nFor faith is not the absence of fear,\nBut courage to believe You're near.\nIn every valley, every height,\nYou are my anchor, You are my light."
+      },
+      {
+        id: 4,
+        title: "SELAH - Volume 4: Contemplation",
+        description: "Deep reflections on life's mysteries and God's unchanging character through seasons of questioning and discovery.",
+        category: "contemplation",
+        content: "In quiet moments of the soul,\nWhen words seem far too small,\nI sit in wonder at Your grace\nThat covers, heals, and calls.\n\nSelah - pause and reflect\n\nYour ways are higher than my ways,\nYour thoughts beyond my reach,\nYet in the silence You draw near\nAnd let Your presence teach."
+      },
+      {
+        id: 5,
+        title: "SELAH - Volume 5: Reflection",
+        description: "Contemplative verses that invite us to pause and consider God's goodness in the ordinary moments of life.",
+        category: "reflection",
+        content: "Look back and see His faithfulness\nIn every twist and turn,\nThe lessons that the heart has learned\nThrough seasons that would burn.\n\nSelah - pause and reflect\n\nWhat seemed like endings were beginnings,\nWhat felt like loss was gain,\nFor in His hands our broken pieces\nBecome beautiful again."
       }
     ];
     
-    setVolumes(fallbackVolumes);
-    setLoading(false);
-  }, []);
+    try {
+      console.log('Loading volumes with category:', selectedCategory);
+      const params = selectedCategory === 'all' ? {} : { category: selectedCategory };
+      const response = await volumeAPI.getAllVolumes(params);
+      
+      console.log('Volumes API response:', response);
+      
+      let volumesData = [];
+      if (response && response.data && Array.isArray(response.data) && response.data.length > 0) {
+        volumesData = response.data;
+        console.log('Using API data:', volumesData.length, 'volumes');
+      } else if (response && response.data?.results && Array.isArray(response.data.results) && response.data.results.length > 0) {
+        volumesData = response.data.results;
+        console.log('Using API paginated data:', volumesData.length, 'volumes');
+      } else {
+        volumesData = fallbackVolumes;
+        console.log('Using fallback data:', volumesData.length, 'volumes');
+      }
+      
+      setVolumes(volumesData);
+    } catch (error) {
+      console.error('Error loading volumes, using fallback data:', error);
+      setVolumes(fallbackVolumes);
+    } finally {
+      setLoading(false);
+    }
+  }, [selectedCategory]);
 
-  if (loading) {
-    return <div style={{ padding: '2rem', textAlign: 'center' }}>Loading...</div>;
-  }
+  const categories = [
+    { value: 'all', label: 'All Collections' },
+    { value: 'thanksgiving', label: 'Thanksgiving' },
+    { value: 'wonder', label: 'Wonder' },
+    { value: 'faith', label: 'Faith' },
+    { value: 'contemplation', label: 'Contemplation' },
+    { value: 'reflection', label: 'Reflection' }
+  ];
+
+  const getCategoryCount = (categoryValue) => {
+    if (categoryValue === 'all') return volumes.length;
+    return volumes.filter(v => v.category === categoryValue).length;
+  };
+
+  const filteredVolumes = selectedCategory === 'all' 
+    ? volumes 
+    : volumes.filter(volume => volume.category === selectedCategory);
 
   return (
-    <div style={{ padding: '2rem', maxWidth: '1200px', margin: '0 auto' }}>
-      <div style={{ textAlign: 'center', marginBottom: '3rem' }}>
-        <h1 style={{ fontSize: '2.5rem', color: '#d4af37', marginBottom: '1rem' }}>
-          SELAH Poetry Series
-        </h1>
-        <p style={{ fontSize: '1.1rem', color: '#666' }}>
-          Premium collection of inspirational poems
-        </p>
-      </div>
+    <>
+      <Helmet>
+        <title>SELAH Poetry Series - Abbaswhispers | Premium Poetry Collection</title>
+        <meta name="description" content="Discover Uzo's acclaimed SELAH poetry series. Premium collection of inspirational poems with professional audio recordings, born from a journey of faith and healing." />
+      </Helmet>
 
-      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))', gap: '2rem' }}>
-        {volumes.map((volume) => (
-          <div key={volume.id} style={{ 
-            border: '1px solid #ddd', 
-            padding: '1.5rem', 
-            borderRadius: '8px',
-            backgroundColor: 'white',
-            boxShadow: '0 2px 4px rgba(0,0,0,0.1)'
-          }}>
-            <h3 style={{ color: '#333', marginBottom: '1rem' }}>{volume.title}</h3>
-            <p style={{ color: '#666', marginBottom: '1.5rem' }}>{volume.description}</p>
-            <button 
-              onClick={() => setSelectedVolume(volume)}
-              style={{ 
-                background: '#d4af37', 
-                color: 'white', 
-                border: 'none', 
-                padding: '10px 20px', 
-                borderRadius: '5px',
-                cursor: 'pointer'
-              }}
-            >
-              Read Poem
-            </button>
-          </div>
-        ))}
-      </div>
+      {/* Hero Section */}
+      <section className="volumes-hero" style={{
+        background: 'linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)), url("https://images.unsplash.com/photo-1441974231531-c6227db76b6e?ixlib=rb-4.0.3&w=2071&q=80") center/cover no-repeat',
+        color: '#ffffff',
+        padding: 'clamp(2rem, 5vw, 4rem) 1rem',
+        textAlign: 'center',
+        minHeight: '50vh',
+        display: 'flex',
+        alignItems: 'center'
+      }}>
+        <div className="container">
+          <motion.div
+            className="volumes-hero-content"
+            initial={{ opacity: 0, y: 30 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.8 }}
+          >
+            <div className="hero-badge" style={{ background: 'var(--primary-gold)', color: 'white', padding: '0.5rem 1.5rem', borderRadius: '25px', display: 'inline-block', marginBottom: '2rem' }}>
+              Premium Poetry Collection
+            </div>
+            <h1 style={{
+              fontSize: 'clamp(2rem, 5vw, 2.5rem)',
+              marginBottom: '1rem',
+              color: 'white',
+              textShadow: '2px 2px 4px rgba(0, 0, 0, 0.5)'
+            }}>SELAH - My Debut Poetry Series</h1>
+            <p style={{
+              fontSize: 'clamp(0.9rem, 2vw, 1rem)',
+              marginBottom: '2rem',
+              color: 'white',
+              textShadow: '1px 1px 2px rgba(0, 0, 0, 0.5)',
+              maxWidth: '800px',
+              margin: '0 auto 2rem',
+              lineHeight: '1.6',
+              padding: '0 1rem'
+            }}>Immerse yourself in my debut collection of inspirational poetry, each piece carefully crafted from a journey through grief into grace. Experience the power of spoken word with professional audio narrations that bring every emotion to life.</p>
+            <div className="volumes-stats" style={{
+              display: 'grid',
+              gridTemplateColumns: 'repeat(auto-fit, minmax(100px, 1fr))',
+              gap: 'clamp(1rem, 3vw, 3rem)',
+              maxWidth: '500px',
+              margin: '0 auto'
+            }}>
+              <div className="stat-item">
+                <span className="stat-number">{volumes.length}</span>
+                <span className="stat-label">Poems</span>
+              </div>
+              <div className="stat-item">
+                <span className="stat-number">5</span>
+                <span className="stat-label">Categories</span>
+              </div>
+              <div className="stat-item">
+                <span className="stat-number">Audio</span>
+                <span className="stat-label">Included</span>
+              </div>
+            </div>
+          </motion.div>
+        </div>
+      </section>
 
+      {/* Category Filter */}
+      <section className="volumes-filter">
+        <div className="container">
+          <motion.div
+            className="filter-container"
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.6, delay: 0.2 }}
+          >
+            <h2>Browse Collections</h2>
+            <div className="category-grid" style={{
+              display: 'grid',
+              gridTemplateColumns: 'repeat(auto-fit, minmax(180px, 1fr))',
+              gap: '1rem',
+              maxWidth: '1000px',
+              margin: '0 auto'
+            }}>
+              {categories.map((category) => (
+                <button
+                  key={category.value}
+                  onClick={() => setSelectedCategory(category.value)}
+                  className={`category-card ${selectedCategory === category.value ? 'active' : ''}`}
+                >
+                  <span className="category-label">{category.label}</span>
+                  <span className="category-count">{getCategoryCount(category.value)}</span>
+                </button>
+              ))}
+            </div>
+          </motion.div>
+        </div>
+      </section>
+
+      {/* Volumes Grid */}
+      <section className="volumes-content">
+        <div className="container">
+          {loading ? (
+            <LoadingSpinner message="Loading poetry collections..." />
+          ) : (
+            filteredVolumes.length === 0 ? (
+            <div style={{ textAlign: 'center', padding: '3rem 1rem' }}>
+              <h3 style={{ color: 'var(--primary-gold)', marginBottom: '1rem' }}>Coming Soon</h3>
+              <p style={{ color: '#666', fontSize: '1.1rem' }}>
+                Our SELAH poetry collection is being prepared for you. Subscribe to our newsletter to be notified when new volumes are available.
+              </p>
+              <a href="/contact" style={{
+                display: 'inline-block',
+                marginTop: '1rem',
+                padding: '12px 24px',
+                background: 'var(--primary-gold)',
+                color: 'white',
+                textDecoration: 'none',
+                borderRadius: '25px',
+                fontWeight: '500'
+              }}>Get Notified</a>
+            </div>
+          ) : (
+            <div className="volumes-grid" style={{
+              display: 'grid',
+              gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))',
+              gap: 'clamp(1rem, 3vw, 2rem)',
+              maxWidth: '1200px',
+              margin: '0 auto'
+            }}>
+              {filteredVolumes.map((volume, index) => (
+              <motion.div
+                key={volume.id}
+                className="volume-card"
+                initial={{ opacity: 0, y: 30 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.6, delay: index * 0.1 }}
+              >
+                {volume.image && (
+                  <div className="volume-image">
+                    <img 
+                      src={volume.image.startsWith('http') ? volume.image : `http://localhost:8000${volume.image}`}
+                      alt={volume.title}
+                      onError={(e) => {
+                        e.target.parentElement.style.display = 'none';
+                      }}
+                    />
+                    <div className="volume-overlay">
+                      <button 
+                        className="preview-btn"
+                        onClick={() => setSelectedVolume(volume)}
+                      >
+                        Preview
+                      </button>
+                    </div>
+                  </div>
+                )}
+                <div className="volume-content">
+                  <h3 className="volume-title">{volume.title}</h3>
+                  <div className="volume-description">
+                    {volume.description}
+                  </div>
+                  <div className="volume-actions" style={{
+                    display: 'flex',
+                    gap: '0.75rem',
+                    flexWrap: 'wrap'
+                  }}>
+                    <button 
+                      className="btn-primary"
+                      onClick={() => setSelectedVolume(volume)}
+                    >
+                      Read Full Poem
+                    </button>
+                    {volume.audio_file && (
+                      <button 
+                        className="btn-secondary audio-btn"
+                        onClick={(e) => {
+                          const audio = document.getElementById(`audio-${volume.id}`);
+                          const button = e.target;
+                          
+                          if (playingAudio && playingAudio !== volume.id) {
+                            // Stop other playing audio
+                            const otherAudio = document.getElementById(`audio-${playingAudio}`);
+                            if (otherAudio) {
+                              otherAudio.pause();
+                              otherAudio.currentTime = 0;
+                            }
+                            // Reset other button text
+                            const otherButton = document.querySelector(`[data-volume-id="${playingAudio}"]`);
+                            if (otherButton) otherButton.textContent = 'Listen';
+                          }
+                          
+                          if (audio) {
+                            if (audio.paused) {
+                              audio.play().then(() => {
+                                button.textContent = 'Pause';
+                                setPlayingAudio(volume.id);
+                              }).catch((error) => {
+                                console.error('Audio play error:', error);
+                                alert('Unable to play audio file.');
+                              });
+                            } else {
+                              audio.pause();
+                              audio.currentTime = 0;
+                              button.textContent = 'Listen';
+                              setPlayingAudio(null);
+                            }
+                          }
+                        }}
+                        data-volume-id={volume.id}
+                      >
+                        {playingAudio === volume.id ? 'Pause' : 'Listen'}
+                      </button>
+                    )}
+                  </div>
+                </div>
+                
+                {/* Hidden Audio Element */}
+                {volume.audio_file && (
+                  <audio 
+                    id={`audio-${volume.id}`}
+                    preload="none"
+                    onEnded={() => {
+                      const button = document.querySelector(`[data-volume-id="${volume.id}"]`);
+                      if (button) button.textContent = 'Listen';
+                      setPlayingAudio(null);
+                    }}
+                    onError={() => {
+                      const button = document.querySelector(`[data-volume-id="${volume.id}"]`);
+                      if (button) button.textContent = 'Listen';
+                      setPlayingAudio(null);
+                      alert('Error loading audio file.');
+                    }}
+                  >
+                    <source 
+                      src={volume.audio_file.startsWith('http') ? volume.audio_file : `http://localhost:8000${volume.audio_file}`}
+                      type="audio/mpeg" 
+                    />
+                  </audio>
+                )}
+              </motion.div>
+              ))}
+            </div>
+          )}
+        </div>
+      </section>
+
+      {/* Modal */}
       {selectedVolume && (
-        <div style={{
+        <div className="volume-modal" onClick={() => setSelectedVolume(null)} style={{
           position: 'fixed',
           top: 0,
           left: 0,
           width: '100%',
           height: '100%',
-          background: 'rgba(0,0,0,0.8)',
+          background: 'rgba(0, 0, 0, 0.8)',
           display: 'flex',
           alignItems: 'center',
           justifyContent: 'center',
-          zIndex: 1000
+          zIndex: 1000,
+          padding: '1rem'
         }}>
-          <div style={{
+          <div className="modal-content" onClick={(e) => e.stopPropagation()} style={{
             background: 'white',
-            padding: '2rem',
-            borderRadius: '8px',
-            maxWidth: '600px',
-            width: '90%',
+            borderRadius: '16px',
+            padding: 'clamp(1.5rem, 4vw, 2rem)',
+            maxWidth: '700px',
+            width: '100%',
             maxHeight: '80vh',
-            overflow: 'auto'
+            overflowY: 'auto',
+            position: 'relative'
           }}>
-            <button 
-              onClick={() => setSelectedVolume(null)}
-              style={{ float: 'right', background: 'none', border: 'none', fontSize: '24px', cursor: 'pointer' }}
-            >
-              ×
-            </button>
+            <button className="modal-close" onClick={() => setSelectedVolume(null)}>×</button>
             <h2>{selectedVolume.title}</h2>
-            <pre style={{ whiteSpace: 'pre-wrap', lineHeight: '1.6' }}>{selectedVolume.content}</pre>
+            <div className="modal-poem">
+              {selectedVolume.content ? 
+                <div dangerouslySetInnerHTML={{ __html: selectedVolume.content }} /> :
+                (selectedVolume.fullText || selectedVolume.full_text)
+              }
+            </div>
           </div>
         </div>
       )}
-    </div>
+
+      {/* CTA Section */}
+      <section className="volumes-cta">
+        <div className="container">
+          <motion.div
+            className="cta-content"
+            initial={{ opacity: 0, y: 30 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.8 }}
+            viewport={{ once: true }}
+          >
+            <h2>Complete SELAH Collection</h2>
+            <p>Experience the full journey with professional recordings and beautiful illustrations.</p>
+            <a href="/contact" className="btn-cta">Get Notified</a>
+          </motion.div>
+        </div>
+      </section>
+    </>
   );
 };
 

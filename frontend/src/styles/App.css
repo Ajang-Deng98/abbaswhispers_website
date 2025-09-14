@@ -1,3 +1,16 @@
+:root {
+  --primary-gold: #d4af37;
+  --warm-gold: #daa520;
+  --sage-green: #a8b89a;
+  --deep-blue: #2c3e50;
+  --cream: #f9f7f4;
+  --light-olive: #8fbc8f;
+  --text-dark: #333333;
+  --text-medium: #666666;
+  --text-light: #999999;
+  --shadow-warm: rgba(212, 175, 55, 0.2);
+}
+
 .App {
   min-height: 100vh;
   display: flex;
