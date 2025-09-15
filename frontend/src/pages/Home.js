@@ -13,13 +13,6 @@ const Home = () => {
   const [featuredVolumes, setFeaturedVolumes] = useState([]);
   const [testimonials, setTestimonials] = useState([]);
 
-  useEffect(() => {
-    loadFeaturedContent();
-  }, []);
-
-  // Real-time updates every 60 seconds for home page
-  useRealTimeData(loadFeaturedContent, [], 60000);
-
   const loadFeaturedContent = async () => {
     try {
       const [postsResponse, volumesResponse, testimonialsResponse] = await Promise.all([
@@ -64,6 +57,13 @@ const Home = () => {
       setTestimonials([]);
     }
   };
+
+  useEffect(() => {
+    loadFeaturedContent();
+  }, []);
+
+  // Real-time updates every 60 seconds for home page
+  useRealTimeData(loadFeaturedContent, [], 60000);
 
   return (
     <>
