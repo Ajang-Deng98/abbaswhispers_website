@@ -15,94 +15,34 @@ const Blog = () => {
 
   useEffect(() => {
     loadPosts();
-  }, [searchTerm, selectedCategory, currentPage]);
+  }, [loadPosts]);
 
   const loadPosts = useCallback(async () => {
     setLoading(true);
     
-    // Always show fallback data for now
-    const fallbackPosts = [
-      {
-        id: 1,
-        title: "Finding Peace in the Psalms",
-        excerpt: "Discover how the ancient words of the Psalms can bring peace to our modern struggles and anxieties. When David wrote 'The Lord is my shepherd,' he was declaring a truth that transcends time.",
-        category: "peace",
-        tags: ["peace", "psalms", "comfort"],
-        created_at: new Date().toISOString()
-      },
-      {
-        id: 2,
-        title: "Gratitude in Every Season",
-        excerpt: "Learning to cultivate a heart of thanksgiving through life's ups and downs, inspired by Psalm 23. Even in difficult seasons, we can find reasons to praise.",
-        category: "gratitude",
-        tags: ["gratitude", "thanksgiving", "seasons"],
-        created_at: new Date().toISOString()
-      },
-      {
-        id: 3,
-        title: "Strength for the Journey",
-        excerpt: "How God's promises in the Psalms provide strength and courage for life's difficult moments. His strength is made perfect in our weakness.",
-        category: "strength",
-        tags: ["strength", "courage", "journey"],
-        created_at: new Date().toISOString()
-      },
-      {
-        id: 4,
-        title: "Walking in His Faithfulness",
-        excerpt: "Exploring the unwavering faithfulness of God through the lens of the Psalms and personal testimony.",
-        category: "faithfulness",
-        tags: ["faithfulness", "trust", "testimony"],
-        created_at: new Date().toISOString()
-      },
-      {
-        id: 5,
-        title: "Songs of Worship from the Heart",
-        excerpt: "How the Psalms teach us to worship authentically, bringing our whole selves before God in praise and petition.",
-        category: "worship",
-        tags: ["worship", "praise", "authenticity"],
-        created_at: new Date().toISOString()
-      },
-      {
-        id: 6,
-        title: "Divine Guidance in Uncertain Times",
-        excerpt: "Finding direction and wisdom through God's word when the path ahead seems unclear.",
-        category: "guidance",
-        tags: ["guidance", "wisdom", "direction"],
-        created_at: new Date().toISOString()
-      }
-    ];
-    
     try {
-      console.log('Loading posts with params:', { searchTerm, selectedCategory, currentPage });
-      const response = await blogAPI.getAllPosts({
-        search: searchTerm,
-        category: selectedCategory,
-        page: currentPage,
-        limit: postsPerPage
-      });
+      const params = {};
+      if (searchTerm) params.search = searchTerm;
+      if (selectedCategory !== 'all') params.category = selectedCategory;
       
+      console.log('Loading posts with params:', params);
+      const response = await blogAPI.getAllPosts(params);
       console.log('Blog API response:', response);
       
-      let postsData = [];
-      if (response && response.data && Array.isArray(response.data) && response.data.length > 0) {
-        postsData = response.data;
-        console.log('Using API data:', postsData.length, 'posts');
-      } else if (response && response.data?.results && Array.isArray(response.data.results) && response.data.results.length > 0) {
-        postsData = response.data.results;
-        console.log('Using API paginated data:', postsData.length, 'posts');
+      if (response && response.data) {
+        const postsData = Array.isArray(response.data) ? response.data : response.data.results || [];
+        setPosts(postsData);
+        console.log('Loaded', postsData.length, 'posts from database');
       } else {
-        postsData = fallbackPosts;
-        console.log('Using fallback data:', postsData.length, 'posts');
+        setPosts([]);
       }
-      
-      setPosts(postsData);
     } catch (error) {
-      console.error('Error loading posts, using fallback data:', error);
-      setPosts(fallbackPosts);
+      console.error('Error loading posts:', error);
+      setPosts([]);
     } finally {
       setLoading(false);
     }
-  }, [searchTerm, selectedCategory, currentPage]);
+  }, [searchTerm, selectedCategory]);
 
   const categories = [
     { value: 'all', label: 'All Posts' },

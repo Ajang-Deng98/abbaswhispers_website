@@ -13,22 +13,6 @@ const BlogPost = () => {
   const [commentAuthor, setCommentAuthor] = useState('');
   const [isAnonymous, setIsAnonymous] = useState(true);
 
-  useEffect(() => {
-    loadPost();
-    loadRelatedPosts();
-    loadComments();
-  }, [id, loadPost, loadRelatedPosts, loadComments]);
-
-  const loadComments = useCallback(async () => {
-    try {
-      const response = await commentAPI.getPostComments(id);
-      setComments(response.data || []);
-    } catch (error) {
-      console.error('Error loading comments:', error);
-      setComments([]);
-    }
-  }, [id]);
-
   const loadPost = useCallback(async () => {
     try {
       const response = await blogAPI.getPost(id);
@@ -49,6 +33,23 @@ const BlogPost = () => {
       setRelatedPosts([]);
     }
   }, [id]);
+
+  const loadComments = useCallback(async () => {
+    try {
+      const response = await commentAPI.getPostComments(id);
+      setComments(response.data || []);
+    } catch (error) {
+      console.error('Error loading comments:', error);
+      setComments([]);
+    }
+  }, [id]);
+
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  useEffect(() => {
+    loadPost();
+    loadRelatedPosts();
+    loadComments();
+  }, [id, loadPost, loadRelatedPosts, loadComments]);
 
   const handleCommentSubmit = async (e) => {
     e.preventDefault();
@@ -81,11 +82,11 @@ const BlogPost = () => {
   return (
     <>
       <Helmet>
-        <title>{post.title} - Abba Whispers Blog</title>
-        <meta name="description" content={post.content.substring(0, 160).replace(/<[^>]*>/g, '') + '...'} />
-        <meta property="og:title" content={post.title} />
-        <meta property="og:description" content={post.content.substring(0, 160).replace(/<[^>]*>/g, '') + '...'} />
-        <meta property="og:image" content={post.image} />
+        <title>{post.title || 'Blog Post'} - Abba Whispers Blog</title>
+        <meta name="description" content={(post.content || '').substring(0, 160).replace(/<[^>]*>/g, '') + '...'} />
+        <meta property="og:title" content={post.title || 'Blog Post'} />
+        <meta property="og:description" content={(post.content || '').substring(0, 160).replace(/<[^>]*>/g, '') + '...'} />
+        <meta property="og:image" content={post.image || ''} />
       </Helmet>
 
       <article className="section">

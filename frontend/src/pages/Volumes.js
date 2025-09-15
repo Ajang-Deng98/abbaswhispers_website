@@ -13,73 +13,28 @@ const Volumes = () => {
 
   useEffect(() => {
     loadVolumes();
-  }, [selectedCategory]);
+  }, [loadVolumes]);
 
   const loadVolumes = useCallback(async () => {
     setLoading(true);
     
-    // Always show fallback data for now
-    const fallbackVolumes = [
-      {
-        id: 1,
-        title: "SELAH - Volume 1: Thanksgiving",
-        description: "A collection of poems celebrating gratitude and God's faithfulness in our lives. Each piece reflects on the beauty of thanksgiving in both joyful and challenging seasons.",
-        category: "thanksgiving",
-        content: "In every breath I take today,\nI find a reason to give praise.\nFor morning light that breaks the dawn,\nFor strength to face what lies beyond.\n\nSelah - pause and reflect\n\nYour faithfulness, O Lord, endures,\nThrough every storm, Your love ensures\nThat I am held, that I am known,\nNever walking this path alone."
-      },
-      {
-        id: 2,
-        title: "SELAH - Volume 2: Wonder",
-        description: "Poems that capture the awe and wonder of God's creation and love. From the vastness of the sky to the intimacy of His presence.",
-        category: "wonder",
-        content: "I stand beneath the starlit sky,\nAnd wonder at Your majesty.\nEach twinkling light, a testament\nTo power beyond what I can see.\n\nSelah - pause and reflect\n\nHow can it be that You who made\nThe galaxies with just Your word,\nWould bend Your ear to hear my prayer,\nAnd call me precious, call me heard?"
-      },
-      {
-        id: 3,
-        title: "SELAH - Volume 3: Faith",
-        description: "Reflections on faith, trust, and walking with God through life's journey. These poems explore the depths of believing when we cannot see.",
-        category: "faith",
-        content: "When shadows fall and doubts arise,\nAnd faith feels fragile in my chest,\nI choose to trust what I cannot see,\nTo find in You my place of rest.\n\nSelah - pause and reflect\n\nFor faith is not the absence of fear,\nBut courage to believe You're near.\nIn every valley, every height,\nYou are my anchor, You are my light."
-      },
-      {
-        id: 4,
-        title: "SELAH - Volume 4: Contemplation",
-        description: "Deep reflections on life's mysteries and God's unchanging character through seasons of questioning and discovery.",
-        category: "contemplation",
-        content: "In quiet moments of the soul,\nWhen words seem far too small,\nI sit in wonder at Your grace\nThat covers, heals, and calls.\n\nSelah - pause and reflect\n\nYour ways are higher than my ways,\nYour thoughts beyond my reach,\nYet in the silence You draw near\nAnd let Your presence teach."
-      },
-      {
-        id: 5,
-        title: "SELAH - Volume 5: Reflection",
-        description: "Contemplative verses that invite us to pause and consider God's goodness in the ordinary moments of life.",
-        category: "reflection",
-        content: "Look back and see His faithfulness\nIn every twist and turn,\nThe lessons that the heart has learned\nThrough seasons that would burn.\n\nSelah - pause and reflect\n\nWhat seemed like endings were beginnings,\nWhat felt like loss was gain,\nFor in His hands our broken pieces\nBecome beautiful again."
-      }
-    ];
-    
     try {
-      console.log('Loading volumes with category:', selectedCategory);
       const params = selectedCategory === 'all' ? {} : { category: selectedCategory };
+      console.log('Loading volumes with params:', params);
       const response = await volumeAPI.getAllVolumes(params);
       
       console.log('Volumes API response:', response);
       
-      let volumesData = [];
-      if (response && response.data && Array.isArray(response.data) && response.data.length > 0) {
-        volumesData = response.data;
-        console.log('Using API data:', volumesData.length, 'volumes');
-      } else if (response && response.data?.results && Array.isArray(response.data.results) && response.data.results.length > 0) {
-        volumesData = response.data.results;
-        console.log('Using API paginated data:', volumesData.length, 'volumes');
+      if (response && response.data) {
+        const volumesData = Array.isArray(response.data) ? response.data : response.data.results || [];
+        setVolumes(volumesData);
+        console.log('Loaded', volumesData.length, 'volumes from database');
       } else {
-        volumesData = fallbackVolumes;
-        console.log('Using fallback data:', volumesData.length, 'volumes');
+        setVolumes([]);
       }
-      
-      setVolumes(volumesData);
     } catch (error) {
-      console.error('Error loading volumes, using fallback data:', error);
-      setVolumes(fallbackVolumes);
+      console.error('Error loading volumes:', error);
+      setVolumes([]);
     } finally {
       setLoading(false);
     }
@@ -209,23 +164,23 @@ const Volumes = () => {
             <LoadingSpinner message="Loading poetry collections..." />
           ) : (
             filteredVolumes.length === 0 ? (
-            <div style={{ textAlign: 'center', padding: '3rem 1rem' }}>
-              <h3 style={{ color: 'var(--primary-gold)', marginBottom: '1rem' }}>Coming Soon</h3>
-              <p style={{ color: '#666', fontSize: '1.1rem' }}>
-                Our SELAH poetry collection is being prepared for you. Subscribe to our newsletter to be notified when new volumes are available.
-              </p>
-              <a href="/contact" style={{
-                display: 'inline-block',
-                marginTop: '1rem',
-                padding: '12px 24px',
-                background: 'var(--primary-gold)',
-                color: 'white',
-                textDecoration: 'none',
-                borderRadius: '25px',
-                fontWeight: '500'
-              }}>Get Notified</a>
-            </div>
-          ) : (
+              <div style={{ textAlign: 'center', padding: '3rem 1rem' }}>
+                <h3 style={{ color: 'var(--primary-gold)', marginBottom: '1rem' }}>Coming Soon</h3>
+                <p style={{ color: '#666', fontSize: '1.1rem' }}>
+                  Our SELAH poetry collection is being prepared for you. Subscribe to our newsletter to be notified when new volumes are available.
+                </p>
+                <a href="/contact" style={{
+                  display: 'inline-block',
+                  marginTop: '1rem',
+                  padding: '12px 24px',
+                  background: 'var(--primary-gold)',
+                  color: 'white',
+                  textDecoration: 'none',
+                  borderRadius: '25px',
+                  fontWeight: '500'
+                }}>Get Notified</a>
+              </div>
+            ) : (
             <div className="volumes-grid" style={{
               display: 'grid',
               gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))',
@@ -346,6 +301,7 @@ const Volumes = () => {
               </motion.div>
               ))}
             </div>
+            )
           )}
         </div>
       </section>
