@@ -2,10 +2,12 @@ import React, { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import { Helmet } from 'react-helmet';
+import { useGlobalLoader } from '../hooks/useGlobalLoader';
 
 import { blogAPI, volumeAPI, testimonialAPI } from '../utils/api';
 
 const Home = () => {
+  useGlobalLoader();
   const [featuredPosts, setFeaturedPosts] = useState([]);
   const [featuredVolumes, setFeaturedVolumes] = useState([]);
   const [testimonials, setTestimonials] = useState([]);

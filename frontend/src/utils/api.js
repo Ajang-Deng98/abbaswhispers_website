@@ -6,6 +6,13 @@ const API_BASE_URL = process.env.REACT_APP_API_URL || 'http://localhost:8000/api
 console.log('API_BASE_URL:', API_BASE_URL);
 console.log('Environment:', process.env.NODE_ENV);
 
+// Global loader reference (will be set by components)
+let globalLoader = null;
+
+export const setGlobalLoader = (loader) => {
+  globalLoader = loader;
+};
+
 // Create axios instance
 const api = axios.create({
   baseURL: API_BASE_URL,
@@ -15,24 +22,44 @@ const api = axios.create({
   },
 });
 
-// Request interceptor to add auth token
+// Request interceptor to add auth token and show loader
 api.interceptors.request.use(
   (config) => {
     const token = localStorage.getItem('adminToken');
     if (token) {
       config.headers.Authorization = `Bearer ${token}`;
     }
+    
+    // Show global loader for non-background requests
+    if (globalLoader && !config.hideLoader) {
+      globalLoader.showLoader('Loading...');
+    }
+    
     return config;
   },
   (error) => {
+    if (globalLoader) {
+      globalLoader.hideLoader();
+    }
     return Promise.reject(error);
   }
 );
 
-// Response interceptor for error handling
+// Response interceptor for error handling and hide loader
 api.interceptors.response.use(
-  (response) => response,
+  (response) => {
+    // Hide global loader
+    if (globalLoader && !response.config.hideLoader) {
+      globalLoader.hideLoader();
+    }
+    return response;
+  },
   (error) => {
+    // Hide global loader
+    if (globalLoader && !error.config?.hideLoader) {
+      globalLoader.hideLoader();
+    }
+    
     console.error('API Error:', {
       message: error.message,
       code: error.code,
