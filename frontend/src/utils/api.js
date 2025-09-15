@@ -25,6 +25,7 @@ const api = axios.create({
 // Request interceptor to add auth token and show loader
 api.interceptors.request.use(
   (config) => {
+    console.log(`API Request: ${config.method?.toUpperCase()} ${config.url}`);
     const token = localStorage.getItem('adminToken');
     if (token) {
       config.headers.Authorization = `Bearer ${token}`;
@@ -48,6 +49,7 @@ api.interceptors.request.use(
 // Response interceptor for error handling and hide loader
 api.interceptors.response.use(
   (response) => {
+    console.log(`API Response: ${response.status} ${response.config.url}`, response.data);
     // Hide global loader
     if (globalLoader && !response.config.hideLoader) {
       globalLoader.hideLoader();
@@ -65,7 +67,8 @@ api.interceptors.response.use(
       code: error.code,
       response: error.response?.status,
       url: error.config?.url,
-      baseURL: error.config?.baseURL
+      baseURL: error.config?.baseURL,
+      data: error.response?.data
     });
     
     if (error.response?.status === 401 && window.location.pathname.includes('/admin')) {
