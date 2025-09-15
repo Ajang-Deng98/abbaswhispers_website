@@ -68,12 +68,6 @@ api.interceptors.response.use(
       baseURL: error.config?.baseURL
     });
     
-    // Handle network errors gracefully - return mock data
-    if (!error.response || error.code === 'NETWORK_ERROR' || error.code === 'ERR_NETWORK') {
-      console.warn('Network error - returning fallback data');
-      return Promise.resolve({ data: [] });
-    }
-    
     if (error.response?.status === 401 && window.location.pathname.includes('/admin')) {
       localStorage.removeItem('adminToken');
       if (window.location.pathname !== '/admin') {
@@ -81,9 +75,7 @@ api.interceptors.response.use(
       }
     }
     
-    // For other errors, return empty data instead of rejecting
-    console.warn('API Error - returning fallback data:', error.response?.status);
-    return Promise.resolve({ data: [] });
+    return Promise.reject(error);
   }
 );
 

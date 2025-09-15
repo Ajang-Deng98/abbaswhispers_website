@@ -2,6 +2,7 @@ import React, { useState, useEffect, useCallback } from 'react';
 import { motion } from 'framer-motion';
 import { Helmet } from 'react-helmet';
 import { volumeAPI } from '../utils/api';
+import { useRealTimeData } from '../hooks/useRealTimeData';
 import LoadingSpinner from '../components/LoadingSpinner';
 
 const Volumes = () => {
@@ -39,6 +40,9 @@ const Volumes = () => {
   useEffect(() => {
     loadVolumes();
   }, [loadVolumes]);
+
+  // Real-time updates every 30 seconds
+  useRealTimeData(loadVolumes, [selectedCategory], 30000);
 
   const categories = [
     { value: 'all', label: 'All Collections' },

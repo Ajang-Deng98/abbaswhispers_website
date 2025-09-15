@@ -6,6 +6,8 @@ from rest_framework_simplejwt.views import TokenObtainPairView
 from django_ratelimit.decorators import ratelimit
 from django.utils.decorators import method_decorator
 from django.contrib.auth import authenticate
+from django.views.decorators.csrf import csrf_exempt
+from django.http import JsonResponse
 from .models import BlogPost, Volume, PrayerRequest, ContactMessage, Subscriber, Comment, SiteSetting, Testimonial, PrayerTestimonial, Book
 from .serializers import (
     BlogPostSerializer, VolumeSerializer, PrayerRequestSerializer,
@@ -13,7 +15,7 @@ from .serializers import (
 )
 
 class BlogPostViewSet(viewsets.ModelViewSet):
-    queryset = BlogPost.objects.filter(status='published')
+    queryset = BlogPost.objects.filter(status='published').order_by('-created_at')
     serializer_class = BlogPostSerializer
     permission_classes = [AllowAny]
     
@@ -21,9 +23,13 @@ class BlogPostViewSet(viewsets.ModelViewSet):
         if self.action in ['create', 'update', 'partial_update', 'destroy']:
             return [IsAuthenticated()]
         return [AllowAny()]
+    
+    def list(self, request, *args, **kwargs):
+        print(f"BlogPost API called - Found {self.get_queryset().count()} posts")
+        return super().list(request, *args, **kwargs)
 
 class VolumeViewSet(viewsets.ModelViewSet):
-    queryset = Volume.objects.filter(status='published')
+    queryset = Volume.objects.filter(status='published').order_by('-created_at')
     serializer_class = VolumeSerializer
     permission_classes = [AllowAny]
     
@@ -31,6 +37,10 @@ class VolumeViewSet(viewsets.ModelViewSet):
         if self.action in ['create', 'update', 'partial_update', 'destroy']:
             return [IsAuthenticated()]
         return [AllowAny()]
+    
+    def list(self, request, *args, **kwargs):
+        print(f"Volume API called - Found {self.get_queryset().count()} volumes")
+        return super().list(request, *args, **kwargs)
 
 class PrayerRequestViewSet(viewsets.ModelViewSet):
     queryset = PrayerRequest.objects.all()

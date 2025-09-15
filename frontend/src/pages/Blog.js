@@ -3,6 +3,7 @@ import { Link } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import { Helmet } from 'react-helmet';
 import { blogAPI } from '../utils/api';
+import { useRealTimeData } from '../hooks/useRealTimeData';
 import LoadingSpinner from '../components/LoadingSpinner';
 
 const Blog = () => {
@@ -43,6 +44,9 @@ const Blog = () => {
   useEffect(() => {
     loadPosts();
   }, [loadPosts]);
+
+  // Real-time updates every 30 seconds
+  useRealTimeData(loadPosts, [searchTerm, selectedCategory], 30000);
 
   const categories = [
     { value: 'all', label: 'All Posts' },
