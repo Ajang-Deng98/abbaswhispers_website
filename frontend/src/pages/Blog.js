@@ -13,10 +13,6 @@ const Blog = () => {
   const [loading, setLoading] = useState(true);
   const postsPerPage = 6;
 
-  useEffect(() => {
-    loadPosts();
-  }, [loadPosts]);
-
   const loadPosts = useCallback(async () => {
     setLoading(true);
     
@@ -43,6 +39,10 @@ const Blog = () => {
       setLoading(false);
     }
   }, [searchTerm, selectedCategory]);
+
+  useEffect(() => {
+    loadPosts();
+  }, [loadPosts]);
 
   const categories = [
     { value: 'all', label: 'All Posts' },

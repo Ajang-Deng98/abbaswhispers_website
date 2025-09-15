@@ -11,10 +11,6 @@ const Volumes = () => {
   const [playingAudio, setPlayingAudio] = useState(null);
   const [loading, setLoading] = useState(true);
 
-  useEffect(() => {
-    loadVolumes();
-  }, [loadVolumes]);
-
   const loadVolumes = useCallback(async () => {
     setLoading(true);
     
@@ -39,6 +35,10 @@ const Volumes = () => {
       setLoading(false);
     }
   }, [selectedCategory]);
+
+  useEffect(() => {
+    loadVolumes();
+  }, [loadVolumes]);
 
   const categories = [
     { value: 'all', label: 'All Collections' },
