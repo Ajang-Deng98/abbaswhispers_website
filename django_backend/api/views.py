@@ -8,10 +8,10 @@ from django.utils.decorators import method_decorator
 from django.contrib.auth import authenticate
 from django.views.decorators.csrf import csrf_exempt
 from django.http import JsonResponse
-from .models import BlogPost, Volume, PrayerRequest, ContactMessage, Subscriber, Comment, SiteSetting, Testimonial, PrayerTestimonial, Book
+from .models import BlogPost, Volume, PrayerRequest, ContactMessage, Subscriber, Comment, SiteSetting
 from .serializers import (
     BlogPostSerializer, VolumeSerializer, PrayerRequestSerializer,
-    ContactMessageSerializer, SubscriberSerializer, CommentSerializer, SiteSettingSerializer, TestimonialSerializer, PrayerTestimonialSerializer, BookSerializer
+    ContactMessageSerializer, SubscriberSerializer, CommentSerializer, SiteSettingSerializer
 )
 
 class BlogPostViewSet(viewsets.ModelViewSet):
@@ -124,35 +124,7 @@ def get_post_comments(request, pk):
     except Exception as e:
         return Response({'error': str(e)}, status=status.HTTP_400_BAD_REQUEST)
 
-class TestimonialViewSet(viewsets.ModelViewSet):
-    queryset = Testimonial.objects.filter(status='published')
-    serializer_class = TestimonialSerializer
-    permission_classes = [AllowAny]
-    
-    def get_permissions(self):
-        if self.action in ['create', 'update', 'partial_update', 'destroy']:
-            return [IsAuthenticated()]
-        return [AllowAny()]
 
-class PrayerTestimonialViewSet(viewsets.ModelViewSet):
-    queryset = PrayerTestimonial.objects.filter(status='published')
-    serializer_class = PrayerTestimonialSerializer
-    permission_classes = [AllowAny]
-    
-    def get_permissions(self):
-        if self.action in ['create', 'update', 'partial_update', 'destroy']:
-            return [IsAuthenticated()]
-        return [AllowAny()]
-
-class BookViewSet(viewsets.ModelViewSet):
-    queryset = Book.objects.filter(status='published')
-    serializer_class = BookSerializer
-    permission_classes = [AllowAny]
-    
-    def get_permissions(self):
-        if self.action in ['create', 'update', 'partial_update', 'destroy']:
-            return [IsAuthenticated()]
-        return [AllowAny()]
 
 @api_view(['PATCH'])
 @permission_classes([AllowAny])

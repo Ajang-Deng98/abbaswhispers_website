@@ -6,13 +6,10 @@ from . import views
 router = DefaultRouter()
 router.register(r'blog', views.BlogPostViewSet)
 router.register(r'volumes', views.VolumeViewSet)
-router.register(r'books', views.BookViewSet)
 router.register(r'prayers', views.PrayerRequestViewSet)
 router.register(r'contact', views.ContactMessageViewSet)
 router.register(r'subscribers', views.SubscriberViewSet)
 router.register(r'comments', views.CommentViewSet)
-router.register(r'testimonials', views.TestimonialViewSet)
-router.register(r'prayer-testimonials', views.PrayerTestimonialViewSet)
 
 urlpatterns = [
     path('', include(router.urls)),
