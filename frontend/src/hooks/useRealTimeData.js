@@ -4,22 +4,16 @@ export const useRealTimeData = (fetchFunction, dependencies = [], interval = 600
   const intervalRef = useRef(null);
 
   useEffect(() => {
-    // Set up polling for real-time updates (no initial fetch)
-    intervalRef.current = setInterval(() => {
-      console.log('Real-time data refresh triggered');
-      fetchFunction();
-    }, interval);
+    if (typeof fetchFunction === 'function') {
+      intervalRef.current = setInterval(() => {
+        fetchFunction();
+      }, interval);
+    }
 
     return () => {
       if (intervalRef.current) {
         clearInterval(intervalRef.current);
       }
     };
-  }, dependencies);
-
-  return () => {
-    if (intervalRef.current) {
-      clearInterval(intervalRef.current);
-    }
-  };
+  }, [fetchFunction, interval]);
 };
