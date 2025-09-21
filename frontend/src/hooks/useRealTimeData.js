@@ -1,14 +1,12 @@
 import { useEffect, useRef } from 'react';
 
-export const useRealTimeData = (fetchFunction, dependencies = [], interval = 30000) => {
+export const useRealTimeData = (fetchFunction, dependencies = [], interval = 60000) => {
   const intervalRef = useRef(null);
 
   useEffect(() => {
-    // Initial fetch
-    fetchFunction();
-
-    // Set up polling for real-time updates
+    // Set up polling for real-time updates (no initial fetch)
     intervalRef.current = setInterval(() => {
+      console.log('Real-time data refresh triggered');
       fetchFunction();
     }, interval);
 

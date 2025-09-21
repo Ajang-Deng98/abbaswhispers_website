@@ -22,7 +22,7 @@ const api = axios.create({
   },
 });
 
-// Request interceptor to add auth token and show loader
+// Request interceptor to add auth token
 api.interceptors.request.use(
   (config) => {
     console.log(`API Request: ${config.method?.toUpperCase()} ${config.url}`);
@@ -30,38 +30,20 @@ api.interceptors.request.use(
     if (token) {
       config.headers.Authorization = `Bearer ${token}`;
     }
-    
-    // Show global loader for non-background requests
-    if (globalLoader && !config.hideLoader) {
-      globalLoader.showLoader('Loading...');
-    }
-    
     return config;
   },
   (error) => {
-    if (globalLoader) {
-      globalLoader.hideLoader();
-    }
     return Promise.reject(error);
   }
 );
 
-// Response interceptor for error handling and hide loader
+// Response interceptor for error handling
 api.interceptors.response.use(
   (response) => {
     console.log(`API Response: ${response.status} ${response.config.url}`, response.data);
-    // Hide global loader
-    if (globalLoader && !response.config.hideLoader) {
-      globalLoader.hideLoader();
-    }
     return response;
   },
   (error) => {
-    // Hide global loader
-    if (globalLoader && !error.config?.hideLoader) {
-      globalLoader.hideLoader();
-    }
-    
     console.error('API Error:', {
       message: error.message,
       code: error.code,

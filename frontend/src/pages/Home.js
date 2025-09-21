@@ -1,69 +1,79 @@
 import React, { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
-import { motion } from 'framer-motion';
 import { Helmet } from 'react-helmet';
-import { useGlobalLoader } from '../hooks/useGlobalLoader';
-import { useRealTimeData } from '../hooks/useRealTimeData';
 
-import { blogAPI, volumeAPI, testimonialAPI } from '../utils/api';
+import { blogAPI, volumeAPI } from '../utils/api';
 
 const Home = () => {
-  useGlobalLoader();
-  const [featuredPosts, setFeaturedPosts] = useState([]);
-  const [featuredVolumes, setFeaturedVolumes] = useState([]);
-  const [testimonials, setTestimonials] = useState([]);
+  const [featuredPosts, setFeaturedPosts] = useState([
+    {
+      id: 1,
+      title: "Finding Peace in Psalm 23",
+      excerpt: "Discover the profound comfort and guidance found in the shepherd's psalm.",
+      created_at: new Date().toISOString()
+    },
+    {
+      id: 2,
+      title: "The Power of Gratitude",
+      excerpt: "Learn how thanksgiving transforms our hearts and minds.",
+      created_at: new Date().toISOString()
+    },
+    {
+      id: 3,
+      title: "Walking in Faith",
+      excerpt: "Steps to strengthen your spiritual journey through daily practice.",
+      created_at: new Date().toISOString()
+    }
+  ]);
+  const [featuredVolumes, setFeaturedVolumes] = useState([
+    {
+      id: 1,
+      title: "Whispers of Hope",
+      description: "A collection of healing meditations inspired by Psalms of comfort and restoration."
+    },
+    {
+      id: 2,
+      title: "Songs of Strength",
+      description: "Empowering writings drawn from Psalms of courage and divine strength."
+    },
+    {
+      id: 3,
+      title: "Prayers of Peace",
+      description: "Gentle reflections on finding tranquility in God's presence."
+    }
+  ]);
 
   const loadFeaturedContent = async () => {
     try {
-      const [postsResponse, volumesResponse, testimonialsResponse] = await Promise.all([
+      const [postsResponse, volumesResponse] = await Promise.all([
         blogAPI.getAllPosts({ limit: 3 }),
-        volumeAPI.getAllVolumes({ limit: 3 }),
-        testimonialAPI.getAllTestimonials({ limit: 3 })
+        volumeAPI.getAllVolumes({ limit: 3 })
       ]);
       
       // Handle posts
       const posts = postsResponse.data;
-      if (Array.isArray(posts)) {
+      if (Array.isArray(posts) && posts.length > 0) {
         setFeaturedPosts(posts.slice(0, 3));
-      } else if (posts?.results && Array.isArray(posts.results)) {
+      } else if (posts?.results && Array.isArray(posts.results) && posts.results.length > 0) {
         setFeaturedPosts(posts.results.slice(0, 3));
-      } else {
-        setFeaturedPosts([]);
       }
 
       // Handle volumes
       const volumes = volumesResponse.data;
-      if (Array.isArray(volumes)) {
+      if (Array.isArray(volumes) && volumes.length > 0) {
         setFeaturedVolumes(volumes.slice(0, 3));
-      } else if (volumes?.results && Array.isArray(volumes.results)) {
+      } else if (volumes?.results && Array.isArray(volumes.results) && volumes.results.length > 0) {
         setFeaturedVolumes(volumes.results.slice(0, 3));
-      } else {
-        setFeaturedVolumes([]);
-      }
-
-      // Handle testimonials
-      const testimonialsData = testimonialsResponse.data;
-      if (Array.isArray(testimonialsData)) {
-        setTestimonials(testimonialsData.slice(0, 3));
-      } else if (testimonialsData?.results && Array.isArray(testimonialsData.results)) {
-        setTestimonials(testimonialsData.results.slice(0, 3));
-      } else {
-        setTestimonials([]);
       }
     } catch (error) {
       console.error('Error loading featured content:', error);
-      setFeaturedPosts([]);
-      setFeaturedVolumes([]);
-      setTestimonials([]);
+      // Keep fallback data on error
     }
   };
 
   useEffect(() => {
     loadFeaturedContent();
   }, []);
-
-  // Real-time updates every 60 seconds for home page
-  useRealTimeData(loadFeaturedContent, [], 60000);
 
   return (
     <>
@@ -77,12 +87,7 @@ const Home = () => {
       <section className="home-hero">
         <div className="container">
           <div className="hero-content">
-            <motion.div
-              className="hero-text"
-              initial={{ opacity: 0, y: 50 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.8 }}
-            >
+            <div className="hero-text">
               <div className="hero-badge">Inspirational Poetry & Faith</div>
               <h1>Abba's Whispers</h1>
               <p>My debut poetry series SELAH - a powerful collection of Christian poetry inspired by the Psalms. Journey from grief to grace and discover God's unfailing love through words that speak directly to your soul.</p>
@@ -90,27 +95,22 @@ const Home = () => {
                 <Link to="/volumes" className="btn-hero-primary">Explore Collections</Link>
                 <Link to="/about" className="btn-hero-secondary">Our Story</Link>
               </div>
-            </motion.div>
+            </div>
             
-            <motion.div
-              className="hero-stats"
-              initial={{ opacity: 0, scale: 0.9 }}
-              animate={{ opacity: 1, scale: 1 }}
-              transition={{ duration: 0.8, delay: 0.3 }}
-            >
+            <div className="hero-stats">
               <div className="stat-card">
-                <span className="stat-number">{featuredVolumes.length}</span>
+                <span className="stat-number">3+</span>
                 <span className="stat-label">SELAH Volumes</span>
               </div>
               <div className="stat-card">
-                <span className="stat-number">{featuredPosts.length}</span>
+                <span className="stat-number">15+</span>
                 <span className="stat-label">Blog Posts</span>
               </div>
               <div className="stat-card">
                 <span className="stat-number">Audio</span>
                 <span className="stat-label">Included</span>
               </div>
-            </motion.div>
+            </div>
           </div>
         </div>
       </section>
@@ -118,51 +118,32 @@ const Home = () => {
       {/* Featured Quote */}
       <section className="home-quote">
         <div className="container">
-          <motion.div
-            className="quote-content"
-            initial={{ opacity: 0, y: 30 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.8 }}
-            viewport={{ once: true }}
-          >
+          <div className="quote-content">
             <blockquote>
               "The Lord is my shepherd; I shall not want. He makes me lie down in green pastures. He leads me beside still waters. He restores my soul."
             </blockquote>
             <cite>- Psalm 23:1-3</cite>
-          </motion.div>
+          </div>
         </div>
       </section>
 
       {/* Featured Collections */}
       <section className="home-collections">
         <div className="container">
-          <motion.div
-            className="section-header"
-            initial={{ opacity: 0, y: 30 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.6 }}
-            viewport={{ once: true }}
-          >
+          <div className="section-header">
             <h2>Featured Collections</h2>
             <p>Discover our most beloved poetry collections</p>
-          </motion.div>
+          </div>
 
           <div className="collections-grid">
-            {Array.isArray(featuredVolumes) && featuredVolumes.slice(0, 3).map((volume, index) => (
-              <motion.div
-                key={volume.id}
-                className="collection-card"
-                initial={{ opacity: 0, y: 30 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.6, delay: index * 0.2 }}
-                viewport={{ once: true }}
-              >
+            {featuredVolumes.slice(0, 3).map((volume) => (
+              <div key={volume.id} className="collection-card">
                 <div className="collection-content">
                   <h3>{volume.title}</h3>
                   <p>{volume.description}</p>
                   <Link to="/volumes" className="collection-link">Read Collection</Link>
                 </div>
-              </motion.div>
+              </div>
             ))}
           </div>
 
@@ -175,27 +156,14 @@ const Home = () => {
       {/* Latest Blog Posts */}
       <section className="home-blog">
         <div className="container">
-          <motion.div
-            className="section-header"
-            initial={{ opacity: 0, y: 30 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.6 }}
-            viewport={{ once: true }}
-          >
+          <div className="section-header">
             <h2>Latest Inspirations</h2>
             <p>Fresh insights and reflections from our recent writings</p>
-          </motion.div>
+          </div>
 
           <div className="blog-grid">
-            {Array.isArray(featuredPosts) && featuredPosts.slice(0, 3).map((post, index) => (
-              <motion.div
-                key={post.id}
-                className="blog-card"
-                initial={{ opacity: 0, y: 30 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.6, delay: index * 0.2 }}
-                viewport={{ once: true }}
-              >
+            {featuredPosts.slice(0, 3).map((post) => (
+              <div key={post.id} className="blog-card">
                 {post.image && (
                   <div className="blog-image" style={{ height: '200px', overflow: 'hidden', borderRadius: '8px 8px 0 0', marginBottom: '1rem' }}>
                     <img 
@@ -222,7 +190,7 @@ const Home = () => {
                     <Link to={`/blog/${post.id}`} className="blog-link">Read More</Link>
                   </div>
                 </div>
-              </motion.div>
+              </div>
             ))}
           </div>
 
@@ -236,56 +204,12 @@ const Home = () => {
 
 
 
-      {/* Testimonials Section */}
-      {testimonials.length > 0 && (
-        <section className="home-testimonials">
-          <div className="container">
-            <motion.div
-              className="section-header"
-              initial={{ opacity: 0, y: 30 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.6 }}
-              viewport={{ once: true }}
-            >
-              <h2>Voices of Transformation</h2>
-              <p>Stories from our community of faith and healing</p>
-            </motion.div>
 
-            <div className="testimonials-grid">
-              {testimonials.slice(0, 3).map((testimonial, index) => (
-                <motion.div
-                  key={testimonial.id}
-                  className="testimonial-card"
-                  initial={{ opacity: 0, y: 30 }}
-                  whileInView={{ opacity: 1, y: 0 }}
-                  transition={{ duration: 0.6, delay: index * 0.2 }}
-                  viewport={{ once: true }}
-                >
-                  <div className="testimonial-content">
-                    <div className="quote-mark">"</div>
-                    <p>{testimonial.quote}</p>
-                    <div className="testimonial-author">
-                      <strong>{testimonial.author_name}</strong>
-                      {testimonial.author_role && <span>{testimonial.author_role}</span>}
-                    </div>
-                  </div>
-                </motion.div>
-              ))}
-            </div>
-          </div>
-        </section>
-      )}
 
       {/* Call to Action */}
       <section className="home-cta">
         <div className="container">
-          <motion.div
-            className="cta-content"
-            initial={{ opacity: 0, y: 30 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.6 }}
-            viewport={{ once: true }}
-          >
+          <div className="cta-content">
             <h2>Join Our Community of Faith</h2>
             <p>Subscribe to our newsletter for weekly inspirations and be part of a community dedicated to spiritual growth and healing.</p>
             <div className="cta-actions">
@@ -299,7 +223,7 @@ const Home = () => {
               </a>
               <Link to="/prayer-request" className="btn-cta-secondary">Submit Prayer Request</Link>
             </div>
-          </motion.div>
+          </div>
         </div>
       </section>
     </>
