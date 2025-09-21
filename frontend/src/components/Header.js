@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { Link, useLocation } from 'react-router-dom';
-import logoImage from '../assets/images/logo.jpg';
+// import logoImage from '../assets/images/logo.jpg';
+const logoImage = '/logo.jpg'; // Vite will serve from public folder
 
 const Header = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
