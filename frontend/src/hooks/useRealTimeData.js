@@ -4,15 +4,20 @@ export const useRealTimeData = (fetchFunction, dependencies = [], interval = 600
   const intervalRef = useRef(null);
 
   useEffect(() => {
-    if (typeof fetchFunction === 'function') {
+    if (typeof fetchFunction === 'function' && interval > 0) {
       intervalRef.current = setInterval(() => {
-        fetchFunction();
+        try {
+          fetchFunction();
+        } catch (error) {
+          console.error('Real-time data fetch error:', error);
+        }
       }, interval);
     }
 
     return () => {
       if (intervalRef.current) {
         clearInterval(intervalRef.current);
+        intervalRef.current = null;
       }
     };
   }, [fetchFunction, interval]);
