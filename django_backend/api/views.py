@@ -104,6 +104,18 @@ class CommentViewSet(viewsets.ModelViewSet):
 def health_check(request):
     return Response({'status': 'OK', 'message': 'Django API is running'})
 
+@api_view(['GET'])
+@permission_classes([AllowAny])
+def debug_posts(request):
+    all_posts = BlogPost.objects.all().values('id', 'title', 'status', 'category')
+    published_posts = BlogPost.objects.filter(status='published').values('id', 'title', 'status', 'category')
+    return Response({
+        'all_posts': list(all_posts),
+        'published_posts': list(published_posts),
+        'total_count': BlogPost.objects.count(),
+        'published_count': BlogPost.objects.filter(status='published').count()
+    })
+
 @api_view(['POST'])
 @permission_classes([AllowAny])
 @method_decorator(ratelimit(key='ip', rate='5/m', method='POST'))

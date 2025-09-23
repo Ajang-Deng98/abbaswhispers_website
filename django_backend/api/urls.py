@@ -20,4 +20,5 @@ urlpatterns = [
     path('blog/<int:pk>/comments/', views.get_post_comments, name='post_comments'),
     path('comments/create/', views.create_comment, name='create_comment'),
     path('volumes/<int:pk>/download/', views.track_download, name='track_download'),
+    path('debug/posts/', views.debug_posts, name='debug_posts'),
 ]

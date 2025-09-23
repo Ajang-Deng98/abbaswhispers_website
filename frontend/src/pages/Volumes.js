@@ -4,12 +4,15 @@ import { Helmet } from 'react-helmet';
 import { volumeAPI } from '../utils/api';
 import { useRealTimeData } from '../hooks/useRealTimeData';
 import LoadingSpinner from '../components/LoadingSpinner';
+import '../styles/Volumes.css';
 
 const Volumes = () => {
   const [volumes, setVolumes] = useState([]);
   const [selectedCategory, setSelectedCategory] = useState('all');
   const [selectedVolume, setSelectedVolume] = useState(null);
   const [playingAudio, setPlayingAudio] = useState(null);
+  const [audioProgress, setAudioProgress] = useState({});
+  const [audioDuration, setAudioDuration] = useState({});
   const [loading, setLoading] = useState(true);
 
   const loadVolumes = useCallback(async () => {
@@ -31,6 +34,7 @@ const Volumes = () => {
       }
     } catch (error) {
       console.error('Error loading volumes:', error);
+      // Set empty array on error to show "Coming Soon" message
       setVolumes([]);
     } finally {
       setLoading(false);
@@ -235,73 +239,98 @@ const Volumes = () => {
                     >
                       Read Full Poem
                     </button>
-                    {volume.audio_file && (
+                    <div className="audio-controls">
                       <button 
                         className="btn-secondary audio-btn"
-                        onClick={(e) => {
+                        onClick={() => {
                           const audio = document.getElementById(`audio-${volume.id}`);
-                          const button = e.target;
                           
                           if (playingAudio && playingAudio !== volume.id) {
-                            // Stop other playing audio
                             const otherAudio = document.getElementById(`audio-${playingAudio}`);
                             if (otherAudio) {
                               otherAudio.pause();
                               otherAudio.currentTime = 0;
                             }
-                            // Reset other button text
-                            const otherButton = document.querySelector(`[data-volume-id="${playingAudio}"]`);
-                            if (otherButton) otherButton.textContent = 'Listen';
+                            setPlayingAudio(null);
                           }
                           
                           if (audio) {
                             if (audio.paused) {
                               audio.play().then(() => {
-                                button.textContent = 'Pause';
                                 setPlayingAudio(volume.id);
                               }).catch((error) => {
                                 console.error('Audio play error:', error);
-                                alert('Unable to play audio file.');
                               });
                             } else {
                               audio.pause();
-                              audio.currentTime = 0;
-                              button.textContent = 'Listen';
                               setPlayingAudio(null);
                             }
                           }
                         }}
-                        data-volume-id={volume.id}
                       >
-                        {playingAudio === volume.id ? 'Pause' : 'Listen'}
+                        {playingAudio === volume.id ? '⏸️ Pause' : '▶️ Listen'}
                       </button>
-                    )}
+                      {playingAudio === volume.id && (
+                        <div className="audio-progress" style={{
+                          width: '100%',
+                          height: '4px',
+                          background: '#e0e0e0',
+                          borderRadius: '2px',
+                          marginTop: '0.5rem',
+                          overflow: 'hidden'
+                        }}>
+                          <div 
+                            className="progress-bar"
+                            style={{
+                              width: `${audioProgress[volume.id] || 0}%`,
+                              height: '100%',
+                              background: 'var(--primary-gold)',
+                              transition: 'width 0.1s ease'
+                            }}
+                          />
+                        </div>
+                      )}
+                    </div>
                   </div>
                 </div>
                 
-                {/* Hidden Audio Element */}
-                {volume.audio_file && (
-                  <audio 
-                    id={`audio-${volume.id}`}
-                    preload="none"
-                    onEnded={() => {
-                      const button = document.querySelector(`[data-volume-id="${volume.id}"]`);
-                      if (button) button.textContent = 'Listen';
-                      setPlayingAudio(null);
-                    }}
-                    onError={() => {
-                      const button = document.querySelector(`[data-volume-id="${volume.id}"]`);
-                      if (button) button.textContent = 'Listen';
-                      setPlayingAudio(null);
-                      alert('Error loading audio file.');
-                    }}
-                  >
-                    <source 
-                      src={volume.audio_file.startsWith('http') ? volume.audio_file : `http://localhost:8000${volume.audio_file}`}
-                      type="audio/mpeg" 
-                    />
-                  </audio>
-                )}
+                {/* Audio Element */}
+                <audio 
+                  id={`audio-${volume.id}`}
+                  preload="metadata"
+                  onLoadedMetadata={(e) => {
+                    setAudioDuration(prev => ({
+                      ...prev,
+                      [volume.id]: e.target.duration
+                    }));
+                  }}
+                  onTimeUpdate={(e) => {
+                    const progress = (e.target.currentTime / e.target.duration) * 100;
+                    setAudioProgress(prev => ({
+                      ...prev,
+                      [volume.id]: progress
+                    }));
+                  }}
+                  onEnded={() => {
+                    setPlayingAudio(null);
+                    setAudioProgress(prev => ({
+                      ...prev,
+                      [volume.id]: 0
+                    }));
+                  }}
+                  onError={() => {
+                    setPlayingAudio(null);
+                    console.error('Error loading audio file for volume:', volume.id);
+                  }}
+                >
+                  <source 
+                    src={volume.audio_file ? 
+                      (volume.audio_file.startsWith('http') ? volume.audio_file : `http://localhost:8000${volume.audio_file}`) :
+                      'https://www.soundjay.com/misc/sounds/bell-ringing-05.wav'
+                    }
+                    type="audio/mpeg" 
+                  />
+                </audio>
               </motion.div>
               ))}
             </div>

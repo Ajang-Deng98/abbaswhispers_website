@@ -1,10 +1,7 @@
 import React from 'react';
 import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
-import { motion } from 'framer-motion';
 import Header from './components/Header';
 import Footer from './components/Footer';
-import ErrorBoundary from './components/ErrorBoundary';
-import { LoaderProvider } from './components/GlobalLoader';
 import Home from './pages/Home';
 import About from './pages/About';
 import Volumes from './pages/Volumes';
@@ -18,44 +15,28 @@ import TermsOfService from './pages/TermsOfService';
 import './styles/App.css';
 import './styles/Mobile.css';
 
-function Layout({ children }) {
-  return (
-    <div className="App">
-      <Header />
-      <motion.main
-        initial={{ opacity: 0 }}
-        animate={{ opacity: 1 }}
-        transition={{ duration: 0.5 }}
-      >
-        <ErrorBoundary>
-          {children}
-        </ErrorBoundary>
-      </motion.main>
-      <Footer />
-    </div>
-  );
-}
-
 function App() {
   return (
-    <ErrorBoundary>
-      <LoaderProvider>
-        <Router>
+    <Router>
+      <div className="App">
+        <Header />
+        <main>
           <Routes>
-            <Route path="/" element={<Layout><Home /></Layout>} />
-            <Route path="/about" element={<Layout><About /></Layout>} />
-            <Route path="/volumes" element={<Layout><Volumes /></Layout>} />
-            <Route path="/blog" element={<Layout><Blog /></Layout>} />
-            <Route path="/blog/:id" element={<Layout><BlogPost /></Layout>} />
-            <Route path="/contact" element={<Layout><Contact /></Layout>} />
-            <Route path="/prayer-request" element={<Layout><PrayerRequest /></Layout>} />
-            <Route path="/privacy" element={<Layout><PrivacyPolicy /></Layout>} />
-            <Route path="/terms" element={<Layout><TermsOfService /></Layout>} />
+            <Route path="/" element={<Home />} />
+            <Route path="/about" element={<About />} />
+            <Route path="/volumes" element={<Volumes />} />
+            <Route path="/blog" element={<Blog />} />
+            <Route path="/blog/:id" element={<BlogPost />} />
+            <Route path="/contact" element={<Contact />} />
+            <Route path="/prayer-request" element={<PrayerRequest />} />
+            <Route path="/privacy" element={<PrivacyPolicy />} />
+            <Route path="/terms" element={<TermsOfService />} />
             <Route path="*" element={<Navigate to="/" replace />} />
           </Routes>
-        </Router>
-      </LoaderProvider>
-    </ErrorBoundary>
+        </main>
+        <Footer />
+      </div>
+    </Router>
   );
 }
 

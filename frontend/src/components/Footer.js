@@ -1,7 +1,8 @@
 import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
 import { subscriberAPI } from '../utils/api';
-import logoImage from '../assets/images/logo.jpg';
+// import logoImage from '../assets/images/logo.jpg';
+const logoImage = '/logo.jpg'; // Vite will serve from public folder
 
 const Footer = () => {
   const [email, setEmail] = useState('');

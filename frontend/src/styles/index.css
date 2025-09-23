@@ -22,6 +22,8 @@ html {
 
 body {
   overflow-x: hidden;
+  margin: 0;
+  padding: 0;
 }
 
 :root {
@@ -31,12 +33,12 @@ body {
   --warm-cream: rgba(255, 255, 255, 0.8);
   --light-olive: #A8B89A;
   --sage-green: #9CAF88;
-  --deep-blue: #000000;
-  --warm-brown: #000000;
+  --deep-blue: #2c3e50;
+  --warm-brown: #8b4513;
   --soft-white: rgba(255, 255, 255, 0.8);
-  --text-dark: #000000;
-  --text-medium: #000000;
-  --text-light: #000000;
+  --text-dark: #333333;
+  --text-medium: #666666;
+  --text-light: #999999;
   --shadow-soft: rgba(0, 0, 0, 0.1);
   --shadow-warm: rgba(0, 0, 0, 0.05);
   --gradient-warm: linear-gradient(135deg, rgba(255, 255, 255, 0.8) 0%, rgba(255, 255, 255, 0.8) 100%);

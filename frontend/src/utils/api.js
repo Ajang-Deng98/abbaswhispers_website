@@ -1,10 +1,10 @@
 import axios from 'axios';
 
-const API_BASE_URL = process.env.REACT_APP_API_URL || 'http://localhost:8000/api';
+const API_BASE_URL = import.meta.env.VITE_API_URL || 'http://localhost:8000/api';
 
 // Debug logging for deployment
 console.log('API_BASE_URL:', API_BASE_URL);
-console.log('Environment:', process.env.NODE_ENV);
+console.log('Environment:', import.meta.env.MODE);
 
 // Global loader reference (will be set by components)
 let globalLoader = null;
