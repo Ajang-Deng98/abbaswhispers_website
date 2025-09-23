@@ -1,0 +1,8 @@
+django_backend/
+*.py
+requirements.txt
+Procfile
+runtime.txt
+manage.py
+db.sqlite3
+.env
