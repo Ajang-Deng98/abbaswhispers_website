@@ -6,13 +6,6 @@ const API_BASE_URL = import.meta.env.VITE_API_URL || 'http://localhost:8000/api'
 console.log('API_BASE_URL:', API_BASE_URL);
 console.log('Environment:', import.meta.env.MODE);
 
-// Global loader reference (will be set by components)
-let globalLoader = null;
-
-export const setGlobalLoader = (loader) => {
-  globalLoader = loader;
-};
-
 // Create axios instance
 const api = axios.create({
   baseURL: API_BASE_URL,
