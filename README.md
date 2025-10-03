@@ -6,7 +6,7 @@ A complete, responsive, SEO-optimized website for Abba Whispers, a Christian fai
 
 - **Frontend**: React 18 with modern hooks and components
 - **Backend**: Django 4.2 with Django REST Framework
-- **Database**: PostgreSQL
+- **Database**: MySQL
 - **Authentication**: JWT with Django Simple JWT
 - **Styling**: Custom CSS with responsive design
 
@@ -15,14 +15,15 @@ A complete, responsive, SEO-optimized website for Abba Whispers, a Christian fai
 ### Prerequisites
 - Python 3.8+
 - Node.js 16+
-- PostgreSQL
+- MySQL
 
-### 1. Setup PostgreSQL
+### 1. Setup MySQL
 ```sql
--- In PG Admin or psql
-ALTER USER postgres PASSWORD 'Ajangdatabase';
+-- In MySQL Workbench or mysql command line
 CREATE DATABASE abba_whispers;
-GRANT ALL PRIVILEGES ON DATABASE abba_whispers TO postgres;
+CREATE USER 'abba_user'@'localhost' IDENTIFIED BY 'your_password';
+GRANT ALL PRIVILEGES ON abba_whispers.* TO 'abba_user'@'localhost';
+FLUSH PRIVILEGES;
 ```
 
 ### 2. Setup Django Backend
@@ -93,7 +94,7 @@ Abbaswhispers_website/
 ### Backend (Django)
 - RESTful API with Django REST Framework
 - JWT authentication
-- PostgreSQL database with optimized queries
+- MySQL database with optimized queries
 - Built-in admin panel
 - Email integration for notifications
 
@@ -130,8 +131,8 @@ pip install gunicorn
 gunicorn abba_whispers.wsgi:application
 ```
 
-### Database (PostgreSQL)
-- Use managed PostgreSQL service
+### Database (MySQL)
+- Use managed MySQL service
 - Update DATABASE_URL in production
 
 ## 📊 Environment Variables
@@ -141,10 +142,10 @@ gunicorn abba_whispers.wsgi:application
 SECRET_KEY=your_secret_key
 DEBUG=False
 DB_NAME=abba_whispers
-DB_USER=postgres
+DB_USER=root
 DB_PASSWORD=your_password
 DB_HOST=localhost
-DB_PORT=5432
+DB_PORT=3306
 ```
 
 ### React (.env)
