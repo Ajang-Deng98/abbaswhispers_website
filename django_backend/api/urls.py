@@ -10,9 +10,11 @@ router.register(r'prayers', views.PrayerRequestViewSet)
 router.register(r'contact', views.ContactMessageViewSet)
 router.register(r'subscribers', views.SubscriberViewSet)
 router.register(r'comments', views.CommentViewSet)
+router.register(r'testimonials', views.TestimonialViewSet)
+router.register(r'prayer-testimonials', views.PrayerTestimonialViewSet)
 
 urlpatterns = [
-    path('', include(router.urls)),
+    # Specific URLs first (before router patterns)
     path('auth/login/', TokenObtainPairView.as_view(), name='token_obtain_pair'),
     path('auth/refresh/', TokenRefreshView.as_view(), name='token_refresh'),
     path('health/', views.health_check, name='health_check'),
@@ -21,4 +23,6 @@ urlpatterns = [
     path('comments/create/', views.create_comment, name='create_comment'),
     path('volumes/<int:pk>/download/', views.track_download, name='track_download'),
     path('debug/posts/', views.debug_posts, name='debug_posts'),
+    # Router patterns last
+    path('', include(router.urls)),
 ]

@@ -213,14 +213,7 @@ const Home = () => {
             <h2>Join Our Community of Faith</h2>
             <p>Subscribe to our newsletter for weekly inspirations and be part of a community dedicated to spiritual growth and healing.</p>
             <div className="cta-actions">
-              <a 
-                href="https://abbaswhispers.substack.com" 
-                target="_blank" 
-                rel="noopener noreferrer"
-                className="btn-cta-primary"
-              >
-                Subscribe Newsletter
-              </a>
+              <Link to="/contact" className="btn-cta-primary">Get In Touch</Link>
               <Link to="/prayer-request" className="btn-cta-secondary">Submit Prayer Request</Link>
             </div>
           </div>

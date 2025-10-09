@@ -1,5 +1,5 @@
 from django.contrib import admin
-from .models import BlogPost, Volume, PrayerRequest, ContactMessage, Subscriber, Comment, SiteSetting
+from .models import BlogPost, Volume, PrayerRequest, ContactMessage, Subscriber, Comment, SiteSetting, Testimonial, PrayerTestimonial
 
 @admin.register(BlogPost)
 class BlogPostAdmin(admin.ModelAdmin):
@@ -49,6 +49,22 @@ class CommentAdmin(admin.ModelAdmin):
     list_editable = ['status']
 
 
+
+@admin.register(Testimonial)
+class TestimonialAdmin(admin.ModelAdmin):
+    list_display = ['author_name', 'author_role', 'status', 'order', 'created_at']
+    list_filter = ['status', 'created_at']
+    search_fields = ['author_name', 'quote']
+    list_editable = ['status', 'order']
+    ordering = ['order', '-created_at']
+
+@admin.register(PrayerTestimonial)
+class PrayerTestimonialAdmin(admin.ModelAdmin):
+    list_display = ['author_name', 'category', 'status', 'order', 'created_at']
+    list_filter = ['status', 'category', 'created_at']
+    search_fields = ['author_name', 'testimony']
+    list_editable = ['status', 'order']
+    ordering = ['order', '-created_at']
 
 @admin.register(SiteSetting)
 class SiteSettingAdmin(admin.ModelAdmin):
