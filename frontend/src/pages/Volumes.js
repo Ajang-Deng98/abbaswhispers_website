@@ -4,7 +4,6 @@ import { Helmet } from 'react-helmet';
 import { volumeAPI } from '../utils/api';
 import { useRealTimeData } from '../hooks/useRealTimeData';
 import LoadingSpinner from '../components/LoadingSpinner';
-import '../styles/Volumes.css';
 
 const Volumes = () => {
   const [volumes, setVolumes] = useState([]);

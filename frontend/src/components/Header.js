@@ -1,13 +1,21 @@
 import React, { useState, useEffect } from 'react';
 import { Link, useLocation } from 'react-router-dom';
-// import logoImage from '../assets/images/logo.jpg';
-const logoImage = '/logo.jpg'; // Vite will serve from public folder
+
+const logoImage = '/logo.jpg';
 
 const Header = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [isVisible, setIsVisible] = useState(true);
   const [lastScrollY, setLastScrollY] = useState(0);
+  const [openDropdowns, setOpenDropdowns] = useState({});
   const location = useLocation();
+
+  const toggleDropdown = (itemPath) => {
+    setOpenDropdowns(prev => ({
+      ...prev,
+      [itemPath]: !prev[itemPath]
+    }));
+  };
 
   useEffect(() => {
     const handleScroll = () => {
@@ -97,27 +105,38 @@ const Header = () => {
           <nav className={`nav ${isMenuOpen ? 'nav-open' : ''}`}>
             {navItems.map((item) => (
               <div key={item.path} className={`nav-item ${item.dropdown ? 'has-dropdown' : ''}`}>
-                <Link
-                  to={item.path}
-                  className={location.pathname === item.path || (item.dropdown && item.dropdown.some(dropItem => location.pathname === dropItem.path.split('?')[0].split('#')[0])) ? 'active' : ''}
-                  onClick={() => setIsMenuOpen(false)}
-                >
-                  {item.label}
-                  {item.dropdown && <span className="dropdown-arrow">▼</span>}
-                </Link>
-                {item.dropdown && (
-                  <div className="dropdown-menu">
-                    {item.dropdown.map((dropItem) => (
-                      <Link
-                        key={dropItem.path}
-                        to={dropItem.path}
-                        className="dropdown-item"
-                        onClick={() => setIsMenuOpen(false)}
-                      >
-                        {dropItem.label}
-                      </Link>
-                    ))}
-                  </div>
+                {item.dropdown ? (
+                  <>
+                    <button
+                      className="nav-link-button"
+                      onClick={() => toggleDropdown(item.path)}
+                    >
+                      {item.label}
+                      <span className="dropdown-arrow">{openDropdowns[item.path] ? '▲' : '▼'}</span>
+                    </button>
+                    {openDropdowns[item.path] && (
+                      <div className="dropdown-menu mobile-dropdown">
+                        {item.dropdown.map((dropItem) => (
+                          <Link
+                            key={dropItem.path}
+                            to={dropItem.path}
+                            className="dropdown-item"
+                            onClick={() => setIsMenuOpen(false)}
+                          >
+                            {dropItem.label}
+                          </Link>
+                        ))}
+                      </div>
+                    )}
+                  </>
+                ) : (
+                  <Link
+                    to={item.path}
+                    className={location.pathname === item.path ? 'active' : ''}
+                    onClick={() => setIsMenuOpen(false)}
+                  >
+                    {item.label}
+                  </Link>
                 )}
               </div>
             ))}

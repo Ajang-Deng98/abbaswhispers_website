@@ -56,6 +56,9 @@ TEMPLATES = [
 WSGI_APPLICATION = 'abba_whispers.wsgi.application'
 
 # Database Configuration
+import pymysql
+pymysql.install_as_MySQLdb()
+
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.mysql',

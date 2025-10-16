@@ -14,7 +14,6 @@ import PrivacyPolicy from './pages/PrivacyPolicy';
 import TermsOfService from './pages/TermsOfService';
 
 import './styles/App.css';
-import './styles/Mobile.css';
 
 function App() {
   return (
