@@ -75,16 +75,12 @@ const Blog = () => {
       </Helmet>
 
       {/* Hero Section */}
-      <section className="blog-hero" style={{
-        background: 'linear-gradient(rgba(0, 0, 0, 0.4), rgba(0, 0, 0, 0.4)), url("https://images.unsplash.com/photo-1481627834876-b7833e8f5570?ixlib=rb-4.0.3&w=2000&q=80") center/cover no-repeat',
-        padding: '150px 0 5rem 0',
-        minHeight: '85vh',
-        display: 'flex',
-        alignItems: 'center',
-        color: 'white',
+      <section style={{
+        background: '#ffffff',
+        padding: '120px 1rem 80px 1rem',
         textAlign: 'center'
       }}>
-        <div className="container">
+        <div className="container" style={{ maxWidth: '800px', margin: '0 auto' }}>
           <motion.div
             initial={{ opacity: 0, y: 30 }}
             animate={{ opacity: 1, y: 0 }}
@@ -92,21 +88,23 @@ const Blog = () => {
           >
             <h1 style={{
               fontFamily: 'Crimson Pro, serif',
-              fontSize: 'clamp(2rem, 4vw, 3rem)',
-              fontWeight: '400',
-              marginBottom: '1rem',
-              textShadow: '1px 1px 2px rgba(0,0,0,0.3)',
-              letterSpacing: '-0.02em'
-            }}>Reflections & Insights</h1>
+              fontSize: 'clamp(2rem, 4vw, 2.8rem)',
+              fontWeight: '300',
+              marginBottom: '2rem',
+              color: '#333',
+              lineHeight: '1.3',
+              letterSpacing: '0.5px'
+            }}>Reflections</h1>
             <p style={{
               fontFamily: 'Crimson Pro, serif',
               fontSize: 'clamp(1rem, 2vw, 1.2rem)',
               fontWeight: '300',
+              marginBottom: '3rem',
+              color: '#666',
               maxWidth: '600px',
-              margin: '0 auto',
-              lineHeight: '1.6',
-              textShadow: '1px 1px 2px rgba(0,0,0,0.3)'
-            }}>Thoughtful reflections and spiritual insights for daily living.</p>
+              margin: '0 auto 3rem',
+              lineHeight: '1.8'
+            }}>Quiet thoughts on faith, healing, and the sacred conversations that shape our days.</p>
           </motion.div>
         </div>
       </section>
@@ -124,26 +122,30 @@ const Blog = () => {
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.6 }}
           style={{
-            marginBottom: '3rem',
-            textAlign: 'center'
+            marginBottom: '4rem',
+            textAlign: 'center',
+            background: '#f9f9f9',
+            padding: '3rem 2rem',
+            margin: '0 -2rem 4rem -2rem'
           }}
         >
           <input
             type="text"
-            placeholder="Search reflections..."
+            placeholder="Search..."
             value={searchTerm}
             onChange={(e) => setSearchTerm(e.target.value)}
             style={{
-              fontFamily: 'Inter, sans-serif',
-              padding: '12px 20px',
-              border: '1px solid #eeeeee',
+              fontFamily: 'Crimson Pro, serif',
+              padding: '0.8rem 1.5rem',
+              border: '1px solid #ddd',
               width: '100%',
               maxWidth: '400px',
-              fontSize: '0.9rem',
+              fontSize: '1rem',
               outline: 'none',
               marginBottom: '2rem',
               transition: 'border-color 0.3s ease',
-              borderRadius: '0'
+              borderRadius: '25px',
+              fontWeight: '300'
             }}
           />
           
@@ -151,7 +153,7 @@ const Blog = () => {
             display: 'flex',
             flexWrap: 'wrap',
             justifyContent: 'center',
-            gap: '0.75rem'
+            gap: '1rem'
           }}>
             {categories.map((category) => (
               <button
@@ -161,16 +163,16 @@ const Blog = () => {
                   setCurrentPage(1);
                 }}
                 style={{
-                  fontFamily: 'Inter, sans-serif',
-                  padding: '8px 20px',
+                  fontFamily: 'Crimson Pro, serif',
+                  padding: '0.5rem 1.2rem',
                   fontSize: '0.9rem',
-                  fontWeight: '400',
-                  border: selectedCategory === category.value ? 'none' : '1px solid var(--text-primary)',
-                  background: selectedCategory === category.value ? 'var(--text-primary)' : 'transparent',
-                  color: selectedCategory === category.value ? 'white' : 'var(--text-primary)',
+                  fontWeight: '300',
+                  border: '1px solid #ddd',
+                  background: selectedCategory === category.value ? '#333' : 'transparent',
+                  color: selectedCategory === category.value ? 'white' : '#666',
                   cursor: 'pointer',
                   transition: 'all 0.3s ease',
-                  letterSpacing: '0.3px'
+                  borderRadius: '25px'
                 }}
               >
                 {category.label}
@@ -204,13 +206,10 @@ const Blog = () => {
                     style={{
                       background: '#ffffff',
                       border: 'none',
-                      borderBottom: '1px solid #eeeeee',
-                      padding: '2rem 0',
-                      transition: 'all 0.3s ease',
-                      cursor: 'pointer',
-                      borderRadius: '0'
+                      borderBottom: '1px solid #eee',
+                      padding: '3rem 0',
+                      transition: 'all 0.3s ease'
                     }}
-                    whileHover={{ borderBottomColor: '#000000' }}
                   >
                     {post.image && (
                       <img 
@@ -242,11 +241,11 @@ const Blog = () => {
                     
                     <h3 style={{
                       fontFamily: 'Crimson Pro, serif',
-                      fontSize: '1.5rem',
-                      fontWeight: '400',
+                      fontSize: '1.4rem',
+                      fontWeight: '300',
                       marginBottom: '1rem',
-                      lineHeight: '1.3',
-                      color: 'var(--text-primary)'
+                      lineHeight: '1.4',
+                      color: '#333'
                     }}>
                       <Link to={`/blog/${post.id}`} style={{
                         color: 'inherit',

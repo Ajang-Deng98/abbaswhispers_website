@@ -245,35 +245,305 @@ const Home = () => {
       </section>
 
       {/* Featured Quote */}
-      <section className="home-quote">
+      <section style={{
+        background: '#f8f9fa',
+        padding: '80px 0',
+        textAlign: 'center'
+      }}>
         <div className="container">
-          <div className="quote-content">
-            <blockquote>
-              "The Lord is my shepherd; I shall not want. He makes me lie down in green pastures. He leads me beside still waters. He restores my soul."
-            </blockquote>
-            <cite>- Psalm 23:1-3</cite>
+          <blockquote style={{
+            fontFamily: 'Georgia, serif',
+            fontSize: '28px',
+            fontStyle: 'italic',
+            color: '#2c2c2c',
+            maxWidth: '700px',
+            margin: '0 auto 30px',
+            lineHeight: '1.4',
+            fontWeight: 'normal'
+          }}>
+            "The Lord is my shepherd; I shall not want. He makes me lie down in green pastures. He leads me beside still waters. He restores my soul."
+          </blockquote>
+          <cite style={{
+            fontFamily: 'Georgia, serif',
+            fontSize: '16px',
+            color: '#8b7355'
+          }}>— Psalm 23:1-3</cite>
+        </div>
+      </section>
+
+      {/* About Section */}
+      <section style={{ padding: '100px 0', background: '#ffffff' }}>
+        <div className="container">
+          <div style={{
+            display: 'grid',
+            gridTemplateColumns: '1fr 1fr',
+            gap: '60px',
+            alignItems: 'center'
+          }}>
+            <div>
+              <h2 style={{
+                fontFamily: 'Georgia, serif',
+                fontSize: '36px',
+                fontWeight: 'normal',
+                color: '#2c2c2c',
+                marginBottom: '30px',
+                lineHeight: '1.2'
+              }}>A Journey Through Grief to Grace</h2>
+              <p style={{
+                fontFamily: 'Georgia, serif',
+                fontSize: '18px',
+                lineHeight: '1.7',
+                color: '#666666',
+                marginBottom: '25px'
+              }}>
+                My name is Uzo, and I am the founder of Abba's Whispers. This sacred space was born from a journey through profound loss and the healing power of divine conversation.
+              </p>
+              <p style={{
+                fontFamily: 'Georgia, serif',
+                fontSize: '18px',
+                lineHeight: '1.7',
+                color: '#666666',
+                marginBottom: '30px'
+              }}>
+                After losing my beloved husband in 2015, I found myself in a wilderness of grief. It was through poetry inspired by the Psalms that I discovered a bridge between the seen and unseen, the spoken and unspoken.
+              </p>
+              <Link to="/about" style={{
+                fontFamily: 'Georgia, serif',
+                fontSize: '16px',
+                color: '#8b7355',
+                textDecoration: 'underline',
+                borderBottom: '1px solid #8b7355'
+              }}>Read My Story</Link>
+            </div>
+            <div style={{
+              background: '#f8f9fa',
+              padding: '40px',
+              borderRadius: '8px'
+            }}>
+              <h3 style={{
+                fontFamily: 'Georgia, serif',
+                fontSize: '24px',
+                fontWeight: 'normal',
+                color: '#2c2c2c',
+                marginBottom: '20px'
+              }}>The SELAH Series</h3>
+              <p style={{
+                fontFamily: 'Georgia, serif',
+                fontSize: '16px',
+                lineHeight: '1.6',
+                color: '#666666',
+                marginBottom: '20px'
+              }}>
+                SELAH—a Hebrew word meaning "pause and reflect"—became the foundation of my healing journey. This poetry series invites you to pause, breathe, and find your own sacred conversation with the divine.
+              </p>
+              <ul style={{
+                fontFamily: 'Georgia, serif',
+                fontSize: '16px',
+                color: '#666666',
+                lineHeight: '1.6',
+                paddingLeft: '20px'
+              }}>
+                <li>Meditations on comfort and restoration</li>
+                <li>Reflections on divine strength and courage</li>
+                <li>Prayers for peace and tranquility</li>
+                <li>Songs of gratitude and wonder</li>
+              </ul>
+            </div>
           </div>
         </div>
       </section>
 
+      {/* Testimonials */}
+      <section style={{
+        background: '#f8f9fa',
+        padding: '80px 0'
+      }}>
+        <div className="container">
+          <h2 style={{
+            fontFamily: 'Georgia, serif',
+            fontSize: '32px',
+            fontWeight: 'normal',
+            color: '#2c2c2c',
+            textAlign: 'center',
+            marginBottom: '60px'
+          }}>Voices from Our Community</h2>
+          <div style={{
+            display: 'grid',
+            gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))',
+            gap: '40px'
+          }}>
+            <div style={{
+              background: '#ffffff',
+              padding: '40px',
+              borderRadius: '8px',
+              boxShadow: '0 2px 20px rgba(0,0,0,0.05)'
+            }}>
+              <p style={{
+                fontFamily: 'Georgia, serif',
+                fontSize: '16px',
+                fontStyle: 'italic',
+                lineHeight: '1.6',
+                color: '#666666',
+                marginBottom: '20px'
+              }}>
+                "These words found me in my darkest hour and reminded me that I am not alone. The poetry speaks directly to the soul."
+              </p>
+              <div style={{
+                fontFamily: 'Georgia, serif',
+                fontSize: '14px',
+                color: '#8b7355'
+              }}>— Sarah M.</div>
+            </div>
+            <div style={{
+              background: '#ffffff',
+              padding: '40px',
+              borderRadius: '8px',
+              boxShadow: '0 2px 20px rgba(0,0,0,0.05)'
+            }}>
+              <p style={{
+                fontFamily: 'Georgia, serif',
+                fontSize: '16px',
+                fontStyle: 'italic',
+                lineHeight: '1.6',
+                color: '#666666',
+                marginBottom: '20px'
+              }}>
+                "Uzo's journey through grief has become a beacon of hope for so many. Her words heal and inspire."
+              </p>
+              <div style={{
+                fontFamily: 'Georgia, serif',
+                fontSize: '14px',
+                color: '#8b7355'
+              }}>— Michael R.</div>
+            </div>
+            <div style={{
+              background: '#ffffff',
+              padding: '40px',
+              borderRadius: '8px',
+              boxShadow: '0 2px 20px rgba(0,0,0,0.05)'
+            }}>
+              <p style={{
+                fontFamily: 'Georgia, serif',
+                fontSize: '16px',
+                fontStyle: 'italic',
+                lineHeight: '1.6',
+                color: '#666666',
+                marginBottom: '20px'
+              }}>
+                "The SELAH series has transformed my prayer life. Each poem is a doorway to deeper communion with God."
+              </p>
+              <div style={{
+                fontFamily: 'Georgia, serif',
+                fontSize: '14px',
+                color: '#8b7355'
+              }}>— Grace L.</div>
+            </div>
+          </div>
+        </div>
+      </section>
 
-
-
-
-
-
-
+      {/* Newsletter Section */}
+      <section style={{ padding: '80px 0', background: '#ffffff' }}>
+        <div className="container" style={{ textAlign: 'center' }}>
+          <h2 style={{
+            fontFamily: 'Georgia, serif',
+            fontSize: '32px',
+            fontWeight: 'normal',
+            color: '#2c2c2c',
+            marginBottom: '20px'
+          }}>Weekly Whispers</h2>
+          <p style={{
+            fontFamily: 'Georgia, serif',
+            fontSize: '18px',
+            lineHeight: '1.6',
+            color: '#666666',
+            maxWidth: '500px',
+            margin: '0 auto 40px'
+          }}>
+            Receive weekly poetry, reflections, and gentle reminders that you are held in love.
+          </p>
+          <div style={{
+            display: 'flex',
+            justifyContent: 'center',
+            gap: '10px',
+            maxWidth: '400px',
+            margin: '0 auto'
+          }}>
+            <input 
+              type="email" 
+              placeholder="Your email address"
+              style={{
+                flex: 1,
+                padding: '12px 16px',
+                border: '1px solid #e8e8e8',
+                borderRadius: '4px',
+                fontFamily: 'Georgia, serif',
+                fontSize: '16px'
+              }}
+            />
+            <button style={{
+              padding: '12px 24px',
+              background: '#8b7355',
+              color: '#ffffff',
+              border: 'none',
+              borderRadius: '4px',
+              fontFamily: 'Georgia, serif',
+              fontSize: '16px',
+              cursor: 'pointer'
+            }}>Subscribe</button>
+          </div>
+        </div>
+      </section>
 
       {/* Call to Action */}
-      <section className="home-cta">
+      <section style={{
+        background: '#2c2c2c',
+        color: '#ffffff',
+        padding: '80px 0',
+        textAlign: 'center'
+      }}>
         <div className="container">
-          <div className="cta-content">
-            <h2>Join Our Community of Faith</h2>
-            <p>Subscribe to our newsletter for weekly inspirations and be part of a community dedicated to spiritual growth and healing.</p>
-            <div className="cta-actions">
-              <Link to="/contact" className="btn-cta-primary">Get In Touch</Link>
-              <Link to="/prayer-request" className="btn-cta-secondary">Submit Prayer Request</Link>
-            </div>
+          <h2 style={{
+            fontFamily: 'Georgia, serif',
+            fontSize: '32px',
+            fontWeight: 'normal',
+            marginBottom: '20px'
+          }}>Begin Your Sacred Conversation</h2>
+          <p style={{
+            fontFamily: 'Georgia, serif',
+            fontSize: '18px',
+            lineHeight: '1.6',
+            maxWidth: '600px',
+            margin: '0 auto 40px',
+            opacity: 0.9
+          }}>
+            Whether you're walking through grief, seeking deeper faith, or simply longing for words that speak to your soul, you're welcome here.
+          </p>
+          <div style={{ display: 'flex', justifyContent: 'center', gap: '20px', flexWrap: 'wrap' }}>
+            <Link to="/volumes" style={{
+              display: 'inline-block',
+              padding: '15px 30px',
+              background: 'transparent',
+              color: '#ffffff',
+              border: '1px solid #ffffff',
+              borderRadius: '4px',
+              fontFamily: 'Georgia, serif',
+              fontSize: '16px',
+              textDecoration: 'none',
+              transition: 'all 0.3s ease'
+            }}>Explore Poetry</Link>
+            <Link to="/prayer-request" style={{
+              display: 'inline-block',
+              padding: '15px 30px',
+              background: '#8b7355',
+              color: '#ffffff',
+              border: '1px solid #8b7355',
+              borderRadius: '4px',
+              fontFamily: 'Georgia, serif',
+              fontSize: '16px',
+              textDecoration: 'none',
+              transition: 'all 0.3s ease'
+            }}>Share Your Prayer</Link>
           </div>
         </div>
       </section>

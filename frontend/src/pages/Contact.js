@@ -46,13 +46,9 @@ const Contact = () => {
         <meta name="description" content="Contact Abbaswhispers for questions, prayer requests, or to learn more about our Christian writings inspired by the Psalms. We'd love to hear from you." />
       </Helmet>
 
-      <section className="contact-hero" style={{
-        background: 'linear-gradient(rgba(0, 0, 0, 0.4), rgba(0, 0, 0, 0.4)), url("https://images.unsplash.com/photo-1470071459604-3b5ec3a7fe05?ixlib=rb-4.0.3&w=2000&q=80") center/cover no-repeat',
-        padding: '150px 1rem 5rem 1rem',
-        minHeight: '85vh',
-        display: 'flex',
-        alignItems: 'center',
-        color: 'white',
+      <section style={{
+        background: 'var(--background-cream)',
+        padding: '150px 2rem 100px',
         textAlign: 'center'
       }}>
         <div className="container">
@@ -64,23 +60,21 @@ const Contact = () => {
           >
 
             <h1 style={{
-              fontFamily: 'Crimson Pro, serif',
-              fontSize: 'clamp(2.5rem, 5vw, 4rem)',
-              fontWeight: '400',
-              color: 'white',
-              textShadow: '2px 2px 4px rgba(0,0,0,0.5)',
-              marginBottom: '1.5rem'
+              fontFamily: 'Georgia, serif',
+              fontSize: '3.5rem',
+              fontWeight: 'normal',
+              color: 'var(--text-primary)',
+              marginBottom: '2rem',
+              lineHeight: '1.2'
             }}>We'd Love to Hear From You</h1>
             <p style={{
-              fontFamily: 'Crimson Pro, serif',
-              fontSize: 'clamp(1.1rem, 2.5vw, 1.4rem)',
-              fontWeight: '300',
-              maxWidth: '900px',
+              fontFamily: 'Georgia, serif',
+              fontSize: '1.3rem',
+              fontWeight: 'normal',
+              maxWidth: '700px',
               margin: '0 auto',
               lineHeight: '1.7',
-              color: 'white',
-              textShadow: '1px 1px 2px rgba(0,0,0,0.5)',
-              padding: '0 1rem'
+              color: 'var(--text-secondary)'
             }}>
               Your story matters to us. Whether you have questions about our writings, need prayer support, 
               or want to share how the SELAH series has touched your heart, we're here to listen and connect.
@@ -89,9 +83,8 @@ const Contact = () => {
         </div>
       </section>
 
-      <section className="section">
-        <div className="container">
-          <div className="modern-contact-layout">
+      <section style={{ padding: '100px 2rem', background: '#ffffff' }}>
+        <div style={{ maxWidth: '1200px', margin: '0 auto' }}>
             <motion.div
               className="contact-main-card"
               initial={{ opacity: 0, y: 30 }}
@@ -106,12 +99,24 @@ const Contact = () => {
                 boxShadow: '0 8px 30px rgba(0,0,0,0.1)'
               }}
             >
-              <div className="contact-form-wrapper" style={{
-                padding: 'clamp(1.5rem, 4vw, 3rem)',
+              <div style={{
+                padding: '3rem',
                 background: 'white'
               }}>
-                <h2>Send us a Message</h2>
-                <p>We'd love to hear from you. Send us a message and we'll respond as soon as possible.</p>
+                <h2 style={{
+                  fontFamily: 'Georgia, serif',
+                  fontSize: '2rem',
+                  fontWeight: 'normal',
+                  color: 'var(--text-primary)',
+                  marginBottom: '1rem'
+                }}>Send us a Message</h2>
+                <p style={{
+                  fontFamily: 'Georgia, serif',
+                  fontSize: '1.1rem',
+                  color: 'var(--text-secondary)',
+                  marginBottom: '2rem',
+                  lineHeight: '1.6'
+                }}>We'd love to hear from you. Send us a message and we'll respond as soon as possible.</p>
                 
                 <form onSubmit={handleSubmit} className="modern-form">
                   <div className="form-row" style={{
@@ -127,7 +132,18 @@ const Contact = () => {
                         onChange={handleChange}
                         placeholder="Your Name"
                         required
-                        className="form-input"
+                        style={{
+                          fontFamily: 'Crimson Pro, serif',
+                          padding: '1rem',
+                          border: '1px solid #ddd',
+                          borderRadius: '0',
+                          fontSize: '1rem',
+                          fontWeight: '300',
+                          width: '100%',
+                          marginBottom: '1rem',
+                          outline: 'none',
+                          transition: 'border-color 0.3s ease'
+                        }}
                       />
                     </div>
                     <div className="form-group">
@@ -138,7 +154,18 @@ const Contact = () => {
                         onChange={handleChange}
                         placeholder="Your Email"
                         required
-                        className="form-input"
+                        style={{
+                          fontFamily: 'Crimson Pro, serif',
+                          padding: '1rem',
+                          border: '1px solid #ddd',
+                          borderRadius: '0',
+                          fontSize: '1rem',
+                          fontWeight: '300',
+                          width: '100%',
+                          marginBottom: '1rem',
+                          outline: 'none',
+                          transition: 'border-color 0.3s ease'
+                        }}
                       />
                     </div>
                   </div>
@@ -149,7 +176,18 @@ const Contact = () => {
                       value={formData.subject}
                       onChange={handleChange}
                       required
-                      className="form-input"
+                      style={{
+                        fontFamily: 'Crimson Pro, serif',
+                        padding: '1rem',
+                        border: '1px solid #ddd',
+                        borderRadius: '0',
+                        fontSize: '1rem',
+                        fontWeight: '300',
+                        width: '100%',
+                        marginBottom: '1rem',
+                        outline: 'none',
+                        transition: 'border-color 0.3s ease'
+                      }}
                     >
                       <option value="">Select Subject</option>
                       <option value="general">General Inquiry</option>
@@ -167,7 +205,19 @@ const Contact = () => {
                       placeholder="Your Message"
                       required
                       rows="6"
-                      className="form-input"
+                      style={{
+                        fontFamily: 'Crimson Pro, serif',
+                        padding: '1rem',
+                        border: '1px solid #ddd',
+                        borderRadius: '0',
+                        fontSize: '1rem',
+                        fontWeight: '300',
+                        width: '100%',
+                        marginBottom: '1rem',
+                        outline: 'none',
+                        transition: 'border-color 0.3s ease',
+                        resize: 'vertical'
+                      }}
                     />
                   </div>
                   
@@ -239,13 +289,12 @@ const Contact = () => {
                 </div>
               </div>
             </motion.div>
-          </div>
         </div>
       </section>
 
-      {/* Modern FAQ Section */}
-      <section className="section faq-transparent-section">
-        <div className="container">
+      {/* FAQ Section */}
+      <section style={{ padding: '100px 2rem', background: '#f8f9fa' }}>
+        <div style={{ maxWidth: '1200px', margin: '0 auto' }}>
           <motion.div
             className="faq-container"
             initial={{ opacity: 0, y: 30 }}
@@ -253,9 +302,21 @@ const Contact = () => {
             transition={{ duration: 0.8 }}
             viewport={{ once: true }}
           >
-            <div className="faq-header">
-              <h2>Frequently Asked Questions</h2>
-              <p>Quick answers to common questions about our ministry and services</p>
+            <div style={{ textAlign: 'center', marginBottom: '4rem' }}>
+              <h2 style={{
+                fontFamily: 'Georgia, serif',
+                fontSize: '2.5rem',
+                fontWeight: 'normal',
+                color: 'var(--text-primary)',
+                marginBottom: '1rem'
+              }}>Frequently Asked Questions</h2>
+              <p style={{
+                fontFamily: 'Georgia, serif',
+                fontSize: '1.1rem',
+                color: 'var(--text-secondary)',
+                maxWidth: '600px',
+                margin: '0 auto'
+              }}>Quick answers to common questions about our ministry and services</p>
             </div>
             
             <div className="faq-grid" style={{
@@ -281,17 +342,30 @@ const Contact = () => {
                   answer: "Yes, we're available for churches, conferences, and retreats. Contact us for details."
                 }
               ].map((faq, index) => (
-                <motion.div
+                <div
                   key={index}
-                  className="faq-item"
-                  initial={{ opacity: 0, y: 20 }}
-                  whileInView={{ opacity: 1, y: 0 }}
-                  transition={{ duration: 0.6, delay: index * 0.1 }}
-                  viewport={{ once: true }}
+                  style={{
+                    background: '#ffffff',
+                    padding: '2rem',
+                    borderRadius: '8px',
+                    boxShadow: '0 2px 20px rgba(0,0,0,0.05)'
+                  }}
                 >
-                  <h4>{faq.question}</h4>
-                  <p>{faq.answer}</p>
-                </motion.div>
+                  <h4 style={{
+                    fontFamily: 'Georgia, serif',
+                    fontSize: '1.2rem',
+                    fontWeight: 'normal',
+                    color: 'var(--text-primary)',
+                    marginBottom: '1rem'
+                  }}>{faq.question}</h4>
+                  <p style={{
+                    fontFamily: 'Georgia, serif',
+                    fontSize: '1rem',
+                    color: 'var(--text-secondary)',
+                    lineHeight: '1.6',
+                    margin: 0
+                  }}>{faq.answer}</p>
+                </div>
               ))}
             </div>
           </motion.div>

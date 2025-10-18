@@ -1,271 +1,138 @@
-import React, { useState, useEffect } from 'react';
-import { motion } from 'framer-motion';
+import React from 'react';
 import { Helmet } from 'react-helmet';
 
-const aboutImage = '/about.jpg';
-const img1 = '/GCQ28997-Edit.jpg';
-const img2 = '/GCQ28999-Edit.jpg';
-const img3 = '/GCQ29003-Edit.jpg';
-const img4 = '/GCQ29069-Edit.jpg';
-const img5 = '/GCQ29078-Edit.jpg';
-const img6 = '/GCQ29088-Edit.jpg';
-const img7 = '/GCQ29179-Edit.jpg';
-const img8 = '/GCQ29182-Edit.jpg';
-const img9 = '/GCQ29192-Edit.jpg';
-
 const About = () => {
-  const [currentSlide, setCurrentSlide] = useState(0);
-  const [isMobile, setIsMobile] = useState(false);
-  const slideImages = [aboutImage, img1, img2, img3, img4, img5, img6, img7, img8, img9];
-
-  useEffect(() => {
-    const checkMobile = () => {
-      setIsMobile(window.innerWidth <= 768);
-    };
-    checkMobile();
-    window.addEventListener('resize', checkMobile);
-    return () => window.removeEventListener('resize', checkMobile);
-  }, []);
-
-  const nextSlide = () => {
-    setCurrentSlide((prev) => (prev + 1) % slideImages.length);
-  };
-
-  const prevSlide = () => {
-    setCurrentSlide((prev) => (prev - 1 + slideImages.length) % slideImages.length);
-  };
-
   return (
     <>
       <Helmet>
-        <title>About Uzo - Abbaswhispers | From Grief to Grace Through Poetry</title>
-        <meta name="description" content="Meet Uzo, founder of Abbaswhispers and creator of the SELAH poetry series. A journey from devastating loss to finding purpose through faith and reflective writing." />
+        <title>About Uzo - Abba's Whispers | A Journey from Grief to Grace</title>
+        <meta name="description" content="Meet Uzo, founder of Abba's Whispers and creator of the SELAH poetry series. A journey from devastating loss to finding purpose through faith and reflective writing." />
       </Helmet>
 
       <div style={{
-        backgroundColor: '#fefefe',
+        backgroundColor: '#faf9f7',
         minHeight: '100vh',
-        fontFamily: 'Georgia, serif',
-        color: '#5a5a5a'
+        fontFamily: 'Georgia, serif'
       }}>
         
         {/* Hero Section */}
         <section style={{
-          padding: isMobile ? '100px 0 60px 0' : '120px 0 80px 0',
+          padding: '120px 0 80px',
           textAlign: 'center',
-          maxWidth: '800px',
-          margin: '0 auto',
-          paddingLeft: '2rem',
-          paddingRight: '2rem'
+          background: 'linear-gradient(rgba(250, 249, 247, 0.85), rgba(250, 249, 247, 0.85)), url("/about.jpg") center/cover no-repeat',
+          backgroundAttachment: 'fixed'
         }}>
-          <motion.h1
-            initial={{ opacity: 0, y: 30 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.8 }}
-            style={{
-              fontSize: isMobile ? 'clamp(1.5rem, 6vw, 2rem)' : 'clamp(1.8rem, 4vw, 2.5rem)',
-              fontWeight: '300',
-              color: '#4a4a4a',
-              marginBottom: '1.5rem',
-              letterSpacing: '-0.01em',
-              lineHeight: '1.2'
-            }}
-          >
-            About Uzo
-          </motion.h1>
-          
-          <motion.p
-            initial={{ opacity: 0, y: 30 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.8, delay: 0.2 }}
-            style={{
-              fontSize: isMobile ? '0.9rem' : '1rem',
-              color: '#777',
+          <div style={{ maxWidth: '800px', margin: '0 auto', padding: '0 2rem' }}>
+            <h1 style={{
+              fontFamily: 'Georgia, serif',
+              fontSize: '48px',
+              fontWeight: 'normal',
+              color: '#2c2c2c',
+              marginBottom: '30px',
+              lineHeight: '1.2',
+              letterSpacing: '-0.5px'
+            }}>
+              About Uzo
+            </h1>
+            <p style={{
+              fontFamily: 'Georgia, serif',
+              fontSize: '20px',
+              color: '#666666',
               lineHeight: '1.6',
-              fontStyle: 'italic',
-              marginBottom: '2.5rem',
-              fontWeight: '300'
-            }}
-          >
-            Founder of Abba's Whispers, poet, mother, and seeker of sacred conversations
-          </motion.p>
+              fontWeight: 'normal',
+              fontStyle: 'italic'
+            }}>
+              Founder of Abba's Whispers, poet, mother, and seeker of sacred conversations
+            </p>
+          </div>
         </section>
 
-        {/* Main Content with Image Slider */}
+        {/* Main Content */}
         <section style={{
-          maxWidth: '1200px',
-          margin: '0 auto',
-          padding: isMobile ? '0 1rem 60px 1rem' : '0 2rem 80px 2rem'
+          padding: '0 0 80px',
+          background: '#ffffff'
         }}>
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.8 }}
-            viewport={{ once: true }}
-            style={{
-              display: 'grid',
-              gridTemplateColumns: isMobile ? '1fr' : '450px 1fr',
-              gap: isMobile ? '2rem' : '4rem',
-              alignItems: 'start'
-            }}
-          >
-            {/* Image Slider */}
-            <div style={{ position: 'relative' }}>
-              <div style={{
-                position: 'relative',
-                overflow: 'hidden',
-                borderRadius: '12px',
-                boxShadow: '0 8px 30px rgba(0,0,0,0.12)'
-              }}>
-                <img 
-                  src={slideImages[currentSlide]}
-                  alt={`Uzo - Image ${currentSlide + 1}`}
-                  style={{
-                    width: '100%',
-                    height: isMobile ? '300px' : '520px',
-                    objectFit: 'cover',
-                    transition: 'all 0.5s ease'
-                  }}
-                />
-                
-                {/* Navigation Arrows */}
-                <button
-                  onClick={prevSlide}
-                  style={{
-                    position: 'absolute',
-                    left: '10px',
-                    top: '50%',
-                    transform: 'translateY(-50%)',
-                    background: 'rgba(255,255,255,0.9)',
-                    border: 'none',
-                    borderRadius: '50%',
-                    width: isMobile ? '40px' : '50px',
-                    height: isMobile ? '40px' : '50px',
-                    cursor: 'pointer',
-                    fontSize: isMobile ? '18px' : '22px',
-                    color: '#555',
-                    boxShadow: '0 2px 10px rgba(0,0,0,0.2)',
-                    transition: 'all 0.3s ease'
-                  }}
-                >
-                  ‹
-                </button>
-                
-                <button
-                  onClick={nextSlide}
-                  style={{
-                    position: 'absolute',
-                    right: '10px',
-                    top: '50%',
-                    transform: 'translateY(-50%)',
-                    background: 'rgba(255,255,255,0.9)',
-                    border: 'none',
-                    borderRadius: '50%',
-                    width: isMobile ? '40px' : '50px',
-                    height: isMobile ? '40px' : '50px',
-                    cursor: 'pointer',
-                    fontSize: isMobile ? '18px' : '22px',
-                    color: '#555',
-                    boxShadow: '0 2px 10px rgba(0,0,0,0.2)',
-                    transition: 'all 0.3s ease'
-                  }}
-                >
-                  ›
-                </button>
-              </div>
-              
-              {/* Dots Indicator */}
-              <div style={{
-                display: 'flex',
-                justifyContent: 'center',
-                gap: '8px',
-                marginTop: '15px'
-              }}>
-                {slideImages.map((_, index) => (
-                  <button
-                    key={index}
-                    onClick={() => setCurrentSlide(index)}
-                    style={{
-                      width: '12px',
-                      height: '12px',
-                      borderRadius: '50%',
-                      border: 'none',
-                      background: currentSlide === index ? '#666' : '#ddd',
-                      cursor: 'pointer',
-                      transition: 'all 0.3s ease'
-                    }}
-                  />
-                ))}
-              </div>
-              
-              {/* Small Gallery Preview */}
-              <div style={{
-                display: 'grid',
-                gridTemplateColumns: 'repeat(3, 1fr)',
-                gap: '8px',
-                marginTop: '20px'
-              }}>
-                {slideImages.slice(1, 4).map((img, index) => (
-                  <img
-                    key={index}
-                    src={img}
-                    alt={`Preview ${index + 1}`}
-                    onClick={() => setCurrentSlide(index + 1)}
-                    style={{
-                      width: '100%',
-                      height: isMobile ? '60px' : '90px',
-                      objectFit: 'cover',
-                      borderRadius: '6px',
-                      cursor: 'pointer',
-                      opacity: currentSlide === index + 1 ? 1 : 0.7,
-                      transition: 'all 0.3s ease',
-                      border: currentSlide === index + 1 ? '2px solid #666' : '2px solid transparent'
-                    }}
-                  />
-                ))}
-              </div>
-            </div>
+          <div style={{ maxWidth: '800px', margin: '0 auto', padding: '60px 2rem' }}>
             
-            {/* Content */}
-            <div>
+            {/* Opening with Side Image */}
+            <div style={{ marginBottom: '60px', position: 'relative' }}>
+              <img 
+                src="/GCQ28999-Edit.jpg" 
+                alt="Uzo in contemplation"
+                style={{
+                  float: 'right',
+                  width: '300px',
+                  height: '400px',
+                  objectFit: 'cover',
+                  borderRadius: '8px',
+                  boxShadow: '0 8px 30px rgba(0,0,0,0.1)',
+                  marginLeft: '40px',
+                  marginBottom: '20px'
+                }}
+              />
+              
               <p style={{
-                fontSize: isMobile ? '0.9rem' : '0.95rem',
-                lineHeight: '1.7',
-                color: '#666',
-                marginBottom: '1.5rem',
-                fontWeight: '300'
+                fontFamily: 'Georgia, serif',
+                fontSize: '18px',
+                lineHeight: '1.8',
+                color: '#2c2c2c',
+                marginBottom: '30px',
+                fontWeight: 'normal'
               }}>
                 My name is Uzo and I am the founder of <em>Abba's Whispers</em>. I am also a mother, 
                 a singer-songwriter, and an education leader.
               </p>
               
               <p style={{
-                fontSize: isMobile ? '0.9rem' : '0.95rem',
-                lineHeight: '1.7',
-                color: '#666',
-                marginBottom: '2rem',
-                fontWeight: '300'
+                fontFamily: 'Georgia, serif',
+                fontSize: '18px',
+                lineHeight: '1.8',
+                color: '#2c2c2c',
+                marginBottom: '30px',
+                fontWeight: 'normal'
               }}>
                 This space was born from a journey through grief and grace, a testament to the 
                 healing power of words and the sacred conversations that emerge when we dare 
                 to speak our truth.
               </p>
+            </div>
 
+            {/* The SELAH Journey */}
+            <div style={{ marginBottom: '60px', position: 'relative' }}>
+              {/* Background image for this section */}
+              {window.innerWidth > 768 && (
+                <div style={{
+                  position: 'absolute',
+                  top: '-40px',
+                  right: '-60px',
+                  width: '200px',
+                  height: '300px',
+                  backgroundImage: 'url("/GCQ29003-Edit.jpg")',
+                  backgroundSize: 'cover',
+                  backgroundPosition: 'center',
+                  opacity: 0.1,
+                  borderRadius: '8px',
+                  zIndex: -1
+                }} />
+              )}
               <h2 style={{
-                fontSize: isMobile ? '1.2rem' : '1.4rem',
-                fontWeight: '300',
-                color: '#555',
-                marginBottom: '1.5rem'
+                fontFamily: 'Georgia, serif',
+                fontSize: '28px',
+                fontWeight: 'normal',
+                color: '#2c2c2c',
+                marginBottom: '30px',
+                lineHeight: '1.3'
               }}>
                 The SELAH Journey
               </h2>
               
               <p style={{
-                fontSize: isMobile ? '0.85rem' : '0.9rem',
-                lineHeight: '1.7',
-                color: '#666',
-                marginBottom: '1.5rem',
-                fontWeight: '300'
+                fontFamily: 'Georgia, serif',
+                fontSize: '16px',
+                lineHeight: '1.8',
+                color: '#666666',
+                marginBottom: '25px',
+                fontWeight: 'normal'
               }}>
                 My poetry series is called <em>SELAH</em>. This series played a pivotal role in 
                 helping me grow from grief. I lost my beloved husband in 2015 from a devastating illness. 
@@ -274,11 +141,12 @@ const About = () => {
               </p>
               
               <p style={{
-                fontSize: isMobile ? '0.85rem' : '0.9rem',
-                lineHeight: '1.7',
-                color: '#666',
-                marginBottom: '1.5rem',
-                fontWeight: '300'
+                fontFamily: 'Georgia, serif',
+                fontSize: '16px',
+                lineHeight: '1.8',
+                color: '#666666',
+                marginBottom: '25px',
+                fontWeight: 'normal'
               }}>
                 The only things that kept me going were looking after our children and speaking to God, 
                 who I call 'Abba,' meaning Father. Though for a couple of years, I'm not sure I was 
@@ -287,33 +155,82 @@ const About = () => {
               </p>
               
               <p style={{
-                fontSize: isMobile ? '0.85rem' : '0.9rem',
-                lineHeight: '1.7',
-                color: '#666',
-                marginBottom: '2rem',
-                fontWeight: '300'
+                fontFamily: 'Georgia, serif',
+                fontSize: '16px',
+                lineHeight: '1.8',
+                color: '#666666',
+                marginBottom: '25px',
+                fontWeight: 'normal'
               }}>
                 In 2021, my Abba asked me to come out of the shadows… to begin once again to live a 
                 life of purpose and destiny. I have wondered for a long time what this message meant to me. 
                 I have always wrestled with my identity… Who am I? What am I? What am I called to do 
                 in this world? What do I have to offer to my fellow human beings?
               </p>
+            </div>
 
+            {/* Image Gallery */}
+            <div style={{
+              display: 'grid',
+              gridTemplateColumns: window.innerWidth <= 768 ? '1fr' : 'repeat(3, 1fr)',
+              gap: '20px',
+              marginBottom: '60px'
+            }}>
+              <img 
+                src="/GCQ29069-Edit.jpg" 
+                alt="Contemplative moment"
+                style={{
+                  width: '100%',
+                  height: '200px',
+                  objectFit: 'cover',
+                  borderRadius: '8px',
+                  opacity: 0.8
+                }}
+              />
+              <img 
+                src="/GCQ29078-Edit.jpg" 
+                alt="Peaceful reflection"
+                style={{
+                  width: '100%',
+                  height: '200px',
+                  objectFit: 'cover',
+                  borderRadius: '8px',
+                  opacity: 0.8
+                }}
+              />
+              <img 
+                src="/GCQ29088-Edit.jpg" 
+                alt="Sacred space"
+                style={{
+                  width: '100%',
+                  height: '200px',
+                  objectFit: 'cover',
+                  borderRadius: '8px',
+                  opacity: 0.8
+                }}
+              />
+            </div>
+
+            {/* From Pain to Purpose */}
+            <div style={{ marginBottom: '60px' }}>
               <h2 style={{
-                fontSize: isMobile ? '1.2rem' : '1.4rem',
-                fontWeight: '300',
-                color: '#555',
-                marginBottom: '1.5rem'
+                fontFamily: 'Georgia, serif',
+                fontSize: '28px',
+                fontWeight: 'normal',
+                color: '#2c2c2c',
+                marginBottom: '30px',
+                lineHeight: '1.3'
               }}>
                 From Pain to Purpose
               </h2>
               
               <p style={{
-                fontSize: isMobile ? '0.85rem' : '0.9rem',
-                lineHeight: '1.7',
-                color: '#666',
-                marginBottom: '1.5rem',
-                fontWeight: '300'
+                fontFamily: 'Georgia, serif',
+                fontSize: '16px',
+                lineHeight: '1.8',
+                color: '#666666',
+                marginBottom: '25px',
+                fontWeight: 'normal'
               }}>
                 Through the darkness of loss, I discovered that poetry could be a bridge between 
                 the seen and unseen, the spoken and unspoken. Each word became a step toward healing, 
@@ -321,43 +238,180 @@ const About = () => {
               </p>
               
               <p style={{
-                fontSize: isMobile ? '0.85rem' : '0.9rem',
-                lineHeight: '1.7',
-                color: '#666',
-                marginBottom: '1.5rem',
-                fontWeight: '300'
+                fontFamily: 'Georgia, serif',
+                fontSize: '16px',
+                lineHeight: '1.8',
+                color: '#666666',
+                marginBottom: '25px',
+                fontWeight: 'normal'
               }}>
                 <em>Abba's Whispers</em> is more than a collection of poems—it is an invitation to join 
                 a sacred conversation, to find your own voice in the silence, and to discover that 
                 even in our deepest grief, we are never truly alone.
               </p>
             </div>
-          </motion.div>
+
+            {/* What SELAH Means */}
+            <div style={{ 
+              background: '#f8f9fa', 
+              padding: '40px', 
+              borderRadius: '8px',
+              marginBottom: '60px'
+            }}>
+              <h3 style={{
+                fontFamily: 'Georgia, serif',
+                fontSize: '22px',
+                fontWeight: 'normal',
+                color: '#2c2c2c',
+                marginBottom: '20px',
+                textAlign: 'center'
+              }}>
+                What is SELAH?
+              </h3>
+              <p style={{
+                fontFamily: 'Georgia, serif',
+                fontSize: '16px',
+                lineHeight: '1.7',
+                color: '#666666',
+                textAlign: 'center',
+                fontStyle: 'italic',
+                margin: 0
+              }}>
+                SELAH is a Hebrew word found throughout the Psalms, meaning "pause and reflect." 
+                It invites us to stop, breathe deeply, and allow the words to settle into our souls. 
+                In our hurried world, SELAH reminds us that healing happens in the pauses, 
+                in the sacred spaces between words.
+              </p>
+            </div>
+
+            {/* Personal Touch */}
+            <div>
+              <p style={{
+                fontFamily: 'Georgia, serif',
+                fontSize: '16px',
+                lineHeight: '1.8',
+                color: '#666666',
+                marginBottom: '25px',
+                fontWeight: 'normal'
+              }}>
+                Today, I continue to write, to sing, to teach, and to mother. But most importantly, 
+                I continue to listen for those whispers—those gentle nudges from Abba that remind me 
+                I am loved, I am held, and I am never alone.
+              </p>
+              
+              <p style={{
+                fontFamily: 'Georgia, serif',
+                fontSize: '16px',
+                lineHeight: '1.8',
+                color: '#666666',
+                fontWeight: 'normal'
+              }}>
+                If you are walking through your own valley, if you are searching for words to express 
+                the inexpressible, or if you simply long for a sacred conversation, I invite you to 
+                pause here with me. Let us listen together for the whispers that heal.
+              </p>
+            </div>
+          </div>
         </section>
 
         {/* Quote Section */}
         <section style={{
-          backgroundColor: '#f8f8f8',
-          padding: isMobile ? '60px 1rem' : '80px 2rem',
-          textAlign: 'center'
+          background: 'linear-gradient(rgba(248, 249, 250, 0.95), rgba(248, 249, 250, 0.95)), url("/GCQ29179-Edit.jpg") center/cover no-repeat',
+          padding: '80px 2rem',
+          textAlign: 'center',
+          backgroundAttachment: 'fixed'
         }}>
-          <motion.blockquote
-            initial={{ opacity: 0, y: 30 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.8 }}
-            viewport={{ once: true }}
-            style={{
-              fontSize: isMobile ? '1rem' : '1.1rem',
+          <div style={{ maxWidth: '600px', margin: '0 auto' }}>
+            <blockquote style={{
+              fontFamily: 'Georgia, serif',
+              fontSize: '24px',
               fontStyle: 'italic',
-              color: '#777',
-              maxWidth: '500px',
-              margin: '0 auto',
-              lineHeight: '1.6',
-              fontWeight: '300'
-            }}
-          >
-            "In the silence between words, we find the space where healing begins."
-          </motion.blockquote>
+              color: '#2c2c2c',
+              lineHeight: '1.5',
+              fontWeight: 'normal',
+              marginBottom: '20px',
+              margin: 0
+            }}>
+              "In the silence between words, we find the space where healing begins."
+            </blockquote>
+            <cite style={{
+              fontFamily: 'Georgia, serif',
+              fontSize: '16px',
+              color: '#8b7355',
+              fontStyle: 'normal',
+              display: 'block',
+              marginTop: '20px'
+            }}>
+              — Uzo, Founder of Abba's Whispers
+            </cite>
+          </div>
+        </section>
+
+        {/* Connect Section */}
+        <section style={{
+          padding: '80px 2rem',
+          background: 'linear-gradient(rgba(44, 44, 44, 0.9), rgba(44, 44, 44, 0.9)), url("/GCQ29192-Edit.jpg") center/cover no-repeat',
+          color: '#ffffff',
+          textAlign: 'center',
+          backgroundAttachment: 'fixed'
+        }}>
+          <div style={{ maxWidth: '600px', margin: '0 auto' }}>
+            <h2 style={{
+              fontFamily: 'Georgia, serif',
+              fontSize: '28px',
+              fontWeight: 'normal',
+              marginBottom: '20px'
+            }}>
+              Join the Conversation
+            </h2>
+            <p style={{
+              fontFamily: 'Georgia, serif',
+              fontSize: '16px',
+              lineHeight: '1.7',
+              marginBottom: '30px',
+              opacity: 0.9
+            }}>
+              Whether you're seeking comfort, inspiration, or simply a place to pause and reflect, 
+              you're welcome in this sacred space.
+            </p>
+            <div style={{ 
+              display: 'flex', 
+              justifyContent: 'center', 
+              gap: '20px', 
+              flexWrap: 'wrap',
+              flexDirection: window.innerWidth <= 768 ? 'column' : 'row',
+              alignItems: 'center'
+            }}>
+              <a href="/volumes" style={{
+                display: 'inline-block',
+                padding: '12px 24px',
+                background: 'transparent',
+                color: '#ffffff',
+                border: '1px solid #ffffff',
+                borderRadius: '4px',
+                fontFamily: 'Georgia, serif',
+                fontSize: '16px',
+                textDecoration: 'none',
+                transition: 'all 0.3s ease'
+              }}>
+                Read Poetry
+              </a>
+              <a href="/contact" style={{
+                display: 'inline-block',
+                padding: '12px 24px',
+                background: '#8b7355',
+                color: '#ffffff',
+                border: '1px solid #8b7355',
+                borderRadius: '4px',
+                fontFamily: 'Georgia, serif',
+                fontSize: '16px',
+                textDecoration: 'none',
+                transition: 'all 0.3s ease'
+              }}>
+                Get in Touch
+              </a>
+            </div>
+          </div>
         </section>
       </div>
     </>

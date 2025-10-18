@@ -180,7 +180,17 @@ const PrayerRequest = () => {
                       value={formData.name}
                       onChange={handleChange}
                       placeholder="Your Name (Optional)"
-                      className="prayer-input"
+                      style={{
+                        fontFamily: 'Crimson Pro, serif',
+                        padding: '1rem',
+                        border: '1px solid #ddd',
+                        borderRadius: '0',
+                        fontSize: '1rem',
+                        fontWeight: '300',
+                        width: '100%',
+                        outline: 'none',
+                        transition: 'border-color 0.3s ease'
+                      }}
                     />
                   </div>
 
@@ -191,7 +201,17 @@ const PrayerRequest = () => {
                       value={formData.email}
                       onChange={handleChange}
                       placeholder="Email for Updates (Optional)"
-                      className="prayer-input"
+                      style={{
+                        fontFamily: 'Crimson Pro, serif',
+                        padding: '1rem',
+                        border: '1px solid #ddd',
+                        borderRadius: '0',
+                        fontSize: '1rem',
+                        fontWeight: '300',
+                        width: '100%',
+                        outline: 'none',
+                        transition: 'border-color 0.3s ease'
+                      }}
                     />
                   </div>
 
@@ -201,7 +221,17 @@ const PrayerRequest = () => {
                       value={formData.category}
                       onChange={handleChange}
                       required
-                      className="prayer-input"
+                      style={{
+                        fontFamily: 'Crimson Pro, serif',
+                        padding: '1rem',
+                        border: '1px solid #ddd',
+                        borderRadius: '0',
+                        fontSize: '1rem',
+                        fontWeight: '300',
+                        width: '100%',
+                        outline: 'none',
+                        transition: 'border-color 0.3s ease'
+                      }}
                     >
                       <option value="">Select Prayer Category</option>
                       <option value="healing">Healing & Health</option>
@@ -223,7 +253,18 @@ const PrayerRequest = () => {
                       required
                       rows="6"
                       placeholder="Share your prayer request with our team. Every word matters to us and to God."
-                      className="prayer-input prayer-textarea"
+                      style={{
+                        fontFamily: 'Crimson Pro, serif',
+                        padding: '1rem',
+                        border: '1px solid #ddd',
+                        borderRadius: '0',
+                        fontSize: '1rem',
+                        fontWeight: '300',
+                        width: '100%',
+                        outline: 'none',
+                        transition: 'border-color 0.3s ease',
+                        resize: 'vertical'
+                      }}
                     />
                   </div>
 
@@ -277,115 +318,11 @@ const PrayerRequest = () => {
                 </form>
               </div>
             </motion.div>
-
-            <motion.div
-              className="prayer-info-sidebar"
-              initial={{ opacity: 0, x: 30 }}
-              animate={{ opacity: 1, x: 0 }}
-              transition={{ duration: 0.8, delay: 0.4 }}
-              style={{
-                display: 'flex',
-                flexDirection: 'column',
-                gap: '1.5rem'
-              }}
-            >
-              <div className="prayer-info-card">
-                <h3>Our Promise</h3>
-                <div className="info-item">
-                  <div>
-                    <h4>Immediate Prayer</h4>
-                    <p>We pray as soon as we receive your request</p>
-                  </div>
-                </div>
-                <div className="info-item">
-                  <div>
-                    <h4>Complete Privacy</h4>
-                    <p>All requests kept strictly confidential</p>
-                  </div>
-                </div>
-                <div className="info-item">
-                  <div>
-                    <h4>Caring Team</h4>
-                    <p>Dedicated prayer warriors lift you up</p>
-                  </div>
-                </div>
-              </div>
-              
-              <div className="scripture-card">
-                <h4>Scripture Promise</h4>
-                <blockquote>
-                  "Ask and it will be given to you; seek and you will find; knock and the door will be opened to you."
-                </blockquote>
-                <cite>- Matthew 7:7</cite>
-              </div>
-              
-              <div className="urgent-card">
-                <h4>Urgent Needs?</h4>
-                <p>For urgent prayer requests, you can also call our prayer line at <strong>+1 (555) PRAY-NOW</strong> or email us directly at <strong>urgent@abbawhispers.com</strong></p>
-              </div>
-            </motion.div>
           </div>
         </div>
       </section>
 
-      {/* Testimonials */}
-      <section className="section" style={{ background: 'var(--cream)' }}>
-        <div className="container">
-          <motion.div
-            className="text-center"
-            initial={{ opacity: 0, y: 30 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.8 }}
-            viewport={{ once: true }}
-          >
-            <h2>Prayer Testimonials</h2>
-            <p>See how God has answered prayers in our community</p>
-          </motion.div>
 
-          {prayerTestimonials.length > 0 ? (
-            <div className="grid grid-3" style={{ 
-              marginTop: '3rem',
-              display: 'grid',
-              gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))',
-              gap: 'clamp(1rem, 3vw, 2rem)'
-            }}>
-              {prayerTestimonials.slice(0, 3).map((testimonial, index) => (
-                <motion.div
-                  key={testimonial.id}
-                  className="card"
-                  initial={{ opacity: 0, y: 30 }}
-                  whileInView={{ opacity: 1, y: 0 }}
-                  transition={{ duration: 0.6, delay: index * 0.2 }}
-                  viewport={{ once: true }}
-                >
-                  <div style={{
-                    background: 'rgba(212, 175, 55, 0.1)',
-                    color: 'var(--primary-gold)',
-                    padding: '0.3rem 0.8rem',
-                    borderRadius: '15px',
-                    fontSize: '0.8rem',
-                    fontWeight: '500',
-                    display: 'inline-block',
-                    marginBottom: '1rem'
-                  }}>
-                    {testimonial.category}
-                  </div>
-                  <p style={{ fontStyle: 'italic', marginBottom: '1rem', lineHeight: '1.6' }}>
-                    "{testimonial.testimony}"
-                  </p>
-                  <div style={{ textAlign: 'right', fontWeight: '500', color: 'var(--primary-gold)' }}>
-                    - {testimonial.author_name}
-                  </div>
-                </motion.div>
-              ))}
-            </div>
-          ) : (
-            <div style={{ textAlign: 'center', padding: '2rem', color: '#666' }}>
-              <p>Prayer testimonials will appear here as they are shared by our community.</p>
-            </div>
-          )}
-        </div>
-      </section>
     </>
   );
 };

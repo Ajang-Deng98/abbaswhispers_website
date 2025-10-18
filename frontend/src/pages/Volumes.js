@@ -73,92 +73,83 @@ const Volumes = () => {
       </Helmet>
 
       {/* Hero Section */}
-      <section className="volumes-hero" style={{
-        background: 'linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)), url("https://images.unsplash.com/photo-1441974231531-c6227db76b6e?ixlib=rb-4.0.3&w=2071&q=80") center/cover no-repeat',
-        color: '#ffffff',
-        padding: '150px 1rem 5rem 1rem',
-        textAlign: 'center',
-        minHeight: '85vh',
-        display: 'flex',
-        alignItems: 'center'
+      <section style={{
+        background: '#ffffff',
+        padding: '120px 1rem 80px 1rem',
+        textAlign: 'center'
       }}>
-        <div className="container">
+        <div className="container" style={{ maxWidth: '800px', margin: '0 auto' }}>
           <motion.div
-            className="volumes-hero-content"
             initial={{ opacity: 0, y: 30 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.8 }}
           >
-
             <h1 style={{
               fontFamily: 'Crimson Pro, serif',
-              fontSize: 'clamp(2.5rem, 5vw, 4rem)',
-              fontWeight: '400',
-              marginBottom: '1.5rem',
-              color: 'white',
-              textShadow: '2px 2px 4px rgba(0, 0, 0, 0.5)'
-            }}>SELAH - My Debut Poetry Series</h1>
-            <p style={{
-              fontFamily: 'Crimson Pro, serif',
-              fontSize: 'clamp(1.1rem, 2.5vw, 1.4rem)',
+              fontSize: 'clamp(2rem, 4vw, 2.8rem)',
               fontWeight: '300',
               marginBottom: '2rem',
-              color: 'white',
-              textShadow: '1px 1px 2px rgba(0, 0, 0, 0.5)',
-              maxWidth: '800px',
-              margin: '0 auto 2rem',
-              lineHeight: '1.7',
-              padding: '0 1rem'
-            }}>Immerse yourself in my debut collection of inspirational poetry, each piece carefully crafted from a journey through grief into grace. Experience the power of spoken word with professional audio narrations that bring every emotion to life.</p>
-            <div className="volumes-stats" style={{
-              display: 'grid',
-              gridTemplateColumns: 'repeat(auto-fit, minmax(100px, 1fr))',
-              gap: 'clamp(1rem, 3vw, 3rem)',
-              maxWidth: '500px',
-              margin: '0 auto'
-            }}>
-              <div className="stat-item">
-                <span className="stat-number">{volumes.length}</span>
-                <span className="stat-label">Poems</span>
-              </div>
-              <div className="stat-item">
-                <span className="stat-number">5</span>
-                <span className="stat-label">Categories</span>
-              </div>
-              <div className="stat-item">
-                <span className="stat-number">Audio</span>
-                <span className="stat-label">Included</span>
-              </div>
-            </div>
+              color: '#333',
+              lineHeight: '1.3',
+              letterSpacing: '0.5px'
+            }}>SELAH</h1>
+            <p style={{
+              fontFamily: 'Crimson Pro, serif',
+              fontSize: 'clamp(1rem, 2vw, 1.2rem)',
+              fontWeight: '300',
+              marginBottom: '3rem',
+              color: '#666',
+              maxWidth: '600px',
+              margin: '0 auto 3rem',
+              lineHeight: '1.8'
+            }}>A collection of poetry born from the sacred pause between heartbreak and healing, where silence becomes song.</p>
           </motion.div>
         </div>
       </section>
 
       {/* Category Filter */}
-      <section className="volumes-filter">
-        <div className="container">
+      <section style={{
+        background: '#f9f9f9',
+        padding: '60px 1rem'
+      }}>
+        <div className="container" style={{ maxWidth: '900px', margin: '0 auto' }}>
           <motion.div
-            className="filter-container"
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.6, delay: 0.2 }}
+            style={{ textAlign: 'center' }}
           >
-            <h2>Browse Collections</h2>
-            <div className="category-grid" style={{
-              display: 'grid',
-              gridTemplateColumns: 'repeat(auto-fit, minmax(180px, 1fr))',
-              gap: '1rem',
-              maxWidth: '1000px',
-              margin: '0 auto'
+            <h2 style={{
+              fontFamily: 'Crimson Pro, serif',
+              fontSize: '1.5rem',
+              fontWeight: '300',
+              marginBottom: '2rem',
+              color: '#555'
+            }}>Explore by Theme</h2>
+            <div style={{
+              display: 'flex',
+              flexWrap: 'wrap',
+              justifyContent: 'center',
+              gap: '1rem'
             }}>
               {categories.map((category) => (
                 <button
                   key={category.value}
                   onClick={() => setSelectedCategory(category.value)}
-                  className={`category-card ${selectedCategory === category.value ? 'active' : ''}`}
+                  style={{
+                    background: selectedCategory === category.value ? '#333' : 'transparent',
+                    color: selectedCategory === category.value ? 'white' : '#666',
+                    border: '1px solid #ddd',
+                    padding: '0.5rem 1.2rem',
+                    borderRadius: '25px',
+                    fontSize: '0.9rem',
+                    fontWeight: '300',
+                    cursor: 'pointer',
+                    transition: 'all 0.3s ease',
+                    fontFamily: 'Crimson Pro, serif'
+                  }}
                 >
-                  <span className="category-label">{category.label}</span>
-                  <span className="category-count">{getCategoryCount(category.value)}</span>
+                  {category.label} ({getCategoryCount(category.value)})
                 </button>
               ))}
             </div>
@@ -190,20 +181,27 @@ const Volumes = () => {
                 }}>Get Notified</a>
               </div>
             ) : (
-            <div className="volumes-grid" style={{
+            <div style={{
               display: 'grid',
-              gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))',
-              gap: 'clamp(1rem, 3vw, 2rem)',
-              maxWidth: '1200px',
+              gridTemplateColumns: 'repeat(auto-fit, minmax(350px, 1fr))',
+              gap: '2rem',
+              maxWidth: '1000px',
               margin: '0 auto'
             }}>
               {filteredVolumes.map((volume, index) => (
               <motion.div
                 key={volume.id}
-                className="volume-card"
                 initial={{ opacity: 0, y: 30 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.6, delay: index * 0.1 }}
+                style={{
+                  background: 'white',
+                  borderRadius: '0',
+                  padding: '2rem',
+                  border: 'none',
+                  borderBottom: '1px solid #eee',
+                  transition: 'all 0.3s ease'
+                }}
               >
                 {volume.image && (
                   <div className="volume-image">
@@ -224,25 +222,48 @@ const Volumes = () => {
                     </div>
                   </div>
                 )}
-                <div className="volume-content">
-                  <h3 className="volume-title">{volume.title}</h3>
-                  <div className="volume-description">
+                <div>
+                  <h3 style={{
+                    fontFamily: 'Crimson Pro, serif',
+                    fontSize: '1.3rem',
+                    fontWeight: '300',
+                    marginBottom: '1rem',
+                    color: '#333'
+                  }}>{volume.title}</h3>
+                  <div style={{
+                    fontFamily: 'Crimson Pro, serif',
+                    fontSize: '1rem',
+                    lineHeight: '1.7',
+                    color: '#666',
+                    marginBottom: '1.5rem',
+                    fontWeight: '300'
+                  }}>
                     {volume.description}
                   </div>
-                  <div className="volume-actions" style={{
+                  <div style={{
                     display: 'flex',
-                    gap: '0.75rem',
+                    gap: '1rem',
                     flexWrap: 'wrap'
                   }}>
                     <button 
-                      className="btn-primary"
                       onClick={() => setSelectedVolume(volume)}
+                      style={{
+                        background: 'transparent',
+                        color: '#333',
+                        border: '1px solid #ddd',
+                        padding: '0.6rem 1.5rem',
+                        borderRadius: '25px',
+                        fontSize: '0.9rem',
+                        fontWeight: '300',
+                        cursor: 'pointer',
+                        transition: 'all 0.3s ease',
+                        fontFamily: 'Crimson Pro, serif'
+                      }}
                     >
-                      Read Full Poem
+                      Read Poem
                     </button>
                     <div className="audio-controls">
                       <button 
-                        className="btn-secondary audio-btn"
                         onClick={() => {
                           const audio = document.getElementById(`audio-${volume.id}`);
                           
@@ -268,8 +289,20 @@ const Volumes = () => {
                             }
                           }
                         }}
+                        style={{
+                          background: playingAudio === volume.id ? '#333' : 'transparent',
+                          color: playingAudio === volume.id ? 'white' : '#666',
+                          border: '1px solid #ddd',
+                          padding: '0.6rem 1.5rem',
+                          borderRadius: '25px',
+                          fontSize: '0.9rem',
+                          fontWeight: '300',
+                          cursor: 'pointer',
+                          transition: 'all 0.3s ease',
+                          fontFamily: 'Crimson Pro, serif'
+                        }}
                       >
-                        {playingAudio === volume.id ? '⏸️ Pause' : '▶️ Listen'}
+                        {playingAudio === volume.id ? 'Pause' : 'Listen'}
                       </button>
                       {playingAudio === volume.id && (
                         <div className="audio-progress" style={{
@@ -378,18 +411,46 @@ const Volumes = () => {
       )}
 
       {/* CTA Section */}
-      <section className="volumes-cta">
-        <div className="container">
+      <section style={{
+        background: '#f9f9f9',
+        padding: '80px 1rem',
+        textAlign: 'center'
+      }}>
+        <div className="container" style={{ maxWidth: '600px', margin: '0 auto' }}>
           <motion.div
-            className="cta-content"
             initial={{ opacity: 0, y: 30 }}
             whileInView={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.8 }}
             viewport={{ once: true }}
           >
-            <h2>Complete SELAH Collection</h2>
-            <p>Experience the full journey with professional recordings and beautiful illustrations.</p>
-            <a href="/contact" className="btn-cta">Get Notified</a>
+            <h2 style={{
+              fontFamily: 'Crimson Pro, serif',
+              fontSize: '1.8rem',
+              fontWeight: '300',
+              marginBottom: '1.5rem',
+              color: '#333'
+            }}>The Complete Collection</h2>
+            <p style={{
+              fontFamily: 'Crimson Pro, serif',
+              fontSize: '1.1rem',
+              fontWeight: '300',
+              marginBottom: '2rem',
+              color: '#666',
+              lineHeight: '1.7'
+            }}>Be among the first to experience the full SELAH journey when it becomes available.</p>
+            <a href="/contact" style={{
+              display: 'inline-block',
+              background: 'transparent',
+              color: '#333',
+              border: '1px solid #ddd',
+              padding: '0.8rem 2rem',
+              borderRadius: '25px',
+              fontSize: '1rem',
+              fontWeight: '300',
+              textDecoration: 'none',
+              transition: 'all 0.3s ease',
+              fontFamily: 'Crimson Pro, serif'
+            }}>Stay Connected</a>
           </motion.div>
         </div>
       </section>
