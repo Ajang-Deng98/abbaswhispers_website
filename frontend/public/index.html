@@ -1,22 +1,58 @@
 <!DOCTYPE html>
 <html lang="en">
   <head>
-    <meta charset="UTF-8" />
-    <link rel="icon" type="image/svg+xml" href="/logo.jpg" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <meta name="theme-color" content="#D4AF37" />
-    <meta name="description" content="Abba Whispers - Christian faith-based writings inspired by the Book of Psalms. Healing and empowering poetry and inspirational content." />
+    <meta charset="utf-8" />
+    <link rel="icon" href="%PUBLIC_URL%/favicon.ico" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="theme-color" content="#8b7355" />
+    <meta name="description" content="Abba's Whispers - Christian poetry and spiritual reflection inspired by the Psalms. Join Uzo's healing journey through the SELAH series." />
     
-    <!-- Google Fonts -->
+    <!-- Preconnect to external domains -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Crimson+Pro:ital,wght@0,300;0,400;0,500;0,600;1,300;1,400&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+    <link rel="preconnect" href="https://www.google-analytics.com">
     
-    <title>Abba Whispers - Christian Poetry & Inspirational Writings</title>
+    <!-- Apple Touch Icon -->
+    <link rel="apple-touch-icon" href="%PUBLIC_URL%/logo192.png" />
+    
+    <!-- Manifest -->
+    <link rel="manifest" href="%PUBLIC_URL%/manifest.json" />
+    
+    <!-- Google Search Console Verification -->
+    <meta name="google-site-verification" content="your-verification-code" />
+    
+    <!-- Organization Schema -->
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "Organization",
+      "name": "Abba's Whispers",
+      "description": "Christian poetry and spiritual reflection inspired by the Psalms",
+      "url": "https://abbawhispers.com",
+      "logo": "https://abbawhispers.com/logo.png",
+      "founder": {
+        "@type": "Person",
+        "name": "Uzo",
+        "description": "Christian poet, spiritual guide, and creator of the SELAH poetry series"
+      },
+      "sameAs": [
+        "https://www.facebook.com/abbawhispers",
+        "https://www.instagram.com/abbawhispers",
+        "https://twitter.com/abbawhispers"
+      ],
+      "contactPoint": {
+        "@type": "ContactPoint",
+        "telephone": "+1-XXX-XXX-XXXX",
+        "contactType": "customer service",
+        "email": "info@abbawhispers.com"
+      }
+    }
+    </script>
+    
+    <title>Abba's Whispers - Christian Poetry & Spiritual Healing</title>
   </head>
   <body>
     <noscript>You need to enable JavaScript to run this app.</noscript>
     <div id="root"></div>
-    <script type="module" src="/src/index.js"></script>
   </body>
 </html>

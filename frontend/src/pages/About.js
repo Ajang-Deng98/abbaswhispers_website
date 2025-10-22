@@ -2,11 +2,13 @@ import React from 'react';
 import { Helmet } from 'react-helmet';
 
 const About = () => {
+  
   return (
     <>
       <Helmet>
-        <title>About Uzo - Abba's Whispers | A Journey from Grief to Grace</title>
-        <meta name="description" content="Meet Uzo, founder of Abba's Whispers and creator of the SELAH poetry series. A journey from devastating loss to finding purpose through faith and reflective writing." />
+        <title>About Uzo - Christian Poet & Founder of Abba's Whispers | SELAH Series Creator</title>
+        <meta name="description" content="Meet Uzo, acclaimed Christian poet and founder of Abba's Whispers. Discover her transformative journey from devastating loss to spiritual healing through the SELAH poetry series." />
+        <meta name="keywords" content="Uzo poet, Christian poet biography, SELAH series creator, spiritual healing journey, grief to grace, faith poetry" />
       </Helmet>
 
       <div style={{
@@ -17,9 +19,13 @@ const About = () => {
         
         {/* Hero Section */}
         <section style={{
-          padding: '120px 0 80px',
+          minHeight: '100vh',
+          padding: '0',
+          display: 'flex',
+          alignItems: 'center',
+          justifyContent: 'center',
           textAlign: 'center',
-          background: 'linear-gradient(rgba(250, 249, 247, 0.85), rgba(250, 249, 247, 0.85)), url("/about.jpg") center/cover no-repeat',
+          background: 'url("/hero-image-aboutpage.JPG") center/cover no-repeat',
           backgroundAttachment: 'fixed'
         }}>
           <div style={{ maxWidth: '800px', margin: '0 auto', padding: '0 2rem' }}>
@@ -37,7 +43,7 @@ const About = () => {
             <p style={{
               fontFamily: 'Georgia, serif',
               fontSize: '20px',
-              color: '#666666',
+              color: '#f4d03f',
               lineHeight: '1.6',
               fontWeight: 'normal',
               fontStyle: 'italic'

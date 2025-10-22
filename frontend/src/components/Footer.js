@@ -17,11 +17,21 @@ const Footer = () => {
     setMessage('');
     
     try {
-      await subscriberAPI.subscribe({ email });
-      setMessage('Successfully subscribed!');
+      const response = await subscriberAPI.subscribe({ email });
+      if (response.data.message && response.data.message.includes('already subscribed')) {
+        setMessage('📬 You are already subscribed! Thank you for your continued support.');
+      } else {
+        setMessage('🎉 Success! Thank you for subscribing to our newsletter.');
+      }
       setEmail('');
     } catch (error) {
-      setMessage('Error subscribing. Please try again.');
+      console.error('Newsletter subscription error:', error);
+      if (error.response?.data?.message?.includes('already subscribed')) {
+        setMessage('📬 You are already subscribed! Thank you for your continued support.');
+        setEmail('');
+      } else {
+        setMessage('There was an error with your subscription. Please try again.');
+      }
     } finally {
       setIsSubmitting(false);
     }
@@ -155,16 +165,28 @@ const Footer = () => {
                 disabled={isSubmitting}
                 style={{
                   padding: '10px 20px',
-                  background: 'var(--primary-gold)',
+                  background: isSubmitting ? '#999999' : '#8b7355',
                   color: 'white',
                   border: 'none',
                   borderRadius: '25px',
                   fontSize: '0.9rem',
-                  cursor: 'pointer',
-                  fontWeight: '500'
+                  cursor: isSubmitting ? 'not-allowed' : 'pointer',
+                  fontWeight: '500',
+                  transition: 'all 0.3s ease',
+                  opacity: isSubmitting ? 0.7 : 1
+                }}
+                onMouseEnter={(e) => {
+                  if (!isSubmitting) {
+                    e.target.style.background = '#6d5a42';
+                  }
+                }}
+                onMouseLeave={(e) => {
+                  if (!isSubmitting) {
+                    e.target.style.background = '#8b7355';
+                  }
                 }}
               >
-                {isSubmitting ? '...' : 'Subscribe'}
+                {isSubmitting ? 'Subscribing...' : 'Subscribe'}
               </button>
             </form>
           </div>

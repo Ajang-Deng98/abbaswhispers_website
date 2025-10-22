@@ -2,12 +2,10 @@ import React, { useState } from 'react';
 import { motion } from 'framer-motion';
 import { Helmet } from 'react-helmet';
 import { contactAPI } from '../utils/api';
-
 const Contact = () => {
   const [formData, setFormData] = useState({
     name: '',
     email: '',
-    subject: '',
     message: ''
   });
   const [isSubmitting, setIsSubmitting] = useState(false);
@@ -23,19 +21,21 @@ const Contact = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     setIsSubmitting(true);
+    setSubmitMessage('');
     
-    // Simulate form submission delay
-    setTimeout(() => {
-      setSubmitMessage('Thank you for your message! We have received it and will get back to you soon. For immediate assistance, please email us directly at info@abbawhispers.com');
-      setFormData({ name: '', email: '', subject: '', message: '' });
-      setIsSubmitting(false);
-    }, 1000);
-    
-    // Try to submit to API in background (won't affect user experience)
     try {
-      await contactAPI.submitForm(formData);
+      const submitData = {
+        ...formData,
+        subject: 'Contact Form Message'
+      };
+      await contactAPI.submitForm(submitData);
+      setSubmitMessage('Thank you for your message! We have received it and will get back to you soon. For immediate assistance, please email us directly at info@abbawhispers.com');
+      setFormData({ name: '', email: '', message: '' });
     } catch (error) {
-      console.log('API submission failed, but user already sees success message');
+      console.error('Contact form submission error:', error);
+      setSubmitMessage('There was an error sending your message. Please try again or email us directly at info@abbawhispers.com');
+    } finally {
+      setIsSubmitting(false);
     }
   };
 
@@ -46,333 +46,480 @@ const Contact = () => {
         <meta name="description" content="Contact Abbaswhispers for questions, prayer requests, or to learn more about our Christian writings inspired by the Psalms. We'd love to hear from you." />
       </Helmet>
 
+      {/* Hero Section */}
       <section style={{
-        background: 'var(--background-cream)',
-        padding: '150px 2rem 100px',
-        textAlign: 'center'
+        background: 'url("/backgroundtextimage2.JPG") center/cover no-repeat',
+        padding: '180px 2rem 120px 2rem',
+        textAlign: 'center',
+        color: '#ffffff',
+        minHeight: '70vh',
+        display: 'flex',
+        alignItems: 'center'
       }}>
-        <div className="container">
+        <div style={{ maxWidth: '800px', margin: '0 auto' }}>
           <motion.div
-            className="text-center"
             initial={{ opacity: 0, y: 30 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.8 }}
           >
-
             <h1 style={{
               fontFamily: 'Georgia, serif',
-              fontSize: '3.5rem',
+              fontSize: 'clamp(2rem, 4vw, 3rem)',
               fontWeight: 'normal',
-              color: 'var(--text-primary)',
-              marginBottom: '2rem',
-              lineHeight: '1.2'
-            }}>We'd Love to Hear From You</h1>
+              marginBottom: '1.5rem',
+              color: '#ffffff',
+              lineHeight: '1.1',
+              letterSpacing: '-0.02em',
+              textShadow: '2px 2px 4px rgba(0,0,0,0.5)'
+            }}>Connect</h1>
             <p style={{
               fontFamily: 'Georgia, serif',
-              fontSize: '1.3rem',
+              fontSize: '1rem',
               fontWeight: 'normal',
-              maxWidth: '700px',
+              marginBottom: '0',
+              color: '#ffffff',
+              maxWidth: '600px',
               margin: '0 auto',
-              lineHeight: '1.7',
-              color: 'var(--text-secondary)'
-            }}>
-              Your story matters to us. Whether you have questions about our writings, need prayer support, 
-              or want to share how the SELAH series has touched your heart, we're here to listen and connect.
-            </p>
+              lineHeight: '1.6',
+              textShadow: '1px 1px 2px rgba(0,0,0,0.5)'
+            }}>We welcome your thoughts, questions, and the stories that shape your spiritual journey.</p>
           </motion.div>
         </div>
       </section>
 
-      <section style={{ padding: '100px 2rem', background: '#ffffff' }}>
-        <div style={{ maxWidth: '1200px', margin: '0 auto' }}>
-            <motion.div
-              className="contact-main-card"
-              initial={{ opacity: 0, y: 30 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.8 }}
-              style={{
-                display: 'grid',
-                gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))',
-                gap: '0',
-                borderRadius: '16px',
-                overflow: 'hidden',
-                boxShadow: '0 8px 30px rgba(0,0,0,0.1)'
-              }}
-            >
-              <div style={{
-                padding: '3rem',
-                background: 'white'
-              }}>
-                <h2 style={{
-                  fontFamily: 'Georgia, serif',
-                  fontSize: '2rem',
-                  fontWeight: 'normal',
-                  color: 'var(--text-primary)',
-                  marginBottom: '1rem'
-                }}>Send us a Message</h2>
-                <p style={{
-                  fontFamily: 'Georgia, serif',
-                  fontSize: '1.1rem',
-                  color: 'var(--text-secondary)',
-                  marginBottom: '2rem',
-                  lineHeight: '1.6'
-                }}>We'd love to hear from you. Send us a message and we'll respond as soon as possible.</p>
-                
-                <form onSubmit={handleSubmit} className="modern-form">
-                  <div className="form-row" style={{
-                    display: 'grid',
-                    gridTemplateColumns: 'repeat(auto-fit, minmax(250px, 1fr))',
-                    gap: '1rem'
-                  }}>
-                    <div className="form-group">
-                      <input
-                        type="text"
-                        name="name"
-                        value={formData.name}
-                        onChange={handleChange}
-                        placeholder="Your Name"
-                        required
-                        style={{
-                          fontFamily: 'Crimson Pro, serif',
-                          padding: '1rem',
-                          border: '1px solid #ddd',
-                          borderRadius: '0',
-                          fontSize: '1rem',
-                          fontWeight: '300',
-                          width: '100%',
-                          marginBottom: '1rem',
-                          outline: 'none',
-                          transition: 'border-color 0.3s ease'
-                        }}
-                      />
-                    </div>
-                    <div className="form-group">
-                      <input
-                        type="email"
-                        name="email"
-                        value={formData.email}
-                        onChange={handleChange}
-                        placeholder="Your Email"
-                        required
-                        style={{
-                          fontFamily: 'Crimson Pro, serif',
-                          padding: '1rem',
-                          border: '1px solid #ddd',
-                          borderRadius: '0',
-                          fontSize: '1rem',
-                          fontWeight: '300',
-                          width: '100%',
-                          marginBottom: '1rem',
-                          outline: 'none',
-                          transition: 'border-color 0.3s ease'
-                        }}
-                      />
-                    </div>
-                  </div>
-                  
-                  <div className="form-group">
-                    <select
-                      name="subject"
-                      value={formData.subject}
-                      onChange={handleChange}
-                      required
-                      style={{
-                        fontFamily: 'Crimson Pro, serif',
-                        padding: '1rem',
-                        border: '1px solid #ddd',
-                        borderRadius: '0',
-                        fontSize: '1rem',
-                        fontWeight: '300',
-                        width: '100%',
-                        marginBottom: '1rem',
-                        outline: 'none',
-                        transition: 'border-color 0.3s ease'
-                      }}
-                    >
-                      <option value="">Select Subject</option>
-                      <option value="general">General Inquiry</option>
-                      <option value="feedback">Feedback</option>
-                      <option value="prayer">Prayer Request</option>
-                      <option value="collaboration">Collaboration</option>
-                    </select>
-                  </div>
-                  
-                  <div className="form-group">
-                    <textarea
-                      name="message"
-                      value={formData.message}
-                      onChange={handleChange}
-                      placeholder="Your Message"
-                      required
-                      rows="6"
-                      style={{
-                        fontFamily: 'Crimson Pro, serif',
-                        padding: '1rem',
-                        border: '1px solid #ddd',
-                        borderRadius: '0',
-                        fontSize: '1rem',
-                        fontWeight: '300',
-                        width: '100%',
-                        marginBottom: '1rem',
-                        outline: 'none',
-                        transition: 'border-color 0.3s ease',
-                        resize: 'vertical'
-                      }}
-                    />
-                  </div>
-                  
-                  <button type="submit" className="form-submit-btn" disabled={isSubmitting}>
-                    {isSubmitting ? 'Sending...' : 'Send Message'}
-                  </button>
-                  
-                  {submitMessage && (
-                    <div className={`form-message ${submitMessage.includes('error') ? 'error' : 'success'}`}>
-                      {submitMessage}
-                    </div>
-                  )}
-                </form>
-              </div>
-              
-              <div className="contact-info-sidebar" style={{
-                background: 'linear-gradient(135deg, rgba(212, 175, 55, 0.9) 0%, rgba(218, 165, 32, 0.9) 100%)',
-                color: 'white',
-                padding: 'clamp(1.5rem, 4vw, 2rem)'
-              }}>
-                <div className="info-section">
-                  <h3>Get in Touch</h3>
-                  <div className="info-item">
-                    <div>
-                      <p><strong>Email</strong></p>
-                      <p>info@abbawhispers.com</p>
-                      <p>prayer@abbawhispers.com</p>
-                    </div>
-                  </div>
-                  <div className="info-item">
-                    <div>
-                      <p><strong>Phone</strong></p>
-                      <p>+1 (555) 123-4567</p>
-                      <small>Mon-Fri, 9 AM - 5 PM EST</small>
-                    </div>
-                  </div>
-                  <div className="info-item">
-                    <div>
-                      <p><strong>Response Time</strong></p>
-                      <small>Within 24-48 hours</small>
-                    </div>
-                  </div>
-                </div>
-                
-                <div className="social-section">
-                  <h4>Follow Us</h4>
-                  <div className="social-links">
-                    <a href="https://facebook.com/abbaswhispers" target="_blank" rel="noopener noreferrer" title="Facebook" className="social-link facebook">
-                      <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
-                        <path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z"/>
-                      </svg>
-                    </a>
-                    <a href="https://twitter.com/abbaswhispers" target="_blank" rel="noopener noreferrer" title="Twitter" className="social-link twitter">
-                      <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
-                        <path d="M23.953 4.57a10 10 0 01-2.825.775 4.958 4.958 0 002.163-2.723c-.951.555-2.005.959-3.127 1.184a4.92 4.92 0 00-8.384 4.482C7.69 8.095 4.067 6.13 1.64 3.162a4.822 4.822 0 00-.666 2.475c0 1.71.87 3.213 2.188 4.096a4.904 4.904 0 01-2.228-.616v.06a4.923 4.923 0 003.946 4.827 4.996 4.996 0 01-2.212.085 4.936 4.936 0 004.604 3.417 9.867 9.867 0 01-6.102 2.105c-.39 0-.779-.023-1.17-.067a13.995 13.995 0 007.557 2.209c9.053 0 13.998-7.496 13.998-13.985 0-.21 0-.42-.015-.63A9.935 9.935 0 0024 4.59z"/>
-                      </svg>
-                    </a>
-                    <a href="https://instagram.com/abbaswhispers" target="_blank" rel="noopener noreferrer" title="Instagram" className="social-link instagram">
-                      <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
-                        <path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z"/>
-                      </svg>
-                    </a>
-                    <a href="https://youtube.com/@abbaswhispers" target="_blank" rel="noopener noreferrer" title="YouTube" className="social-link youtube">
-                      <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
-                        <path d="M23.498 6.186a3.016 3.016 0 0 0-2.122-2.136C19.505 3.545 12 3.545 12 3.545s-7.505 0-9.377.505A3.017 3.017 0 0 0 .502 6.186C0 8.07 0 12 0 12s0 3.93.502 5.814a3.016 3.016 0 0 0 2.122 2.136c1.871.505 9.376.505 9.376.505s7.505 0 9.377-.505a3.015 3.015 0 0 0 2.122-2.136C24 15.93 24 12 24 12s0-3.93-.502-5.814zM9.545 15.568V8.432L15.818 12l-6.273 3.568z"/>
-                      </svg>
-                    </a>
-                  </div>
-                </div>
-              </div>
-            </motion.div>
-        </div>
-      </section>
-
-      {/* FAQ Section */}
-      <section style={{ padding: '100px 2rem', background: '#f8f9fa' }}>
-        <div style={{ maxWidth: '1200px', margin: '0 auto' }}>
-          <motion.div
-            className="faq-container"
-            initial={{ opacity: 0, y: 30 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.8 }}
-            viewport={{ once: true }}
-          >
-            <div style={{ textAlign: 'center', marginBottom: '4rem' }}>
+      {/* Main Content */}
+      <div style={{
+        maxWidth: '1000px',
+        margin: '0 auto',
+        padding: '5rem 2rem'
+      }}>
+        
+        {/* Introduction Section */}
+        <section style={{ marginBottom: '5rem' }}>
+          <div style={{
+            display: 'grid',
+            gridTemplateColumns: window.innerWidth > 768 ? '1fr 2fr' : '1fr',
+            gap: '4rem',
+            alignItems: 'start'
+          }}>
+            <div>
               <h2 style={{
                 fontFamily: 'Georgia, serif',
-                fontSize: '2.5rem',
+                fontSize: '1.4rem',
                 fontWeight: 'normal',
-                color: 'var(--text-primary)',
-                marginBottom: '1rem'
-              }}>Frequently Asked Questions</h2>
+                color: '#2c2c2c',
+                marginBottom: '1.2rem',
+                lineHeight: '1.2'
+              }}>Let's Begin a Conversation</h2>
+            </div>
+            <div>
+              <p style={{
+                fontFamily: 'Georgia, serif',
+                fontSize: '1.2rem',
+                lineHeight: '1.7',
+                color: '#666666',
+                marginBottom: '2rem',
+                fontWeight: 'normal'
+              }}>
+                Every message that arrives here is received as a gift. Whether you're sharing how these writings have touched your life, seeking guidance on your spiritual journey, or simply wanting to connect, we welcome your words.
+              </p>
+              <p style={{
+                fontFamily: 'Georgia, serif',
+                fontSize: '1.2rem',
+                lineHeight: '1.7',
+                color: '#666666',
+                marginBottom: '2rem',
+                fontWeight: 'normal'
+              }}>
+                In a world that often moves too quickly for meaningful exchange, we believe in the power of thoughtful correspondence and genuine human connection.
+              </p>
+            </div>
+          </div>
+        </section>
+
+        {/* Contact Form Section */}
+        <section style={{
+          borderTop: '1px solid #e8e8e8',
+          paddingTop: '5rem',
+          marginBottom: '5rem'
+        }}>
+          <div style={{
+            display: 'grid',
+            gridTemplateColumns: window.innerWidth > 768 ? '1fr 2fr' : '1fr',
+            gap: '4rem'
+          }}>
+            <div>
+              <h3 style={{
+                fontFamily: 'Georgia, serif',
+                fontSize: '1.2rem',
+                fontWeight: 'normal',
+                color: '#2c2c2c',
+                marginBottom: '0.8rem'
+              }}>Send a Message</h3>
+              <p style={{
+                fontFamily: 'Georgia, serif',
+                fontSize: '1rem',
+                lineHeight: '1.6',
+                color: '#666666',
+                marginBottom: '2rem'
+              }}>
+                We read every message personally and respond with care. Please allow 24-48 hours for a thoughtful reply.
+              </p>
+            </div>
+            
+            <div>
+              <form onSubmit={handleSubmit} style={{
+                display: 'flex',
+                flexDirection: 'column',
+                gap: '2rem'
+              }}>
+                <div>
+                  <input
+                    type="text"
+                    name="name"
+                    value={formData.name}
+                    onChange={handleChange}
+                    placeholder="Your name"
+                    required
+                    style={{
+                      fontFamily: 'Georgia, serif',
+                      padding: '1rem 0',
+                      border: 'none',
+                      borderBottom: '1px solid #e8e8e8',
+                      fontSize: '1rem',
+                      fontWeight: 'normal',
+                      width: '100%',
+                      outline: 'none',
+                      background: 'transparent'
+                    }}
+                  />
+                </div>
+
+                <div>
+                  <input
+                    type="email"
+                    name="email"
+                    value={formData.email}
+                    onChange={handleChange}
+                    placeholder="Email address"
+                    required
+                    style={{
+                      fontFamily: 'Georgia, serif',
+                      padding: '1rem 0',
+                      border: 'none',
+                      borderBottom: '1px solid #e8e8e8',
+                      fontSize: '1rem',
+                      fontWeight: 'normal',
+                      width: '100%',
+                      outline: 'none',
+                      background: 'transparent'
+                    }}
+                  />
+                </div>
+
+
+
+                <div>
+                  <textarea
+                    name="message"
+                    value={formData.message}
+                    onChange={handleChange}
+                    placeholder="Your message..."
+                    required
+                    rows="6"
+                    style={{
+                      fontFamily: 'Georgia, serif',
+                      padding: '1rem 0',
+                      border: 'none',
+                      borderBottom: '1px solid #e8e8e8',
+                      fontSize: '1rem',
+                      fontWeight: 'normal',
+                      width: '100%',
+                      outline: 'none',
+                      background: 'transparent',
+                      resize: 'vertical'
+                    }}
+                  />
+                </div>
+
+                <button 
+                  type="submit" 
+                  disabled={isSubmitting}
+                  style={{
+                    fontFamily: 'Georgia, serif',
+                    padding: '1rem 2rem',
+                    border: '1px solid #8b7355',
+                    background: 'transparent',
+                    color: '#8b7355',
+                    fontSize: '1rem',
+                    fontWeight: 'normal',
+                    cursor: 'pointer',
+                    transition: 'all 0.3s ease',
+                    alignSelf: 'flex-start'
+                  }}
+                  onMouseEnter={(e) => {
+                    e.target.style.background = '#8b7355';
+                    e.target.style.color = 'white';
+                  }}
+                  onMouseLeave={(e) => {
+                    e.target.style.background = 'transparent';
+                    e.target.style.color = '#8b7355';
+                  }}
+                >
+                  {isSubmitting ? 'Sending...' : 'Send Message'}
+                </button>
+
+                {submitMessage && (
+                  <div style={{ 
+                    padding: '1rem',
+                    backgroundColor: submitMessage.includes('error') ? '#ffebee' : '#f0f8f0',
+                    color: submitMessage.includes('error') ? '#c62828' : '#2e7d32',
+                    fontSize: '0.9rem'
+                  }}>
+                    {submitMessage}
+                  </div>
+                )}
+              </form>
+            </div>
+          </div>
+        </section>
+
+        {/* Contact Information Section */}
+        <section style={{
+          borderTop: '1px solid #e8e8e8',
+          paddingTop: '5rem',
+          marginBottom: '5rem'
+        }}>
+          <div style={{
+            display: 'grid',
+            gridTemplateColumns: window.innerWidth > 768 ? '1fr 2fr' : '1fr',
+            gap: '4rem'
+          }}>
+            <div>
+              <h3 style={{
+                fontFamily: 'Georgia, serif',
+                fontSize: '1.8rem',
+                fontWeight: 'normal',
+                color: '#2c2c2c',
+                marginBottom: '1.5rem'
+              }}>Other Ways to Connect</h3>
+            </div>
+            <div>
+              <div style={{ marginBottom: '3rem' }}>
+                <h4 style={{
+                  fontFamily: 'Georgia, serif',
+                  fontSize: '1.2rem',
+                  fontWeight: 'normal',
+                  color: '#2c2c2c',
+                  marginBottom: '1rem'
+                }}>Email</h4>
+                <p style={{
+                  fontFamily: 'Georgia, serif',
+                  fontSize: '1rem',
+                  color: '#666666',
+                  marginBottom: '0.5rem'
+                }}>General inquiries: <a href="mailto:info@abbawhispers.com" style={{ color: '#8b7355', textDecoration: 'none', borderBottom: '1px solid #8b7355' }}>info@abbawhispers.com</a></p>
+                <p style={{
+                  fontFamily: 'Georgia, serif',
+                  fontSize: '1rem',
+                  color: '#666666'
+                }}>Prayer requests: <a href="mailto:prayer@abbawhispers.com" style={{ color: '#8b7355', textDecoration: 'none', borderBottom: '1px solid #8b7355' }}>prayer@abbawhispers.com</a></p>
+              </div>
+              
+              <div style={{ marginBottom: '3rem' }}>
+                <h4 style={{
+                  fontFamily: 'Georgia, serif',
+                  fontSize: '1.2rem',
+                  fontWeight: 'normal',
+                  color: '#2c2c2c',
+                  marginBottom: '1rem'
+                }}>Response Time</h4>
+                <p style={{
+                  fontFamily: 'Georgia, serif',
+                  fontSize: '1rem',
+                  color: '#666666'
+                }}>We typically respond within 24-48 hours. For urgent prayer requests, please use our dedicated prayer request form.</p>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        {/* Philosophy Section */}
+        <section style={{
+          borderTop: '1px solid #e8e8e8',
+          paddingTop: '5rem'
+        }}>
+          <div style={{
+            display: 'grid',
+            gridTemplateColumns: window.innerWidth > 768 ? '1fr 2fr' : '1fr',
+            gap: '4rem'
+          }}>
+            <div>
+              <h3 style={{
+                fontFamily: 'Georgia, serif',
+                fontSize: '1.8rem',
+                fontWeight: 'normal',
+                color: '#2c2c2c',
+                marginBottom: '1.5rem'
+              }}>Our Approach</h3>
+            </div>
+            <div>
               <p style={{
                 fontFamily: 'Georgia, serif',
                 fontSize: '1.1rem',
-                color: 'var(--text-secondary)',
-                maxWidth: '600px',
-                margin: '0 auto'
-              }}>Quick answers to common questions about our ministry and services</p>
+                lineHeight: '1.7',
+                color: '#666666',
+                marginBottom: '2rem',
+                fontWeight: 'normal'
+              }}>
+                We believe that every person who reaches out is seeking something sacred—whether it's understanding, connection, or simply the comfort of being heard. Our responses are crafted with the same care and intention that we bring to our writings.
+              </p>
+              <p style={{
+                fontFamily: 'Georgia, serif',
+                fontSize: '1.1rem',
+                lineHeight: '1.7',
+                color: '#666666',
+                fontWeight: 'normal'
+              }}>
+                In this digital age, we remain committed to the ancient art of meaningful correspondence, treating each exchange as an opportunity for genuine human connection and spiritual growth.
+              </p>
             </div>
-            
-            <div className="faq-grid" style={{
-              display: 'grid',
-              gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))',
-              gap: '1.5rem'
-            }}>
-              {[
-                {
-                  question: "How often do you publish new content?",
-                  answer: "We publish new blog posts weekly and release new volumes monthly. Subscribe to stay updated!"
-                },
-                {
-                  question: "Are your volumes available in print?",
-                  answer: "Currently digital only, but we're exploring print options for the future."
-                },
-                {
-                  question: "Can I request prayer for specific situations?",
-                  answer: "Absolutely! Visit our Prayer Request page. All requests are kept confidential."
-                },
-                {
-                  question: "Do you offer speaking engagements?",
-                  answer: "Yes, we're available for churches, conferences, and retreats. Contact us for details."
-                }
-              ].map((faq, index) => (
-                <div
-                  key={index}
-                  style={{
-                    background: '#ffffff',
-                    padding: '2rem',
-                    borderRadius: '8px',
-                    boxShadow: '0 2px 20px rgba(0,0,0,0.05)'
-                  }}
-                >
-                  <h4 style={{
-                    fontFamily: 'Georgia, serif',
-                    fontSize: '1.2rem',
-                    fontWeight: 'normal',
-                    color: 'var(--text-primary)',
-                    marginBottom: '1rem'
-                  }}>{faq.question}</h4>
-                  <p style={{
-                    fontFamily: 'Georgia, serif',
-                    fontSize: '1rem',
-                    color: 'var(--text-secondary)',
-                    lineHeight: '1.6',
-                    margin: 0
-                  }}>{faq.answer}</p>
-                </div>
-              ))}
-            </div>
-          </motion.div>
+          </div>
+        </section>
+      </div>
+
+      {/* Community Section */}
+      <section style={{
+        background: 'linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)), url("/backgroundimage4.JPG") center/cover no-repeat',
+        padding: '5rem 2rem',
+        color: 'white',
+        textAlign: 'center'
+      }}>
+        <div style={{ maxWidth: '800px', margin: '0 auto' }}>
+          <h2 style={{
+            fontFamily: 'Georgia, serif',
+            fontSize: '2rem',
+            fontWeight: 'normal',
+            color: 'white',
+            marginBottom: '2rem'
+          }}>Join Our Community</h2>
+          <p style={{
+            fontFamily: 'Georgia, serif',
+            fontSize: '1.2rem',
+            lineHeight: '1.7',
+            color: 'white',
+            marginBottom: '2rem'
+          }}>
+            You are invited into a community of seekers, dreamers, and believers who understand 
+            that the spiritual journey is both deeply personal and beautifully communal.
+          </p>
+          <p style={{
+            fontFamily: 'Georgia, serif',
+            fontSize: '1.1rem',
+            lineHeight: '1.7',
+            color: 'white'
+          }}>
+            Whether you're walking through a season of joy or navigating the valleys of grief, 
+            you'll find companions here who honor both the questions and the quiet revelations 
+            that shape our faith.
+          </p>
         </div>
       </section>
 
+      {/* Ways to Connect Section */}
+      <section style={{ padding: '5rem 2rem', background: '#ffffff' }}>
+        <div style={{ maxWidth: '1000px', margin: '0 auto' }}>
+          <h2 style={{
+            fontFamily: 'Georgia, serif',
+            fontSize: '2rem',
+            fontWeight: 'normal',
+            color: '#2c2c2c',
+            marginBottom: '3rem',
+            textAlign: 'center'
+          }}>Ways to Connect</h2>
+          
+          <div style={{
+            display: 'grid',
+            gridTemplateColumns: window.innerWidth > 768 ? 'repeat(3, 1fr)' : '1fr',
+            gap: '3rem'
+          }}>
+            <div style={{ textAlign: 'center' }}>
+              <h4 style={{
+                fontFamily: 'Georgia, serif',
+                fontSize: '1.2rem',
+                fontWeight: 'normal',
+                color: '#2c2c2c',
+                marginBottom: '1rem'
+              }}>Share Your Story</h4>
+              <p style={{
+                fontFamily: 'Georgia, serif',
+                fontSize: '1rem',
+                lineHeight: '1.6',
+                color: '#666666'
+              }}>
+                Tell us how these writings have touched your life or share your own journey of faith and healing.
+              </p>
+            </div>
+            
+            <div style={{ textAlign: 'center' }}>
+              <h4 style={{
+                fontFamily: 'Georgia, serif',
+                fontSize: '1.2rem',
+                fontWeight: 'normal',
+                color: '#2c2c2c',
+                marginBottom: '1rem'
+              }}>Ask Questions</h4>
+              <p style={{
+                fontFamily: 'Georgia, serif',
+                fontSize: '1rem',
+                lineHeight: '1.6',
+                color: '#666666'
+              }}>
+                Bring your spiritual questions, your doubts, your wonderings. All sincere seekers are welcome here.
+              </p>
+            </div>
+            
+            <div style={{ textAlign: 'center' }}>
+              <h4 style={{
+                fontFamily: 'Georgia, serif',
+                fontSize: '1.2rem',
+                fontWeight: 'normal',
+                color: '#2c2c2c',
+                marginBottom: '1rem'
+              }}>Collaborate</h4>
+              <p style={{
+                fontFamily: 'Georgia, serif',
+                fontSize: '1rem',
+                lineHeight: '1.6',
+                color: '#666666'
+              }}>
+                Interested in speaking engagements, writing collaborations, or community partnerships? Let's explore together.
+              </p>
+            </div>
+          </div>
+        </div>
+      </section>
 
+      {/* Quote Section */}
+      <section style={{ padding: '5rem 2rem', background: '#f8f9fa', textAlign: 'center' }}>
+        <div style={{ maxWidth: '700px', margin: '0 auto' }}>
+          <blockquote style={{
+            fontFamily: 'Georgia, serif',
+            fontSize: '1.5rem',
+            fontStyle: 'italic',
+            color: '#2c2c2c',
+            lineHeight: '1.5',
+            marginBottom: '2rem'
+          }}>
+            "We are all just walking each other home."
+          </blockquote>
+          <cite style={{
+            fontFamily: 'Georgia, serif',
+            fontSize: '1rem',
+            color: '#8b7355'
+          }}>— Ram Dass</cite>
+        </div>
+      </section>
     </>
   );
 };

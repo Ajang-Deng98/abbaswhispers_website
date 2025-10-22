@@ -69,6 +69,17 @@ class SubscriberViewSet(viewsets.ModelViewSet):
         if self.action == 'create':
             return [AllowAny()]
         return [IsAuthenticated()]
+    
+    def create(self, request, *args, **kwargs):
+        email = request.data.get('email')
+        if not email:
+            return Response({'error': 'Email is required'}, status=status.HTTP_400_BAD_REQUEST)
+        
+        # Check if email already exists
+        if Subscriber.objects.filter(email=email).exists():
+            return Response({'message': 'You are already subscribed!'}, status=status.HTTP_200_OK)
+        
+        return super().create(request, *args, **kwargs)
 
 class CommentViewSet(viewsets.ModelViewSet):
     queryset = Comment.objects.all()
@@ -98,7 +109,13 @@ class CommentViewSet(viewsets.ModelViewSet):
                 status=status.HTTP_400_BAD_REQUEST
             )
         
-        return super().create(request, *args, **kwargs)
+        response = super().create(request, *args, **kwargs)
+        if response.status_code == 201:
+            return Response({
+                'message': 'We have successfully received your reflection. Thank you for sharing your thoughts with our community.',
+                'data': response.data
+            }, status=status.HTTP_201_CREATED)
+        return response
 
 class TestimonialViewSet(viewsets.ModelViewSet):
     queryset = Testimonial.objects.filter(status='published').order_by('order', '-created_at')
@@ -197,7 +214,10 @@ def create_comment(request):
     
     serializer = CommentSerializer(data=request.data)
     if serializer.is_valid():
-        serializer.save()
-        return Response(serializer.data, status=status.HTTP_201_CREATED)
+        comment = serializer.save()
+        return Response({
+            'message': 'We have successfully received your reflection. Thank you for sharing your thoughts with our community.',
+            'data': serializer.data
+        }, status=status.HTTP_201_CREATED)
     
     return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)

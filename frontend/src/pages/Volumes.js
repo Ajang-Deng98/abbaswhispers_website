@@ -1,10 +1,9 @@
 import React, { useState, useEffect, useCallback } from 'react';
 import { motion } from 'framer-motion';
 import { Helmet } from 'react-helmet';
-import { volumeAPI } from '../utils/api';
+import { volumeAPI, subscriberAPI } from '../utils/api';
 import { useRealTimeData } from '../hooks/useRealTimeData';
 import LoadingSpinner from '../components/LoadingSpinner';
-
 const Volumes = () => {
   const [volumes, setVolumes] = useState([]);
   const [selectedCategory, setSelectedCategory] = useState('all');
@@ -13,6 +12,9 @@ const Volumes = () => {
   const [audioProgress, setAudioProgress] = useState({});
   const [audioDuration, setAudioDuration] = useState({});
   const [loading, setLoading] = useState(true);
+  const [signupForm, setSignupForm] = useState({ name: '', email: '', message: '' });
+  const [isSubmittingSignup, setIsSubmittingSignup] = useState(false);
+  const [signupMessage, setSignupMessage] = useState('');
 
   const loadVolumes = useCallback(async () => {
     setLoading(true);
@@ -47,6 +49,42 @@ const Volumes = () => {
   // Real-time updates every 30 seconds
   useRealTimeData(loadVolumes, [selectedCategory], 30000);
 
+  const handleSignupChange = (e) => {
+    setSignupForm({
+      ...signupForm,
+      [e.target.name]: e.target.value
+    });
+  };
+
+  const handleSignupSubmit = async (e) => {
+    e.preventDefault();
+    setIsSubmittingSignup(true);
+    setSignupMessage('');
+    
+    try {
+      const response = await subscriberAPI.subscribe({
+        email: signupForm.email,
+        name: signupForm.name
+      });
+      if (response.data.message && response.data.message.includes('already subscribed')) {
+        setSignupMessage('📬 You are already subscribed! Thank you for your continued support.');
+      } else {
+        setSignupMessage('🎉 Success! Thank you for signing up for volume updates. You\'ll be the first to know when the seven new SELAH collections are released.');
+      }
+      setSignupForm({ name: '', email: '', message: '' });
+    } catch (error) {
+      console.error('Signup form submission error:', error);
+      if (error.response?.data?.message?.includes('already subscribed')) {
+        setSignupMessage('📬 You are already subscribed! Thank you for your continued support.');
+        setSignupForm({ name: '', email: '', message: '' });
+      } else {
+        setSignupMessage('There was an error with your signup. Please try again or contact us directly.');
+      }
+    } finally {
+      setIsSubmittingSignup(false);
+    }
+  };
+
   const categories = [
     { value: 'all', label: 'All Collections' },
     { value: 'thanksgiving', label: 'Thanksgiving' },
@@ -74,304 +112,485 @@ const Volumes = () => {
 
       {/* Hero Section */}
       <section style={{
-        background: '#ffffff',
-        padding: '120px 1rem 80px 1rem',
-        textAlign: 'center'
+        background: 'url("/heroimage-volumepage.JPG") center/cover no-repeat',
+        padding: '180px 2rem 120px 2rem',
+        textAlign: 'center',
+        color: '#ffffff',
+        minHeight: '70vh',
+        display: 'flex',
+        alignItems: 'center'
       }}>
-        <div className="container" style={{ maxWidth: '800px', margin: '0 auto' }}>
+        <div style={{ maxWidth: '800px', margin: '0 auto' }}>
           <motion.div
             initial={{ opacity: 0, y: 30 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.8 }}
           >
             <h1 style={{
-              fontFamily: 'Crimson Pro, serif',
-              fontSize: 'clamp(2rem, 4vw, 2.8rem)',
-              fontWeight: '300',
-              marginBottom: '2rem',
-              color: '#333',
-              lineHeight: '1.3',
-              letterSpacing: '0.5px'
+              fontFamily: 'Georgia, serif',
+              fontSize: 'clamp(2rem, 4vw, 3rem)',
+              fontWeight: 'normal',
+              marginBottom: '1.5rem',
+              color: '#ffffff',
+              lineHeight: '1.1',
+              letterSpacing: '-0.02em',
+              textShadow: '2px 2px 4px rgba(0,0,0,0.5)'
             }}>SELAH</h1>
             <p style={{
-              fontFamily: 'Crimson Pro, serif',
-              fontSize: 'clamp(1rem, 2vw, 1.2rem)',
-              fontWeight: '300',
-              marginBottom: '3rem',
-              color: '#666',
+              fontFamily: 'Georgia, serif',
+              fontSize: '1rem',
+              fontWeight: 'normal',
+              marginBottom: '0',
+              color: '#ffffff',
               maxWidth: '600px',
-              margin: '0 auto 3rem',
-              lineHeight: '1.8'
-            }}>A collection of poetry born from the sacred pause between heartbreak and healing, where silence becomes song.</p>
+              margin: '0 auto',
+              lineHeight: '1.6',
+              textShadow: '1px 1px 2px rgba(0,0,0,0.5)'
+            }}>Poetry born from the sacred pause between heartbreak and healing, where silence becomes song.</p>
           </motion.div>
         </div>
       </section>
 
-      {/* Category Filter */}
-      <section style={{
-        background: '#f9f9f9',
-        padding: '60px 1rem'
+      {/* Main Content */}
+      <div style={{
+        maxWidth: '1000px',
+        margin: '0 auto',
+        padding: '5rem 2rem'
       }}>
-        <div className="container" style={{ maxWidth: '900px', margin: '0 auto' }}>
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.6, delay: 0.2 }}
-            style={{ textAlign: 'center' }}
-          >
-            <h2 style={{
-              fontFamily: 'Crimson Pro, serif',
-              fontSize: '1.5rem',
-              fontWeight: '300',
-              marginBottom: '2rem',
-              color: '#555'
-            }}>Explore by Theme</h2>
+        
+        {/* Introduction Section */}
+        <section style={{ marginBottom: '5rem' }}>
+          <div style={{
+            display: 'grid',
+            gridTemplateColumns: window.innerWidth > 768 ? '1fr 2fr' : '1fr',
+            gap: '4rem',
+            alignItems: 'start'
+          }}>
+            <div>
+              <h2 style={{
+                fontFamily: 'Georgia, serif',
+                fontSize: '1.4rem',
+                fontWeight: 'normal',
+                color: '#2c2c2c',
+                marginBottom: '1.2rem',
+                lineHeight: '1.2'
+              }}>The SELAH Collection</h2>
+            </div>
+            <div>
+              <p style={{
+                fontFamily: 'Georgia, serif',
+                fontSize: '1.2rem',
+                lineHeight: '1.7',
+                color: '#666666',
+                marginBottom: '2rem',
+                fontWeight: 'normal'
+              }}>
+                SELAH—a Hebrew word meaning "pause and reflect"—invites us into the sacred spaces between words, between breaths, between heartbreak and hope.
+              </p>
+              <p style={{
+                fontFamily: 'Georgia, serif',
+                fontSize: '1.2rem',
+                lineHeight: '1.7',
+                color: '#666666',
+                marginBottom: '2rem',
+                fontWeight: 'normal'
+              }}>
+                These collections emerged from a journey through profound loss, each poem a stepping stone across the river of grief toward the shores of grace.
+              </p>
+            </div>
+          </div>
+        </section>
+
+        {/* Coming Soon Section */}
+        <section style={{
+          background: 'linear-gradient(135deg, rgba(201, 169, 110, 0.08) 0%, rgba(255, 255, 255, 0.95) 100%)',
+          borderRadius: '20px',
+          padding: '3rem 2rem',
+          marginBottom: '5rem',
+          border: '1px solid rgba(201, 169, 110, 0.2)',
+          textAlign: 'center'
+        }}>
+          <h2 style={{
+            fontFamily: 'Georgia, serif',
+            fontSize: '1.8rem',
+            fontWeight: 'normal',
+            color: '#2c2c2c',
+            marginBottom: '1rem',
+            lineHeight: '1.2'
+          }}>Seven New Volumes Coming Soon</h2>
+          <p style={{
+            fontFamily: 'Georgia, serif',
+            fontSize: '1.1rem',
+            lineHeight: '1.7',
+            color: '#666666',
+            marginBottom: '2rem',
+            maxWidth: '600px',
+            margin: '0 auto 2rem'
+          }}>
+            We're preparing seven new poetry collections that will take you deeper into the sacred pause of SELAH. Be the first to know when they're released.
+          </p>
+          <form onSubmit={handleSignupSubmit} style={{
+            display: 'flex',
+            flexDirection: 'column',
+            gap: '1.5rem',
+            maxWidth: '500px',
+            margin: '0 auto'
+          }}>
+            <input
+              type="text"
+              name="name"
+              value={signupForm.name}
+              onChange={handleSignupChange}
+              placeholder="Your name"
+              required
+              style={{
+                fontFamily: 'Georgia, serif',
+                padding: '1rem 0',
+                border: 'none',
+                borderBottom: '1px solid rgba(201, 169, 110, 0.3)',
+                fontSize: '1rem',
+                fontWeight: 'normal',
+                width: '100%',
+                outline: 'none',
+                background: 'transparent'
+              }}
+            />
+            <input
+              type="email"
+              name="email"
+              value={signupForm.email}
+              onChange={handleSignupChange}
+              placeholder="Email address"
+              required
+              style={{
+                fontFamily: 'Georgia, serif',
+                padding: '1rem 0',
+                border: 'none',
+                borderBottom: '1px solid rgba(201, 169, 110, 0.3)',
+                fontSize: '1rem',
+                fontWeight: 'normal',
+                width: '100%',
+                outline: 'none',
+                background: 'transparent'
+              }}
+            />
+            <textarea
+              name="message"
+              value={signupForm.message}
+              onChange={handleSignupChange}
+              placeholder="Tell us about your interest in the upcoming volumes..."
+              rows="4"
+              style={{
+                fontFamily: 'Georgia, serif',
+                padding: '1rem 0',
+                border: 'none',
+                borderBottom: '1px solid rgba(201, 169, 110, 0.3)',
+                fontSize: '1rem',
+                fontWeight: 'normal',
+                width: '100%',
+                outline: 'none',
+                background: 'transparent',
+                resize: 'vertical'
+              }}
+            />
+            <button
+              type="submit"
+              disabled={isSubmittingSignup}
+              style={{
+                fontFamily: 'Georgia, serif',
+                padding: '1rem 2rem',
+                border: '1px solid #c9a96e',
+                background: isSubmittingSignup ? '#c9a96e' : 'transparent',
+                color: isSubmittingSignup ? 'white' : '#c9a96e',
+                fontSize: '1rem',
+                fontWeight: 'normal',
+                cursor: isSubmittingSignup ? 'not-allowed' : 'pointer',
+                transition: 'all 0.3s ease',
+                alignSelf: 'center',
+                opacity: isSubmittingSignup ? 0.7 : 1
+              }}
+              onMouseEnter={(e) => {
+                if (!isSubmittingSignup) {
+                  e.target.style.background = '#c9a96e';
+                  e.target.style.color = 'white';
+                }
+              }}
+              onMouseLeave={(e) => {
+                if (!isSubmittingSignup) {
+                  e.target.style.background = 'transparent';
+                  e.target.style.color = '#c9a96e';
+                }
+              }}
+            >
+              {isSubmittingSignup ? 'Signing Up...' : 'Sign Up for Updates'}
+            </button>
+            
+            {signupMessage && (
+              <div style={{ 
+                padding: '1rem',
+                backgroundColor: signupMessage.includes('error') ? '#ffebee' : '#f0f8f0',
+                color: signupMessage.includes('error') ? '#c62828' : '#2e7d32',
+                fontSize: '0.9rem',
+                borderRadius: '8px',
+                textAlign: 'center'
+              }}>
+                {signupMessage}
+              </div>
+            )}
+          </form>
+          <p style={{
+            fontFamily: 'Georgia, serif',
+            fontSize: '0.9rem',
+            color: '#999999',
+            marginTop: '1rem',
+            fontStyle: 'italic'
+          }}>Join our community of poetry lovers and spiritual seekers</p>
+        </section>
+
+        {/* Category Filter */}
+        <section style={{
+          borderTop: '1px solid #e8e8e8',
+          paddingTop: '5rem',
+          marginBottom: '5rem'
+        }}>
+          <div style={{
+            display: 'flex',
+            flexWrap: 'wrap',
+            gap: '2rem',
+            alignItems: 'center',
+            justifyContent: 'space-between',
+            marginBottom: '3rem'
+          }}>
             <div style={{
               display: 'flex',
               flexWrap: 'wrap',
-              justifyContent: 'center',
-              gap: '1rem'
+              gap: '1.5rem'
             }}>
               {categories.map((category) => (
                 <button
                   key={category.value}
                   onClick={() => setSelectedCategory(category.value)}
                   style={{
-                    background: selectedCategory === category.value ? '#333' : 'transparent',
-                    color: selectedCategory === category.value ? 'white' : '#666',
-                    border: '1px solid #ddd',
-                    padding: '0.5rem 1.2rem',
-                    borderRadius: '25px',
-                    fontSize: '0.9rem',
-                    fontWeight: '300',
+                    fontFamily: 'Georgia, serif',
+                    padding: '0',
+                    fontSize: '1rem',
+                    fontWeight: 'normal',
+                    border: 'none',
+                    background: 'none',
+                    color: selectedCategory === category.value ? '#2c2c2c' : '#999999',
                     cursor: 'pointer',
-                    transition: 'all 0.3s ease',
-                    fontFamily: 'Crimson Pro, serif'
+                    transition: 'color 0.3s ease',
+                    borderBottom: selectedCategory === category.value ? '1px solid #2c2c2c' : 'none'
                   }}
                 >
-                  {category.label} ({getCategoryCount(category.value)})
+                  {category.label}
                 </button>
               ))}
             </div>
-          </motion.div>
-        </div>
-      </section>
+          </div>
 
-      {/* Volumes Grid */}
-      <section className="volumes-content">
-        <div className="container">
+          {/* Volumes List */}
           {loading ? (
             <LoadingSpinner message="Loading poetry collections..." />
           ) : (
             filteredVolumes.length === 0 ? (
-              <div style={{ textAlign: 'center', padding: '3rem 1rem' }}>
-                <h3 style={{ color: 'var(--primary-gold)', marginBottom: '1rem' }}>Coming Soon</h3>
-                <p style={{ color: '#666', fontSize: '1.1rem' }}>
-                  Our SELAH poetry collection is being prepared for you. Subscribe to our newsletter to be notified when new volumes are available.
-                </p>
+              <div style={{
+                textAlign: 'center',
+                padding: '4rem 0',
+                borderTop: '1px solid #f0f0f0'
+              }}>
+                <h3 style={{
+                  fontFamily: 'Georgia, serif',
+                  fontSize: '1.5rem',
+                  fontWeight: 'normal',
+                  color: '#2c2c2c',
+                  marginBottom: '1rem'
+                }}>Coming Soon</h3>
+                <p style={{
+                  fontFamily: 'Georgia, serif',
+                  fontSize: '1.1rem',
+                  color: '#666666',
+                  lineHeight: '1.7',
+                  maxWidth: '500px',
+                  margin: '0 auto 2rem'
+                }}>Our SELAH poetry collection is being prepared with care. Each poem is a sacred offering, and we want to ensure they reach you at the perfect moment.</p>
                 <a href="/contact" style={{
-                  display: 'inline-block',
-                  marginTop: '1rem',
-                  padding: '12px 24px',
-                  background: 'var(--primary-gold)',
-                  color: 'white',
+                  fontFamily: 'Georgia, serif',
+                  padding: '1rem 2rem',
+                  border: '1px solid #8b7355',
+                  background: 'transparent',
+                  color: '#8b7355',
+                  fontSize: '1rem',
+                  fontWeight: 'normal',
                   textDecoration: 'none',
-                  borderRadius: '25px',
-                  fontWeight: '500'
-                }}>Get Notified</a>
+                  transition: 'all 0.3s ease'
+                }}>Stay Connected</a>
               </div>
             ) : (
-            <div style={{
-              display: 'grid',
-              gridTemplateColumns: 'repeat(auto-fit, minmax(350px, 1fr))',
-              gap: '2rem',
-              maxWidth: '1000px',
-              margin: '0 auto'
-            }}>
-              {filteredVolumes.map((volume, index) => (
-              <motion.div
-                key={volume.id}
-                initial={{ opacity: 0, y: 30 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.6, delay: index * 0.1 }}
-                style={{
-                  background: 'white',
-                  borderRadius: '0',
-                  padding: '2rem',
-                  border: 'none',
-                  borderBottom: '1px solid #eee',
-                  transition: 'all 0.3s ease'
-                }}
-              >
-                {volume.image && (
-                  <div className="volume-image">
-                    <img 
-                      src={volume.image.startsWith('http') ? volume.image : `http://localhost:8000${volume.image}`}
-                      alt={volume.title}
-                      onError={(e) => {
-                        e.target.parentElement.style.display = 'none';
-                      }}
-                    />
-                    <div className="volume-overlay">
-                      <button 
-                        className="preview-btn"
-                        onClick={() => setSelectedVolume(volume)}
-                      >
-                        Preview
-                      </button>
-                    </div>
-                  </div>
-                )}
-                <div>
-                  <h3 style={{
-                    fontFamily: 'Crimson Pro, serif',
-                    fontSize: '1.3rem',
-                    fontWeight: '300',
-                    marginBottom: '1rem',
-                    color: '#333'
-                  }}>{volume.title}</h3>
-                  <div style={{
-                    fontFamily: 'Crimson Pro, serif',
-                    fontSize: '1rem',
-                    lineHeight: '1.7',
-                    color: '#666',
-                    marginBottom: '1.5rem',
-                    fontWeight: '300'
-                  }}>
-                    {volume.description}
-                  </div>
-                  <div style={{
-                    display: 'flex',
-                    gap: '1rem',
-                    flexWrap: 'wrap'
-                  }}>
-                    <button 
-                      onClick={() => setSelectedVolume(volume)}
-                      style={{
-                        background: 'transparent',
-                        color: '#333',
-                        border: '1px solid #ddd',
-                        padding: '0.6rem 1.5rem',
-                        borderRadius: '25px',
-                        fontSize: '0.9rem',
-                        fontWeight: '300',
-                        cursor: 'pointer',
-                        transition: 'all 0.3s ease',
-                        fontFamily: 'Crimson Pro, serif'
-                      }}
-                    >
-                      Read Poem
-                    </button>
-                    <div className="audio-controls">
-                      <button 
-                        onClick={() => {
-                          const audio = document.getElementById(`audio-${volume.id}`);
-                          
-                          if (playingAudio && playingAudio !== volume.id) {
-                            const otherAudio = document.getElementById(`audio-${playingAudio}`);
-                            if (otherAudio) {
-                              otherAudio.pause();
-                              otherAudio.currentTime = 0;
-                            }
-                            setPlayingAudio(null);
-                          }
-                          
-                          if (audio) {
-                            if (audio.paused) {
-                              audio.play().then(() => {
-                                setPlayingAudio(volume.id);
-                              }).catch((error) => {
-                                console.error('Audio play error:', error);
-                              });
-                            } else {
-                              audio.pause();
-                              setPlayingAudio(null);
-                            }
-                          }
-                        }}
-                        style={{
-                          background: playingAudio === volume.id ? '#333' : 'transparent',
-                          color: playingAudio === volume.id ? 'white' : '#666',
-                          border: '1px solid #ddd',
-                          padding: '0.6rem 1.5rem',
-                          borderRadius: '25px',
-                          fontSize: '0.9rem',
-                          fontWeight: '300',
-                          cursor: 'pointer',
-                          transition: 'all 0.3s ease',
-                          fontFamily: 'Crimson Pro, serif'
-                        }}
-                      >
-                        {playingAudio === volume.id ? 'Pause' : 'Listen'}
-                      </button>
-                      {playingAudio === volume.id && (
-                        <div className="audio-progress" style={{
-                          width: '100%',
-                          height: '4px',
-                          background: '#e0e0e0',
-                          borderRadius: '2px',
-                          marginTop: '0.5rem',
-                          overflow: 'hidden'
+              <div style={{
+                display: 'flex',
+                flexDirection: 'column',
+                gap: '0'
+              }}>
+                {filteredVolumes.map((volume, index) => (
+                  <motion.div
+                    key={volume.id}
+                    initial={{ opacity: 0, y: 30 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    transition={{ duration: 0.6, delay: index * 0.1 }}
+                    style={{
+                      borderBottom: '1px solid #f0f0f0',
+                      padding: '4rem 0',
+                      transition: 'all 0.3s ease'
+                    }}
+                  >
+                    <div style={{
+                      display: 'grid',
+                      gridTemplateColumns: window.innerWidth > 768 ? '1fr 2fr' : '1fr',
+                      gap: '3rem',
+                      alignItems: 'start'
+                    }}>
+                      <div>
+                        <h3 style={{
+                          fontFamily: 'Georgia, serif',
+                          fontSize: '1.2rem',
+                          fontWeight: 'normal',
+                          marginBottom: '0.8rem',
+                          lineHeight: '1.3',
+                          color: '#2c2c2c'
+                        }}>{volume.title}</h3>
+                        
+                        <div style={{
+                          display: 'flex',
+                          gap: '1rem',
+                          marginTop: '2rem'
                         }}>
-                          <div 
-                            className="progress-bar"
+                          <button 
+                            onClick={() => setSelectedVolume(volume)}
                             style={{
-                              width: `${audioProgress[volume.id] || 0}%`,
-                              height: '100%',
-                              background: 'var(--primary-gold)',
-                              transition: 'width 0.1s ease'
+                              fontFamily: 'Georgia, serif',
+                              padding: '0.5rem 1.5rem',
+                              border: '1px solid #8b7355',
+                              background: 'transparent',
+                              color: '#8b7355',
+                              fontSize: '0.9rem',
+                              fontWeight: 'normal',
+                              cursor: 'pointer',
+                              transition: 'all 0.3s ease'
                             }}
-                          />
+                            onMouseEnter={(e) => {
+                              e.target.style.background = '#8b7355';
+                              e.target.style.color = 'white';
+                            }}
+                            onMouseLeave={(e) => {
+                              e.target.style.background = 'transparent';
+                              e.target.style.color = '#8b7355';
+                            }}
+                          >
+                            Read
+                          </button>
+                          
+                          {volume.audio_file && (
+                            <button 
+                              onClick={() => {
+                                const audio = document.getElementById(`audio-${volume.id}`);
+                                
+                                if (playingAudio && playingAudio !== volume.id) {
+                                  const otherAudio = document.getElementById(`audio-${playingAudio}`);
+                                  if (otherAudio) {
+                                    otherAudio.pause();
+                                    otherAudio.currentTime = 0;
+                                  }
+                                  setPlayingAudio(null);
+                                }
+                                
+                                if (audio) {
+                                  if (audio.paused) {
+                                    audio.play().then(() => {
+                                      setPlayingAudio(volume.id);
+                                    }).catch((error) => {
+                                      console.error('Audio play error:', error);
+                                    });
+                                  } else {
+                                    audio.pause();
+                                    setPlayingAudio(null);
+                                  }
+                                }
+                              }}
+                              style={{
+                                fontFamily: 'Georgia, serif',
+                                padding: '0.5rem 1.5rem',
+                                border: '1px solid #8b7355',
+                                background: playingAudio === volume.id ? '#8b7355' : 'transparent',
+                                color: playingAudio === volume.id ? 'white' : '#8b7355',
+                                fontSize: '0.9rem',
+                                fontWeight: 'normal',
+                                cursor: 'pointer',
+                                transition: 'all 0.3s ease'
+                              }}
+                            >
+                              {playingAudio === volume.id ? 'Pause' : 'Listen'}
+                            </button>
+                          )}
                         </div>
-                      )}
+                      </div>
+                      
+                      <div>
+                        <p style={{
+                          fontFamily: 'Georgia, serif',
+                          fontSize: '0.9rem',
+                          lineHeight: '1.7',
+                          color: '#666666',
+                          fontWeight: 'normal'
+                        }}>
+                          {volume.description}
+                        </p>
+                      </div>
                     </div>
-                  </div>
-                </div>
-                
-                {/* Audio Element */}
-                <audio 
-                  id={`audio-${volume.id}`}
-                  preload="metadata"
-                  onLoadedMetadata={(e) => {
-                    setAudioDuration(prev => ({
-                      ...prev,
-                      [volume.id]: e.target.duration
-                    }));
-                  }}
-                  onTimeUpdate={(e) => {
-                    const progress = (e.target.currentTime / e.target.duration) * 100;
-                    setAudioProgress(prev => ({
-                      ...prev,
-                      [volume.id]: progress
-                    }));
-                  }}
-                  onEnded={() => {
-                    setPlayingAudio(null);
-                    setAudioProgress(prev => ({
-                      ...prev,
-                      [volume.id]: 0
-                    }));
-                  }}
-                  onError={() => {
-                    setPlayingAudio(null);
-                    console.error('Error loading audio file for volume:', volume.id);
-                  }}
-                >
-                  <source 
-                    src={volume.audio_file ? 
-                      (volume.audio_file.startsWith('http') ? volume.audio_file : `http://localhost:8000${volume.audio_file}`) :
-                      'https://www.soundjay.com/misc/sounds/bell-ringing-05.wav'
-                    }
-                    type="audio/mpeg" 
-                  />
-                </audio>
-              </motion.div>
-              ))}
-            </div>
+                    
+                    {/* Audio Element */}
+                    {volume.audio_file && (
+                      <audio 
+                        id={`audio-${volume.id}`}
+                        preload="metadata"
+                        onLoadedMetadata={(e) => {
+                          setAudioDuration(prev => ({
+                            ...prev,
+                            [volume.id]: e.target.duration
+                          }));
+                        }}
+                        onTimeUpdate={(e) => {
+                          const progress = (e.target.currentTime / e.target.duration) * 100;
+                          setAudioProgress(prev => ({
+                            ...prev,
+                            [volume.id]: progress
+                          }));
+                        }}
+                        onEnded={() => {
+                          setPlayingAudio(null);
+                          setAudioProgress(prev => ({
+                            ...prev,
+                            [volume.id]: 0
+                          }));
+                        }}
+                        onError={() => {
+                          setPlayingAudio(null);
+                          console.error('Error loading audio file for volume:', volume.id);
+                        }}
+                      >
+                        <source 
+                          src={volume.audio_file.startsWith('http') ? volume.audio_file : `http://localhost:8000${volume.audio_file}`}
+                          type="audio/mpeg" 
+                        />
+                      </audio>
+                    )}
+                  </motion.div>
+                ))}
+              </div>
             )
           )}
-        </div>
-      </section>
+        </section>
+      </div>
 
       {/* Modal */}
       {selectedVolume && (
@@ -410,50 +629,7 @@ const Volumes = () => {
         </div>
       )}
 
-      {/* CTA Section */}
-      <section style={{
-        background: '#f9f9f9',
-        padding: '80px 1rem',
-        textAlign: 'center'
-      }}>
-        <div className="container" style={{ maxWidth: '600px', margin: '0 auto' }}>
-          <motion.div
-            initial={{ opacity: 0, y: 30 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.8 }}
-            viewport={{ once: true }}
-          >
-            <h2 style={{
-              fontFamily: 'Crimson Pro, serif',
-              fontSize: '1.8rem',
-              fontWeight: '300',
-              marginBottom: '1.5rem',
-              color: '#333'
-            }}>The Complete Collection</h2>
-            <p style={{
-              fontFamily: 'Crimson Pro, serif',
-              fontSize: '1.1rem',
-              fontWeight: '300',
-              marginBottom: '2rem',
-              color: '#666',
-              lineHeight: '1.7'
-            }}>Be among the first to experience the full SELAH journey when it becomes available.</p>
-            <a href="/contact" style={{
-              display: 'inline-block',
-              background: 'transparent',
-              color: '#333',
-              border: '1px solid #ddd',
-              padding: '0.8rem 2rem',
-              borderRadius: '25px',
-              fontSize: '1rem',
-              fontWeight: '300',
-              textDecoration: 'none',
-              transition: 'all 0.3s ease',
-              fontFamily: 'Crimson Pro, serif'
-            }}>Stay Connected</a>
-          </motion.div>
-        </div>
-      </section>
+
     </>
   );
 };

@@ -16,6 +16,14 @@ body {
   background: var(--background-cream);
 }
 
+* {
+  transition: all 0.3s ease;
+}
+
+a, button {
+  transition: all 0.2s ease;
+}
+
 @keyframes slideDown {
   from {
     transform: translateY(-100%);
@@ -74,8 +82,8 @@ body {
 
 .scrolling-text {
   white-space: nowrap;
-  animation: scrollRight 30s linear infinite;
   width: 100%;
+  text-align: center;
 }
 
 .scrolling-text span {
@@ -111,7 +119,7 @@ body {
   }
   
   .scrolling-text {
-    animation: scrollRight 25s linear infinite;
+    text-align: center;
   }
   
   .announcement-close {
@@ -138,13 +146,15 @@ body {
     top: 100%;
     left: 0;
     right: 0;
-    background: none;
+    background: rgba(0, 0, 0, 0.95);
+    backdrop-filter: blur(15px);
     flex-direction: column;
     padding: 1rem;
-    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
-    border-top: 1px solid rgba(212, 175, 55, 0.1);
+    box-shadow: 0 8px 30px rgba(0, 0, 0, 0.3);
+    border-top: 2px solid var(--primary-soft);
+    border: 2px solid rgba(255, 255, 255, 0.1);
     z-index: 1000;
-    border-radius: 0 0 12px 12px;
+    border-radius: 0 0 16px 16px;
   }
   
   .nav.nav-open {
@@ -157,16 +167,26 @@ body {
   
   .nav a {
     padding: 1rem 0;
-    border-bottom: 1px solid rgba(212, 175, 55, 0.1);
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
     font-size: 1rem;
     text-align: center;
     justify-content: center;
-    color: #333;
+    color: white;
     text-shadow: none;
+    font-weight: 500;
+    transition: all 0.3s ease;
   }
   
   .nav a:hover {
-    color: var(--primary-gold);
+    color: var(--primary-soft);
+    background: rgba(255, 255, 255, 0.1);
+    border-radius: 8px;
+  }
+  
+  .nav a.active {
+    color: var(--primary-soft);
+    background: rgba(201, 169, 110, 0.2);
+    border-radius: 8px;
   }
   
   .nav-link-button {
@@ -365,7 +385,7 @@ main {
 .nav {
   display: flex;
   list-style: none;
-  gap: 2rem;
+  gap: 1.5rem;
 }
 
 @media (max-width: 768px) {
@@ -391,8 +411,8 @@ main {
   display: flex;
   align-items: center;
   gap: 0.5rem;
-  padding: 0.4rem 0;
-  font-size: 0.9rem;
+  padding: 0.6rem 1rem;
+  font-size: 0.8rem;
   transition: color 0.3s ease;
   text-shadow: 1px 1px 3px rgba(0,0,0,0.6);
   letter-spacing: 0.5px;
@@ -466,8 +486,8 @@ main {
 
 .mobile-menu-toggle {
   display: none;
-  background: none;
-  border: none;
+  background: rgba(0, 0, 0, 0.8);
+  border: 2px solid rgba(255, 255, 255, 0.3);
   font-size: 1.5rem;
   cursor: pointer;
   color: white;
@@ -475,14 +495,20 @@ main {
   border-radius: 8px;
   transition: all 0.2s ease;
   z-index: 1001;
+  backdrop-filter: blur(10px);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
 }
 
 .mobile-menu-toggle:hover {
-  background-color: rgba(255, 255, 255, 0.1);
+  background: rgba(0, 0, 0, 0.9);
+  border-color: rgba(255, 255, 255, 0.5);
+  transform: scale(1.05);
 }
 
 .mobile-menu-toggle:focus {
   outline: none;
+  border-color: var(--primary-soft);
+  box-shadow: 0 0 0 2px rgba(201, 169, 110, 0.3);
 }
 
 @media (min-width: 769px) {
@@ -517,7 +543,7 @@ main {
 
 .hero h1 {
   font-family: 'Crimson Pro', serif;
-  font-size: 2.5rem;
+  font-size: 2rem;
   color: var(--text-primary);
   margin-bottom: 1.5rem;
   position: relative;
@@ -529,7 +555,7 @@ main {
 
 .hero p {
   font-family: 'Crimson Pro', serif;
-  font-size: 1.2rem;
+  font-size: 1rem;
   max-width: 600px;
   margin: 0 auto 2rem;
   color: var(--text-secondary);
@@ -546,7 +572,7 @@ main {
   box-shadow: 0 4px 15px var(--shadow-soft);
   font-family: 'Source Serif Pro', serif;
   font-style: italic;
-  font-size: 1.05rem;
+  font-size: 0.9rem;
   color: var(--soft-blue);
   border: 1px solid var(--warm-beige);
   line-height: 1.8;
@@ -1968,7 +1994,6 @@ main {
 
 /* Home Page Professional Design */
 .home-hero {
-  background: var(--background-cream);
   color: var(--text-primary);
   padding: 120px 0 80px 0;
   text-align: center;

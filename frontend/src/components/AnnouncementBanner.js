@@ -28,7 +28,7 @@ const AnnouncementBanner = () => {
     <div className={`announcement-banner ${isScrollHidden ? 'banner-hidden' : 'banner-visible'}`}>
       <div className="announcement-content">
         <div className="scrolling-text">
-          <span>The Seven Volume is coming soon! Stay tuned.</span>
+          <span>Seven volumes are coming soon. Stay tuned.</span>
         </div>
         <button
           className="announcement-close"

@@ -15,15 +15,14 @@ A complete, responsive, SEO-optimized website for Abba Whispers, a Christian fai
 ### Prerequisites
 - Python 3.8+
 - Node.js 16+
-- MySQL
+- PostgreSQL 12+
 
-### 1. Setup MySQL
+### 1. Setup PostgreSQL
 ```sql
--- In MySQL Workbench or mysql command line
+-- In PostgreSQL command line (psql) or pgAdmin
 CREATE DATABASE abba_whispers;
-CREATE USER 'abba_user'@'localhost' IDENTIFIED BY 'your_password';
-GRANT ALL PRIVILEGES ON abba_whispers.* TO 'abba_user'@'localhost';
-FLUSH PRIVILEGES;
+CREATE USER abba_user WITH PASSWORD 'your_password';
+GRANT ALL PRIVILEGES ON DATABASE abba_whispers TO abba_user;
 ```
 
 ### 2. Setup Django Backend
@@ -131,8 +130,8 @@ pip install gunicorn
 gunicorn abba_whispers.wsgi:application
 ```
 
-### Database (MySQL)
-- Use managed MySQL service
+### Database (PostgreSQL)
+- Use managed PostgreSQL service
 - Update DATABASE_URL in production
 
 ## 📊 Environment Variables
@@ -142,10 +141,10 @@ gunicorn abba_whispers.wsgi:application
 SECRET_KEY=your_secret_key
 DEBUG=False
 DB_NAME=abba_whispers
-DB_USER=root
+DB_USER=postgres
 DB_PASSWORD=your_password
 DB_HOST=localhost
-DB_PORT=3306
+DB_PORT=5432
 ```
 
 ### React (.env)

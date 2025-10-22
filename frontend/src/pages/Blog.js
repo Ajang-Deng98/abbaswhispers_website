@@ -5,7 +5,6 @@ import { Helmet } from 'react-helmet';
 import { blogAPI } from '../utils/api';
 import { useRealTimeData } from '../hooks/useRealTimeData';
 import LoadingSpinner from '../components/LoadingSpinner';
-
 const Blog = () => {
   const [posts, setPosts] = useState([]);
   const [searchTerm, setSearchTerm] = useState('');
@@ -76,44 +75,50 @@ const Blog = () => {
 
       {/* Hero Section */}
       <section style={{
-        background: '#ffffff',
-        padding: '120px 1rem 80px 1rem',
-        textAlign: 'center'
+        background: 'url("/backgroundimage5.JPG") center/cover no-repeat',
+        padding: '180px 2rem 120px 2rem',
+        textAlign: 'center',
+        color: '#ffffff',
+        minHeight: '70vh',
+        display: 'flex',
+        alignItems: 'center'
       }}>
-        <div className="container" style={{ maxWidth: '800px', margin: '0 auto' }}>
+        <div style={{ maxWidth: '800px', margin: '0 auto' }}>
           <motion.div
             initial={{ opacity: 0, y: 30 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.8 }}
           >
             <h1 style={{
-              fontFamily: 'Crimson Pro, serif',
-              fontSize: 'clamp(2rem, 4vw, 2.8rem)',
-              fontWeight: '300',
-              marginBottom: '2rem',
-              color: '#333',
-              lineHeight: '1.3',
-              letterSpacing: '0.5px'
-            }}>Reflections</h1>
+              fontFamily: 'Georgia, serif',
+              fontSize: 'clamp(2rem, 4vw, 3rem)',
+              fontWeight: 'normal',
+              marginBottom: '1.5rem',
+              color: '#ffffff',
+              lineHeight: '1.1',
+              letterSpacing: '-0.02em',
+              textShadow: '2px 2px 4px rgba(0,0,0,0.5)'
+            }}>Writings</h1>
             <p style={{
-              fontFamily: 'Crimson Pro, serif',
-              fontSize: 'clamp(1rem, 2vw, 1.2rem)',
-              fontWeight: '300',
-              marginBottom: '3rem',
-              color: '#666',
+              fontFamily: 'Georgia, serif',
+              fontSize: '1rem',
+              fontWeight: 'normal',
+              marginBottom: '0',
+              color: '#ffffff',
               maxWidth: '600px',
-              margin: '0 auto 3rem',
-              lineHeight: '1.8'
-            }}>Quiet thoughts on faith, healing, and the sacred conversations that shape our days.</p>
+              margin: '0 auto',
+              lineHeight: '1.6',
+              textShadow: '1px 1px 2px rgba(0,0,0,0.5)'
+            }}>Reflections on the sacred journey through grief, grace, and the whispers that heal.</p>
           </motion.div>
         </div>
       </section>
 
       {/* Main Content */}
       <div style={{
-        maxWidth: '1200px',
+        maxWidth: '1000px',
         margin: '0 auto',
-        padding: '3rem 2rem'
+        padding: '5rem 2rem 5rem 2rem'
       }}>
         
         {/* Search and Filter */}
@@ -122,62 +127,64 @@ const Blog = () => {
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.6 }}
           style={{
-            marginBottom: '4rem',
-            textAlign: 'center',
-            background: '#f9f9f9',
-            padding: '3rem 2rem',
-            margin: '0 -2rem 4rem -2rem'
+            marginBottom: '5rem',
+            borderBottom: '1px solid #e8e8e8',
+            paddingBottom: '3rem'
           }}
         >
-          <input
-            type="text"
-            placeholder="Search..."
-            value={searchTerm}
-            onChange={(e) => setSearchTerm(e.target.value)}
-            style={{
-              fontFamily: 'Crimson Pro, serif',
-              padding: '0.8rem 1.5rem',
-              border: '1px solid #ddd',
-              width: '100%',
-              maxWidth: '400px',
-              fontSize: '1rem',
-              outline: 'none',
-              marginBottom: '2rem',
-              transition: 'border-color 0.3s ease',
-              borderRadius: '25px',
-              fontWeight: '300'
-            }}
-          />
-          
           <div style={{
             display: 'flex',
             flexWrap: 'wrap',
-            justifyContent: 'center',
-            gap: '1rem'
+            gap: '2rem',
+            alignItems: 'center',
+            justifyContent: 'space-between'
           }}>
-            {categories.map((category) => (
-              <button
-                key={category.value}
-                onClick={() => {
-                  setSelectedCategory(category.value);
-                  setCurrentPage(1);
-                }}
-                style={{
-                  fontFamily: 'Crimson Pro, serif',
-                  padding: '0.5rem 1.2rem',
-                  fontSize: '0.9rem',
-                  fontWeight: '300',
-                  border: '1px solid #ddd',
-                  background: selectedCategory === category.value ? '#333' : 'transparent',
-                  color: selectedCategory === category.value ? 'white' : '#666',
-                  cursor: 'pointer',
-                  transition: 'all 0.3s ease',
-                  borderRadius: '25px'
-                }}
-              >
-                {category.label}
-              </button>
-            ))}
+            <div style={{
+              display: 'flex',
+              flexWrap: 'wrap',
+              gap: '1.5rem'
+            }}>
+              {categories.map((category) => (
+                <button
+                  key={category.value}
+                  onClick={() => {
+                    setSelectedCategory(category.value);
+                    setCurrentPage(1);
+                  }}
+                  style={{
+                    fontFamily: 'Georgia, serif',
+                    padding: '0',
+                    fontSize: '1rem',
+                    fontWeight: 'normal',
+                    border: 'none',
+                    background: 'none',
+                    color: selectedCategory === category.value ? '#2c2c2c' : '#999999',
+                    cursor: 'pointer',
+                    transition: 'color 0.3s ease',
+                    borderBottom: selectedCategory === category.value ? '1px solid #2c2c2c' : 'none'
+                  }}
+                >
+                  {category.label}
+                </button>
+              ))}
+            </div>
+            <input
+              type="text"
+              placeholder="Search writings..."
+              value={searchTerm}
+              onChange={(e) => setSearchTerm(e.target.value)}
+              style={{
+                fontFamily: 'Georgia, serif',
+                padding: '0.5rem 0',
+                border: 'none',
+                borderBottom: '1px solid #e8e8e8',
+                width: '250px',
+                fontSize: '1rem',
+                outline: 'none',
+                background: 'transparent',
+                fontWeight: 'normal'
+              }}
+            />
           </div>
         </motion.div>
 
@@ -192,10 +199,9 @@ const Blog = () => {
           >
             {currentPosts.length > 0 ? (
               <div style={{
-                display: 'grid',
-                gridTemplateColumns: 'repeat(auto-fit, minmax(350px, 1fr))',
-                gap: '2rem',
-                marginBottom: '3rem'
+                display: 'flex',
+                flexDirection: 'column',
+                gap: '0'
               }}>
                 {currentPosts.map((post, index) => (
                   <motion.article
@@ -204,131 +210,119 @@ const Blog = () => {
                     animate={{ opacity: 1, y: 0 }}
                     transition={{ duration: 0.6, delay: index * 0.1 }}
                     style={{
-                      background: '#ffffff',
-                      border: 'none',
-                      borderBottom: '1px solid #eee',
+                      borderBottom: index < currentPosts.length - 1 ? '1px solid #f0f0f0' : 'none',
                       padding: '3rem 0',
                       transition: 'all 0.3s ease'
                     }}
                   >
-                    {post.image && (
-                      <img 
-                        src={post.image.startsWith('http') ? post.image : `http://localhost:8000${post.image}`} 
-                        alt={post.title}
-                        style={{ 
-                          width: '100%', 
-                          height: '200px', 
-                          objectFit: 'cover', 
-                          marginBottom: '1.5rem'
-                        }}
-                        onError={(e) => e.target.style.display = 'none'}
-                      />
-                    )}
-                    
                     <div style={{
-                      fontSize: '0.85rem',
-                      color: 'var(--text-light)',
-                      marginBottom: '1rem',
-                      fontFamily: 'Inter, sans-serif',
-                      letterSpacing: '0.5px'
+                      maxWidth: '700px'
                     }}>
-                      {new Date(post.created_at).toLocaleDateString('en-US', { 
-                        year: 'numeric', 
-                        month: 'long', 
-                        day: 'numeric' 
-                      })}
-                    </div>
-                    
-                    <h3 style={{
-                      fontFamily: 'Crimson Pro, serif',
-                      fontSize: '1.4rem',
-                      fontWeight: '300',
-                      marginBottom: '1rem',
-                      lineHeight: '1.4',
-                      color: '#333'
-                    }}>
-                      <Link to={`/blog/${post.id}`} style={{
-                        color: 'inherit',
-                        textDecoration: 'none'
-                      }}>
-                        {post.title}
-                      </Link>
-                    </h3>
-                    
-                    <p style={{
-                      fontFamily: 'Crimson Pro, serif',
-                      fontSize: '1.1rem',
-                      lineHeight: '1.7',
-                      color: 'var(--text-secondary)',
-                      marginBottom: '1.5rem',
-                      fontWeight: '300'
-                    }}>
-                      {post.excerpt}
-                    </p>
-                    
-                    <Link 
-                      to={`/blog/${post.id}`}
-                      style={{
-                        fontFamily: 'Inter, sans-serif',
-                        color: 'var(--accent-gold)',
-                        textDecoration: 'none',
-                        fontSize: '0.9rem',
-                        fontWeight: '500',
+                      <div style={{
+                        fontSize: '0.85rem',
+                        color: '#999999',
+                        marginBottom: '1rem',
+                        fontFamily: 'Georgia, serif',
                         letterSpacing: '0.5px',
-                        borderBottom: '1px solid transparent',
-                        transition: 'border-color 0.3s ease'
-                      }}
-                      onMouseEnter={(e) => e.target.style.borderBottomColor = 'var(--accent-gold)'}
-                      onMouseLeave={(e) => e.target.style.borderBottomColor = 'transparent'}
-                    >
-                      READ MORE
-                    </Link>
+                        textTransform: 'uppercase'
+                      }}>
+                        {new Date(post.created_at).toLocaleDateString('en-US', { 
+                          year: 'numeric', 
+                          month: 'long', 
+                          day: 'numeric' 
+                        })}
+                      </div>
+                      
+                      <h2 style={{
+                        fontFamily: 'Georgia, serif',
+                        fontSize: '1.2rem',
+                        fontWeight: 'normal',
+                        marginBottom: '0.8rem',
+                        lineHeight: '1.2',
+                        color: '#2c2c2c',
+                        letterSpacing: '-0.01em'
+                      }}>
+                        <Link to={`/blog/${post.id}`} style={{
+                          color: 'inherit',
+                          textDecoration: 'none'
+                        }}>
+                          {post.title}
+                        </Link>
+                      </h2>
+                      
+                      <p style={{
+                        fontFamily: 'Georgia, serif',
+                        fontSize: '0.9rem',
+                        lineHeight: '1.7',
+                        color: '#666666',
+                        marginBottom: '1.2rem',
+                        fontWeight: 'normal'
+                      }}>
+                        {post.excerpt}
+                      </p>
+                      
+                      <Link 
+                        to={`/blog/${post.id}`}
+                        style={{
+                          fontFamily: 'Georgia, serif',
+                          color: '#8b7355',
+                          textDecoration: 'none',
+                          fontSize: '0.9rem',
+                          fontWeight: 'normal',
+                          borderBottom: '1px solid #8b7355',
+                          paddingBottom: '2px'
+                        }}
+                      >
+                        Continue reading
+                      </Link>
+                    </div>
                   </motion.article>
                 ))}
               </div>
             ) : (
               <div style={{
                 textAlign: 'center',
-                padding: '4rem 2rem',
-                color: 'var(--text-secondary)'
+                padding: '4rem 0',
+                maxWidth: '500px',
+                margin: '0 auto'
               }}>
                 <h3 style={{
-                  fontFamily: 'Crimson Pro, serif',
-                  fontSize: '1.5rem',
-                  marginBottom: '1rem',
-                  color: 'var(--text-primary)'
+                  fontFamily: 'Georgia, serif',
+                  fontSize: '1.8rem',
+                  fontWeight: 'normal',
+                  marginBottom: '1.5rem',
+                  color: '#2c2c2c'
                 }}>Coming Soon</h3>
                 <p style={{
-                  fontFamily: 'Crimson Pro, serif',
+                  fontFamily: 'Georgia, serif',
                   fontSize: '1.1rem',
                   lineHeight: '1.7',
-                  maxWidth: '500px',
-                  margin: '0 auto 2rem'
-                }}>We're preparing thoughtful reflections for you. Subscribe to be notified when new posts are published.</p>
+                  color: '#666666',
+                  marginBottom: '2rem'
+                }}>We're preparing thoughtful reflections for you. Each piece is crafted with care and intention, waiting for the right moment to be shared.</p>
                 <Link 
                   to="/contact"
                   style={{
-                    fontFamily: 'Inter, sans-serif',
-                    display: 'inline-block',
-                    padding: '12px 24px',
-                    border: '1px solid var(--text-primary)',
-                    color: 'var(--text-primary)',
+                    fontFamily: 'Georgia, serif',
+                    padding: '1rem 2rem',
+                    border: '1px solid #8b7355',
+                    background: 'transparent',
+                    color: '#8b7355',
                     textDecoration: 'none',
-                    fontSize: '0.9rem',
-                    fontWeight: '500',
-                    letterSpacing: '0.5px',
+                    fontSize: '1rem',
+                    fontWeight: 'normal',
                     transition: 'all 0.3s ease'
                   }}
                   onMouseEnter={(e) => {
-                    e.target.style.background = 'var(--text-primary)';
+                    e.target.style.background = '#8b7355';
                     e.target.style.color = 'white';
                   }}
                   onMouseLeave={(e) => {
                     e.target.style.background = 'transparent';
-                    e.target.style.color = 'var(--text-primary)';
+                    e.target.style.color = '#8b7355';
                   }}
                 >
-                  SUBSCRIBE FOR UPDATES
+                  Stay Connected
                 </Link>
               </div>
             )}
@@ -338,24 +332,27 @@ const Blog = () => {
         {/* Pagination */}
         {totalPages > 1 && (
           <div style={{
+            borderTop: '1px solid #f0f0f0',
+            paddingTop: '3rem',
+            marginTop: '3rem',
             display: 'flex',
             justifyContent: 'center',
-            gap: '0.5rem',
-            marginTop: '3rem'
+            gap: '1rem'
           }}>
             {Array.from({ length: totalPages }, (_, i) => i + 1).map(page => (
               <button
                 key={page}
                 onClick={() => setCurrentPage(page)}
                 style={{
-                  fontFamily: 'Inter, sans-serif',
-                  padding: '8px 16px',
-                  fontSize: '0.9rem',
-                  border: currentPage === page ? 'none' : '1px solid var(--text-primary)',
-                  background: currentPage === page ? 'var(--text-primary)' : 'transparent',
-                  color: currentPage === page ? 'white' : 'var(--text-primary)',
+                  fontFamily: 'Georgia, serif',
+                  padding: '0.5rem 1rem',
+                  fontSize: '1rem',
+                  border: 'none',
+                  background: 'none',
+                  color: currentPage === page ? '#2c2c2c' : '#999999',
                   cursor: 'pointer',
-                  transition: 'all 0.3s ease'
+                  transition: 'color 0.3s ease',
+                  borderBottom: currentPage === page ? '1px solid #2c2c2c' : 'none'
                 }}
               >
                 {page}
@@ -364,6 +361,143 @@ const Blog = () => {
           </div>
         )}
       </div>
+
+      {/* About Our Writings Section */}
+      <section style={{
+        background: 'linear-gradient(rgba(0, 0, 0, 0.6), rgba(0, 0, 0, 0.6)), url("/backgroundimage6.JPG") center/cover no-repeat',
+        padding: '5rem 2rem',
+        color: 'white',
+        textAlign: 'center'
+      }}>
+        <div style={{ maxWidth: '800px', margin: '0 auto' }}>
+          <h2 style={{
+            fontFamily: 'Georgia, serif',
+            fontSize: '2rem',
+            fontWeight: 'normal',
+            color: 'white',
+            marginBottom: '2rem'
+          }}>The Heart Behind Our Words</h2>
+          <p style={{
+            fontFamily: 'Georgia, serif',
+            fontSize: '1.1rem',
+            lineHeight: '1.7',
+            color: 'white',
+            marginBottom: '2rem'
+          }}>
+            Each reflection shared here emerges from the sacred intersection of scripture and lived experience. 
+            These writings are born from quiet moments of prayer, seasons of questioning, and the gentle whispers 
+            that come when we dare to listen with our whole hearts.
+          </p>
+          <p style={{
+            fontFamily: 'Georgia, serif',
+            fontSize: '1.1rem',
+            lineHeight: '1.7',
+            color: 'white'
+          }}>
+            We believe that in sharing our spiritual journey—the struggles alongside the victories—we create 
+            space for others to find their own path to healing and hope.
+          </p>
+        </div>
+      </section>
+
+      {/* Writing Philosophy Section */}
+      <section style={{ padding: '5rem 2rem', background: '#ffffff' }}>
+        <div style={{ maxWidth: '1000px', margin: '0 auto' }}>
+          <div style={{
+            display: 'grid',
+            gridTemplateColumns: window.innerWidth > 768 ? '1fr 2fr' : '1fr',
+            gap: '4rem',
+            alignItems: 'start'
+          }}>
+            <div>
+              <h3 style={{
+                fontFamily: 'Georgia, serif',
+                fontSize: '1.8rem',
+                fontWeight: 'normal',
+                color: '#2c2c2c',
+                marginBottom: '1.5rem'
+              }}>Our Writing Process</h3>
+            </div>
+            <div>
+              <p style={{
+                fontFamily: 'Georgia, serif',
+                fontSize: '1.1rem',
+                lineHeight: '1.7',
+                color: '#666666',
+                marginBottom: '2rem'
+              }}>
+                Every piece begins in silence—in those sacred pauses where the soul speaks louder than words. 
+                We write not from a place of having all the answers, but from the honest acknowledgment of our questions, 
+                our longings, and our discoveries along the way.
+              </p>
+              <p style={{
+                fontFamily: 'Georgia, serif',
+                fontSize: '1.1rem',
+                lineHeight: '1.7',
+                color: '#666666',
+                marginBottom: '2rem'
+              }}>
+                Drawing deeply from the Psalms—those ancient songs of lament and praise—we explore themes of 
+                grief and gratitude, doubt and faith, isolation and communion. Each reflection is an invitation 
+                to pause, to breathe, to remember that we are not alone in our spiritual journey.
+              </p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* Subscribe Section */}
+      <section style={{ padding: '5rem 2rem', background: '#f8f9fa', textAlign: 'center' }}>
+        <div style={{ maxWidth: '600px', margin: '0 auto' }}>
+          <h3 style={{
+            fontFamily: 'Georgia, serif',
+            fontSize: '1.8rem',
+            fontWeight: 'normal',
+            color: '#2c2c2c',
+            marginBottom: '1.5rem'
+          }}>Stay Connected</h3>
+          <p style={{
+            fontFamily: 'Georgia, serif',
+            fontSize: '1.1rem',
+            lineHeight: '1.7',
+            color: '#666666',
+            marginBottom: '2.5rem'
+          }}>
+            Receive new reflections and gentle reminders that you are held in love. 
+            No spam, just thoughtful words delivered to your inbox.
+          </p>
+          <div style={{
+            display: 'flex',
+            gap: '10px',
+            maxWidth: '400px',
+            margin: '0 auto',
+            flexDirection: window.innerWidth <= 480 ? 'column' : 'row'
+          }}>
+            <input 
+              type="email" 
+              placeholder="Your email address"
+              style={{
+                flex: 1,
+                padding: '12px 16px',
+                border: '1px solid #e8e8e8',
+                borderRadius: '4px',
+                fontFamily: 'Georgia, serif',
+                fontSize: '1rem'
+              }}
+            />
+            <button style={{
+              padding: '12px 24px',
+              background: '#8b7355',
+              color: '#ffffff',
+              border: 'none',
+              borderRadius: '4px',
+              fontFamily: 'Georgia, serif',
+              fontSize: '1rem',
+              cursor: 'pointer'
+            }}>Subscribe</button>
+          </div>
+        </div>
+      </section>
     </>
   );
 };

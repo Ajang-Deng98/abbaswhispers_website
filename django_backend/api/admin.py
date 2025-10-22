@@ -7,6 +7,13 @@ class BlogPostAdmin(admin.ModelAdmin):
     list_filter = ['status', 'category', 'created_at']
     search_fields = ['title', 'content']
     list_editable = ['status']
+    fields = ['title', 'excerpt', 'content', 'category', 'tags', 'image', 'status', 'author']
+    readonly_fields = ['created_at', 'updated_at']
+    
+    def save_model(self, request, obj, form, change):
+        if not obj.author:
+            obj.author = request.user
+        super().save_model(request, obj, form, change)
 
 @admin.register(Volume)
 class VolumeAdmin(admin.ModelAdmin):
@@ -14,6 +21,8 @@ class VolumeAdmin(admin.ModelAdmin):
     list_filter = ['status', 'category', 'created_at']
     search_fields = ['title', 'description']
     list_editable = ['status']
+    fields = ['title', 'excerpt', 'description', 'content', 'category', 'price', 'image', 'audio_file', 'download_link', 'status']
+    readonly_fields = ['downloads', 'created_at', 'updated_at']
 
 @admin.register(PrayerRequest)
 class PrayerRequestAdmin(admin.ModelAdmin):

@@ -94,7 +94,7 @@ export const contactAPI = {
 };
 
 export const subscriberAPI = {
-  subscribe: (data) => api.post('/subscribers/subscribe/', data),
+  subscribe: (data) => api.post('/subscribers/', data),
   unsubscribe: (data) => api.patch('/subscribers/', data),
   getAll: (params) => api.get('/subscribers/', { params }),
   getStats: () => api.get('/subscribers/'),
