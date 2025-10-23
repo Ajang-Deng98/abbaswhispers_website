@@ -14,9 +14,6 @@ __pycache__/
 *.sqlite3
 *.db
 
-# Media files (optional - remove if you want to include them)
-# django_backend/media/
-
 # Build files
 frontend/dist/
 frontend/build/
@@ -35,5 +32,12 @@ Thumbs.db
 *.log
 logs/
 
-# Package lock files (optional)
-package-lock.json
+# Static files (production)
+django_backend/staticfiles/
+
+# Test files
+test_*.py
+
+# Backup files
+*.bak
+*.backup
