@@ -33,20 +33,22 @@ const About = () => {
               fontFamily: 'Georgia, serif',
               fontSize: '48px',
               fontWeight: 'normal',
-              color: '#2c2c2c',
+              color: '#000000',
               marginBottom: '30px',
               lineHeight: '1.2',
-              letterSpacing: '-0.5px'
+              letterSpacing: '-0.5px',
+              textShadow: '2px 2px 4px rgba(255,255,255,0.8)'
             }}>
               About Uzo
             </h1>
             <p style={{
               fontFamily: 'Georgia, serif',
               fontSize: '20px',
-              color: '#f4d03f',
+              color: '#DAA520',
               lineHeight: '1.6',
               fontWeight: 'normal',
-              fontStyle: 'italic'
+              fontStyle: 'italic',
+              textShadow: '1px 1px 2px rgba(0,0,0,0.5)'
             }}>
               Founder of Abba's Whispers, poet, mother, and seeker of sacred conversations
             </p>

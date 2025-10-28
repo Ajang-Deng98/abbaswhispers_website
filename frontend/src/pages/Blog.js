@@ -94,17 +94,17 @@ const Blog = () => {
               fontSize: 'clamp(2rem, 4vw, 3rem)',
               fontWeight: 'normal',
               marginBottom: '1.5rem',
-              color: '#ffffff',
+              color: '#000000',
               lineHeight: '1.1',
               letterSpacing: '-0.02em',
-              textShadow: '2px 2px 4px rgba(0,0,0,0.5)'
+              textShadow: '2px 2px 4px rgba(255,255,255,0.8)'
             }}>Writings</h1>
             <p style={{
               fontFamily: 'Georgia, serif',
               fontSize: '1rem',
               fontWeight: 'normal',
               marginBottom: '0',
-              color: '#ffffff',
+              color: '#DAA520',
               maxWidth: '600px',
               margin: '0 auto',
               lineHeight: '1.6',

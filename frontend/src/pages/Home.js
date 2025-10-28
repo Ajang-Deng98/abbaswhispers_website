@@ -73,7 +73,9 @@ const Home = () => {
             fontWeight: 'normal',
             marginBottom: '2rem',
             letterSpacing: '-0.02em',
-            lineHeight: '1.1'
+            lineHeight: '1.1',
+            color: '#000000',
+            textShadow: '2px 2px 4px rgba(255,255,255,0.8)'
           }}>Abba's Whispers</h1>
           <p style={{
             fontFamily: 'Georgia, serif',
@@ -81,8 +83,8 @@ const Home = () => {
             fontWeight: 'normal',
             lineHeight: '1.5',
             marginBottom: '3rem',
-            opacity: 0.9,
-            color: '#DAA520'
+            color: '#DAA520',
+            textShadow: '1px 1px 2px rgba(0,0,0,0.5)'
           }}>Poetry inspired by the Psalms</p>
         </div>
       </section>
