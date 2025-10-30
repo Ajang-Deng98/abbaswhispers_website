@@ -74,8 +74,8 @@ const Home = () => {
             marginBottom: '2rem',
             letterSpacing: '-0.02em',
             lineHeight: '1.1',
-            color: '#000000',
-            textShadow: '2px 2px 4px rgba(255,255,255,0.8)'
+            color: 'white',
+            textShadow: '2px 2px 4px rgba(0,0,0,0.8)'
           }}>Abba's Whispers</h1>
           <p style={{
             fontFamily: 'Georgia, serif',
