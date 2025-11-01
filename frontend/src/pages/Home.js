@@ -210,7 +210,7 @@ const Home = () => {
               marginBottom: '3rem',
               textAlign: 'center',
               lineHeight: '1.2'
-            }}>Latest Writings</h2>
+            }}>Check out our latest writing on our blog</h2>
           </ScrollAnimatedSection>
           <div style={{
             display: 'grid',
