@@ -364,55 +364,116 @@ const Blog = () => {
 
 
 
-      {/* Subscribe Section */}
-      <section style={{ padding: '5rem 2rem', background: '#f8f9fa', textAlign: 'center' }}>
-        <div style={{ maxWidth: '600px', margin: '0 auto' }}>
+      {/* Inspiration Gallery */}
+      <section style={{ padding: '5rem 2rem', background: '#f8f9fa' }}>
+        <div style={{ maxWidth: '1000px', margin: '0 auto' }}>
           <h3 style={{
             fontFamily: 'Georgia, serif',
             fontSize: '1.8rem',
             fontWeight: 'normal',
             color: '#2c2c2c',
-            marginBottom: '1.5rem'
-          }}>Stay Connected</h3>
-          <p style={{
-            fontFamily: 'Georgia, serif',
-            fontSize: '1.1rem',
-            lineHeight: '1.7',
-            color: '#666666',
-            marginBottom: '2.5rem'
-          }}>
-            Receive new reflections and gentle reminders that you are held in love. 
-            No spam, just thoughtful words delivered to your inbox.
-          </p>
+            marginBottom: '3rem',
+            textAlign: 'center'
+          }}>Words That Heal</h3>
+          
           <div style={{
-            display: 'flex',
-            gap: '10px',
-            maxWidth: '400px',
-            margin: '0 auto',
-            flexDirection: window.innerWidth <= 480 ? 'column' : 'row'
+            display: 'grid',
+            gridTemplateColumns: window.innerWidth <= 768 ? '1fr' : 'repeat(3, 1fr)',
+            gap: '2rem'
           }}>
-            <input 
-              type="email" 
-              placeholder="Your email address"
-              style={{
-                flex: 1,
-                padding: '12px 16px',
-                border: '1px solid #e8e8e8',
-                borderRadius: '4px',
+            <div style={{
+              background: 'white',
+              padding: '2rem',
+              borderRadius: '8px',
+              boxShadow: '0 2px 10px rgba(0,0,0,0.05)',
+              textAlign: 'center'
+            }}>
+              <div style={{
+                fontSize: '2rem',
+                marginBottom: '1rem',
+                color: '#8b7355'
+              }}>📖</div>
+              <h4 style={{
                 fontFamily: 'Georgia, serif',
-                fontSize: '1rem'
-              }}
-            />
-            <button style={{
-              padding: '12px 24px',
-              background: '#8b7355',
-              color: '#ffffff',
-              border: 'none',
-              borderRadius: '4px',
+                fontSize: '1.1rem',
+                color: '#2c2c2c',
+                marginBottom: '1rem'
+              }}>Daily Reflections</h4>
+              <p style={{
+                fontFamily: 'Georgia, serif',
+                fontSize: '0.9rem',
+                color: '#666666',
+                lineHeight: '1.6'
+              }}>Find peace in the sacred pause of each day through thoughtful meditations.</p>
+            </div>
+            
+            <div style={{
+              background: 'white',
+              padding: '2rem',
+              borderRadius: '8px',
+              boxShadow: '0 2px 10px rgba(0,0,0,0.05)',
+              textAlign: 'center'
+            }}>
+              <div style={{
+                fontSize: '2rem',
+                marginBottom: '1rem',
+                color: '#8b7355'
+              }}>🕊️</div>
+              <h4 style={{
+                fontFamily: 'Georgia, serif',
+                fontSize: '1.1rem',
+                color: '#2c2c2c',
+                marginBottom: '1rem'
+              }}>Healing Journey</h4>
+              <p style={{
+                fontFamily: 'Georgia, serif',
+                fontSize: '0.9rem',
+                color: '#666666',
+                lineHeight: '1.6'
+              }}>Walk the path from grief to grace with poetry that speaks to the soul.</p>
+            </div>
+            
+            <div style={{
+              background: 'white',
+              padding: '2rem',
+              borderRadius: '8px',
+              boxShadow: '0 2px 10px rgba(0,0,0,0.05)',
+              textAlign: 'center'
+            }}>
+              <div style={{
+                fontSize: '2rem',
+                marginBottom: '1rem',
+                color: '#8b7355'
+              }}>💝</div>
+              <h4 style={{
+                fontFamily: 'Georgia, serif',
+                fontSize: '1.1rem',
+                color: '#2c2c2c',
+                marginBottom: '1rem'
+              }}>Sacred Community</h4>
+              <p style={{
+                fontFamily: 'Georgia, serif',
+                fontSize: '0.9rem',
+                color: '#666666',
+                lineHeight: '1.6'
+              }}>Join others who understand that healing happens in shared silence.</p>
+            </div>
+          </div>
+          
+          <div style={{
+            textAlign: 'center',
+            marginTop: '3rem'
+          }}>
+            <Link to="/prayer-request" style={{
               fontFamily: 'Georgia, serif',
+              padding: '1rem 2rem',
+              background: '#8b7355',
+              color: 'white',
+              textDecoration: 'none',
+              borderRadius: '4px',
               fontSize: '1rem',
-              cursor: 'pointer'
-            }}>Subscribe</button>
+              transition: 'all 0.3s ease'
+            }}>Share Your Heart</Link>
           </div>
         </div>
       </section>
