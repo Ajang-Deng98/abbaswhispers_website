@@ -82,7 +82,7 @@ const PrayerRequest = () => {
             <p style={{
               fontFamily: 'Georgia, serif',
               fontSize: '1rem',
-              fontWeight: 'normal',
+              fontWeight: 'bold',
               marginBottom: '0',
               color: '#000000',
               maxWidth: '600px',

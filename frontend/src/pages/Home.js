@@ -80,10 +80,10 @@ const Home = () => {
           <p style={{
             fontFamily: 'Georgia, serif',
             fontSize: 'clamp(1rem, 2vw, 1.2rem)',
-            fontWeight: 'normal',
+            fontWeight: 'bold',
             lineHeight: '1.5',
             marginBottom: '3rem',
-            color: '#8B4513',
+            color: '#000000',
             textShadow: '2px 2px 4px rgba(255,255,255,0.9)'
           }}>Poetry inspired by the Psalms</p>
         </div>

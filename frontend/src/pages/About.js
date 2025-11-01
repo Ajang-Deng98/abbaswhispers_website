@@ -44,9 +44,9 @@ const About = () => {
             <p style={{
               fontFamily: 'Georgia, serif',
               fontSize: '20px',
-              color: '#8B4513',
+              color: '#000000',
               lineHeight: '1.6',
-              fontWeight: 'normal',
+              fontWeight: 'bold',
               fontStyle: 'italic',
               textShadow: '2px 2px 4px rgba(255,255,255,0.9)'
             }}>
