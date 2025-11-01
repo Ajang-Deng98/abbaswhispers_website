@@ -615,15 +615,39 @@ const Volumes = () => {
             width: '100%',
             maxHeight: '80vh',
             overflowY: 'auto',
-            position: 'relative'
+            position: 'relative',
+            fontFamily: 'Georgia, serif'
           }}>
-            <button className="modal-close" onClick={() => setSelectedVolume(null)}>×</button>
-            <h2>{selectedVolume.title}</h2>
-            <div className="modal-poem">
-              {selectedVolume.content ? 
-                <div dangerouslySetInnerHTML={{ __html: selectedVolume.content }} /> :
-                (selectedVolume.fullText || selectedVolume.full_text)
-              }
+            <button 
+              onClick={() => setSelectedVolume(null)}
+              style={{
+                position: 'absolute',
+                top: '1rem',
+                right: '1rem',
+                background: 'none',
+                border: 'none',
+                fontSize: '2rem',
+                cursor: 'pointer',
+                color: '#666666',
+                lineHeight: '1'
+              }}
+            >×</button>
+            <h2 style={{
+              fontFamily: 'Georgia, serif',
+              fontSize: '1.8rem',
+              fontWeight: 'normal',
+              color: '#2c2c2c',
+              marginBottom: '2rem',
+              paddingRight: '3rem'
+            }}>{selectedVolume.title}</h2>
+            <div style={{
+              fontFamily: 'Georgia, serif',
+              fontSize: '1.1rem',
+              lineHeight: '1.8',
+              color: '#2c2c2c',
+              whiteSpace: 'pre-wrap'
+            }}>
+              {selectedVolume.content || selectedVolume.fullText || selectedVolume.full_text || selectedVolume.description || 'Content not available'}
             </div>
           </div>
         </div>
