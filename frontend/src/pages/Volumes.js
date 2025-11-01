@@ -138,7 +138,7 @@ const Volumes = () => {
             }}>SELAH</h1>
             <p style={{
               fontFamily: 'Georgia, serif',
-              fontSize: '1rem',
+              fontSize: '1.2rem',
               fontWeight: 'bold',
               marginBottom: '0',
               color: '#000000',

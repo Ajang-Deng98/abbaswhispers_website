@@ -79,7 +79,7 @@ const Home = () => {
           }}>Abba's Whispers</h1>
           <p style={{
             fontFamily: 'Georgia, serif',
-            fontSize: 'clamp(1rem, 2vw, 1.2rem)',
+            fontSize: 'clamp(1.2rem, 3vw, 1.8rem)',
             fontWeight: 'bold',
             lineHeight: '1.5',
             marginBottom: '3rem',

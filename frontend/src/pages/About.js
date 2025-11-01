@@ -43,7 +43,7 @@ const About = () => {
             </h1>
             <p style={{
               fontFamily: 'Georgia, serif',
-              fontSize: '20px',
+              fontSize: '24px',
               color: '#000000',
               lineHeight: '1.6',
               fontWeight: 'bold',
