@@ -1,43 +1,37 @@
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
 import { Helmet } from 'react-helmet';
 import ScrollAnimatedSection from '../components/ScrollAnimatedSection';
-import { blogAPI, volumeAPI, subscriberAPI } from '../utils/api';
+
 const Home = () => {
-  const [featuredPosts, setFeaturedPosts] = useState([]);
-  const [featuredVolumes, setFeaturedVolumes] = useState([]);
   const [newsletterEmail, setNewsletterEmail] = useState('');
   const [isSubscribing, setIsSubscribing] = useState(false);
   const [subscribeMessage, setSubscribeMessage] = useState('');
 
-  const loadFeaturedContent = async () => {
-    try {
-      const [postsResponse, volumesResponse] = await Promise.all([
-        blogAPI.getAllPosts({ limit: 3 }),
-        volumeAPI.getAllVolumes({ limit: 3 })
-      ]);
-      
-      const posts = postsResponse.data;
-      if (Array.isArray(posts) && posts.length > 0) {
-        setFeaturedPosts(posts.slice(0, 3));
-      } else if (posts?.results && Array.isArray(posts.results) && posts.results.length > 0) {
-        setFeaturedPosts(posts.results.slice(0, 3));
-      }
-
-      const volumes = volumesResponse.data;
-      if (Array.isArray(volumes) && volumes.length > 0) {
-        setFeaturedVolumes(volumes.slice(0, 3));
-      } else if (volumes?.results && Array.isArray(volumes.results) && volumes.results.length > 0) {
-        setFeaturedVolumes(volumes.results.slice(0, 3));
-      }
-    } catch (error) {
-      console.error('Error loading featured content:', error);
+  // Sample featured posts
+  const featuredPosts = [
+    {
+      id: 1,
+      title: "Finding Peace in the Storm",
+      excerpt: "When life's tempests rage around us, we can find solace in the eternal promises found within the Psalms...",
+      date: "December 15, 2024",
+      slug: "finding-peace-in-the-storm"
+    },
+    {
+      id: 2,
+      title: "The Language of Lament",
+      excerpt: "David's raw honesty in the Psalms teaches us that it's okay to bring our deepest sorrows before God...",
+      date: "December 10, 2024",
+      slug: "the-language-of-lament"
+    },
+    {
+      id: 3,
+      title: "Selah: The Sacred Pause",
+      excerpt: "In our hurried world, the Hebrew word 'Selah' invites us to pause, breathe, and reflect on God's goodness...",
+      date: "December 5, 2024",
+      slug: "selah-the-sacred-pause"
     }
-  };
-
-  useEffect(() => {
-    loadFeaturedContent();
-  }, []);
+  ];
 
   return (
     <>
@@ -217,35 +211,61 @@ const Home = () => {
             gridTemplateColumns: window.innerWidth <= 768 ? '1fr' : 'repeat(3, 1fr)',
             gap: '40px'
           }}>
-            {featuredPosts.length > 0 ? featuredPosts.slice(0, 3).map((post, index) => (
-              <ScrollAnimatedSection key={post.id} animation="fade-up" delay={index * 100} style={{
-                textAlign: 'center'
-              }}>
-                <h3 style={{
-                  fontFamily: 'Georgia, serif',
-                  fontSize: '1.1rem',
-                  fontWeight: 'normal',
-                  color: '#2c2c2c',
-                  marginBottom: '1rem',
-                  lineHeight: '1.3'
-                }}>{post.title}</h3>
-                <p style={{
-                  fontFamily: 'Georgia, serif',
-                  fontSize: '1rem',
-                  lineHeight: '1.6',
-                  color: '#666666',
-                  marginBottom: '1.5rem'
-                }}>{post.excerpt}</p>
-                <Link to={`/blog/${post.id}`} style={{
-                  fontFamily: 'Georgia, serif',
-                  fontSize: '0.9rem',
-                  color: '#8b7355',
-                  textDecoration: 'none',
-                  borderBottom: '1px solid #8b7355',
-                  paddingBottom: '2px'
-                }}>Read More</Link>
-              </ScrollAnimatedSection>
-            )) : (
+            {featuredPosts.length > 0 ? (
+              featuredPosts.map((post) => (
+                <ScrollAnimatedSection key={post.id} animation="fade-up">
+                  <article style={{
+                    background: '#f8f9fa',
+                    padding: '2rem',
+                    borderRadius: '8px',
+                    height: '100%',
+                    display: 'flex',
+                    flexDirection: 'column'
+                  }}>
+                    <h3 style={{
+                      fontFamily: 'Georgia, serif',
+                      fontSize: '1.2rem',
+                      color: '#2c2c2c',
+                      marginBottom: '1rem',
+                      lineHeight: '1.3'
+                    }}>{post.title}</h3>
+                    <p style={{
+                      fontFamily: 'Georgia, serif',
+                      fontSize: '0.95rem',
+                      color: '#666666',
+                      lineHeight: '1.6',
+                      marginBottom: '1.5rem',
+                      flex: 1
+                    }}>{post.excerpt}</p>
+                    <div style={{
+                      display: 'flex',
+                      justifyContent: 'space-between',
+                      alignItems: 'center',
+                      marginTop: 'auto'
+                    }}>
+                      <span style={{
+                        fontFamily: 'Georgia, serif',
+                        fontSize: '0.85rem',
+                        color: '#999999'
+                      }}>{post.date}</span>
+                      <Link 
+                        to={`/blog/${post.slug}`}
+                        style={{
+                          fontFamily: 'Georgia, serif',
+                          fontSize: '0.9rem',
+                          color: '#8b7355',
+                          textDecoration: 'none',
+                          borderBottom: '1px solid #8b7355',
+                          paddingBottom: '2px'
+                        }}
+                      >
+                        Read More
+                      </Link>
+                    </div>
+                  </article>
+                </ScrollAnimatedSection>
+              ))
+            ) : (
               <div style={{ gridColumn: '1 / -1', textAlign: 'center' }}>
                 <p style={{
                   fontFamily: 'Georgia, serif',
@@ -374,30 +394,12 @@ const Home = () => {
           }}>
             Receive weekly poetry, reflections, and gentle reminders that you are held in love.
           </p>
-          <form onSubmit={async (e) => {
+          <form onSubmit={(e) => {
             e.preventDefault();
             setIsSubscribing(true);
-            setSubscribeMessage('');
-            
-            try {
-              const response = await subscriberAPI.subscribe({ email: newsletterEmail });
-              if (response.data.message && response.data.message.includes('already subscribed')) {
-                setSubscribeMessage('📬 You are already subscribed! Thank you for your continued support.');
-              } else {
-                setSubscribeMessage('🎉 Success! Thank you for subscribing to Weekly Whispers. You\'ll receive inspiring poetry and reflections in your inbox.');
-              }
-              setNewsletterEmail('');
-            } catch (error) {
-              console.error('Newsletter subscription error:', error);
-              if (error.response?.data?.message?.includes('already subscribed')) {
-                setSubscribeMessage('📬 You are already subscribed! Thank you for your continued support.');
-                setNewsletterEmail('');
-              } else {
-                setSubscribeMessage('There was an error with your subscription. Please try again.');
-              }
-            } finally {
-              setIsSubscribing(false);
-            }
+            setSubscribeMessage('🎉 Thank you for your interest! Newsletter functionality coming soon.');
+            setNewsletterEmail('');
+            setIsSubscribing(false);
           }} style={{
             display: 'flex',
             gap: '10px',

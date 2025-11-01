@@ -1,0 +1,15 @@
+{
+  "short_name": "Abba Whispers",
+  "name": "Abba's Whispers - Christian Poetry",
+  "icons": [
+    {
+      "src": "logo.jpg",
+      "sizes": "64x64 32x32 24x24 16x16",
+      "type": "image/jpeg"
+    }
+  ],
+  "start_url": ".",
+  "display": "standalone",
+  "theme_color": "#8b7355",
+  "background_color": "#ffffff"
+}

@@ -40,11 +40,11 @@ python manage.py runserver
 ```bash
 cd frontend
 npm install
-npm start
+npm run dev
 ```
 
 ### 4. Access Application
-- **Frontend**: http://localhost:3000
+- **Frontend**: http://localhost:5176
 - **Backend API**: http://localhost:8000/api
 - **Django Admin**: http://localhost:8000/admin
 
@@ -149,7 +149,7 @@ DB_PORT=5432
 
 ### React (.env)
 ```env
-REACT_APP_API_URL=http://localhost:8000/api
+VITE_API_URL=http://localhost:8000/api
 ```
 
 ## 🤝 Contributing
