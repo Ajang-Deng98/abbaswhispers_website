@@ -74,8 +74,8 @@ const Home = () => {
             marginBottom: '2rem',
             letterSpacing: '-0.02em',
             lineHeight: '1.1',
-            color: 'white',
-            textShadow: '2px 2px 4px rgba(0,0,0,0.8)'
+            color: '#000000',
+            textShadow: '2px 2px 4px rgba(255,255,255,0.9)'
           }}>Abba's Whispers</h1>
           <p style={{
             fontFamily: 'Georgia, serif',
@@ -83,8 +83,8 @@ const Home = () => {
             fontWeight: 'normal',
             lineHeight: '1.5',
             marginBottom: '3rem',
-            color: '#DAA520',
-            textShadow: '1px 1px 2px rgba(0,0,0,0.5)'
+            color: '#8B4513',
+            textShadow: '2px 2px 4px rgba(255,255,255,0.9)'
           }}>Poetry inspired by the Psalms</p>
         </div>
       </section>
@@ -105,7 +105,7 @@ const Home = () => {
               color: '#2c2c2c',
               marginBottom: '2rem',
               lineHeight: '1.2'
-            }}>A Journey Through Grief to Grace</h2>
+            }}>A Journey Through Grief and Grace</h2>
             <p style={{
               fontFamily: 'Georgia, serif',
               fontSize: '1rem',
@@ -259,42 +259,7 @@ const Home = () => {
         </div>
       </section>
 
-      {/* What is SELAH */}
-      <section style={{ padding: '120px 0', background: '#f8f9fa' }}>
-        <div style={{ maxWidth: '800px', margin: '0 auto', padding: '0 2rem', textAlign: 'center' }}>
-          <ScrollAnimatedSection animation="fade-up">
-            <h2 style={{
-              fontFamily: 'Georgia, serif',
-              fontSize: '2.2rem',
-              fontWeight: 'normal',
-              color: '#2c2c2c',
-              marginBottom: '2rem',
-              lineHeight: '1.2'
-            }}>What is SELAH?</h2>
-          <p style={{
-            fontFamily: 'Georgia, serif',
-            fontSize: '1.2rem',
-            lineHeight: '1.7',
-            color: '#666666',
-            marginBottom: '2rem',
-            fontStyle: 'italic'
-          }}>
-            SELAH is a Hebrew word found throughout the Psalms, meaning "pause and reflect." 
-            It invites us to stop, breathe deeply, and allow the words to settle into our souls.
-          </p>
-          <p style={{
-            fontFamily: 'Georgia, serif',
-            fontSize: '1.1rem',
-            lineHeight: '1.7',
-            color: '#666666'
-          }}>
-            In our hurried world, SELAH reminds us that healing happens in the pauses, 
-            in the sacred spaces between words. This poetry series became the foundation 
-            of my healing journey, inviting you to find your own sacred conversation with the divine.
-          </p>
-          </ScrollAnimatedSection>
-        </div>
-      </section>
+
 
       {/* Quote Section */}
       <section style={{

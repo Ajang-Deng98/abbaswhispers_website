@@ -97,19 +97,19 @@ const Blog = () => {
               color: '#000000',
               lineHeight: '1.1',
               letterSpacing: '-0.02em',
-              textShadow: '2px 2px 4px rgba(255,255,255,0.8)'
+              textShadow: '2px 2px 4px rgba(255,255,255,0.9)'
             }}>Writings</h1>
             <p style={{
               fontFamily: 'Georgia, serif',
               fontSize: '1rem',
               fontWeight: 'normal',
               marginBottom: '0',
-              color: '#DAA520',
+              color: '#8B4513',
               maxWidth: '600px',
               margin: '0 auto',
               lineHeight: '1.6',
-              textShadow: '1px 1px 2px rgba(0,0,0,0.5)'
-            }}>Reflections on the sacred journey through grief, grace, and the whispers that heal.</p>
+              textShadow: '2px 2px 4px rgba(255,255,255,0.9)'
+            }}>Reflections on the sacred journey through grief and grace, and the whispers that heal.</p>
           </motion.div>
         </div>
       </section>
@@ -362,89 +362,7 @@ const Blog = () => {
         )}
       </div>
 
-      {/* About Our Writings Section */}
-      <section style={{
-        background: 'linear-gradient(rgba(0, 0, 0, 0.6), rgba(0, 0, 0, 0.6)), url("/backgroundimage6.JPG") center/cover no-repeat',
-        padding: '5rem 2rem',
-        color: 'white',
-        textAlign: 'center'
-      }}>
-        <div style={{ maxWidth: '800px', margin: '0 auto' }}>
-          <h2 style={{
-            fontFamily: 'Georgia, serif',
-            fontSize: '2rem',
-            fontWeight: 'normal',
-            color: 'white',
-            marginBottom: '2rem'
-          }}>The Heart Behind Our Words</h2>
-          <p style={{
-            fontFamily: 'Georgia, serif',
-            fontSize: '1.1rem',
-            lineHeight: '1.7',
-            color: 'white',
-            marginBottom: '2rem'
-          }}>
-            Each reflection shared here emerges from the sacred intersection of scripture and lived experience. 
-            These writings are born from quiet moments of prayer, seasons of questioning, and the gentle whispers 
-            that come when we dare to listen with our whole hearts.
-          </p>
-          <p style={{
-            fontFamily: 'Georgia, serif',
-            fontSize: '1.1rem',
-            lineHeight: '1.7',
-            color: 'white'
-          }}>
-            We believe that in sharing our spiritual journey—the struggles alongside the victories—we create 
-            space for others to find their own path to healing and hope.
-          </p>
-        </div>
-      </section>
 
-      {/* Writing Philosophy Section */}
-      <section style={{ padding: '5rem 2rem', background: '#ffffff' }}>
-        <div style={{ maxWidth: '1000px', margin: '0 auto' }}>
-          <div style={{
-            display: 'grid',
-            gridTemplateColumns: window.innerWidth > 768 ? '1fr 2fr' : '1fr',
-            gap: '4rem',
-            alignItems: 'start'
-          }}>
-            <div>
-              <h3 style={{
-                fontFamily: 'Georgia, serif',
-                fontSize: '1.8rem',
-                fontWeight: 'normal',
-                color: '#2c2c2c',
-                marginBottom: '1.5rem'
-              }}>Our Writing Process</h3>
-            </div>
-            <div>
-              <p style={{
-                fontFamily: 'Georgia, serif',
-                fontSize: '1.1rem',
-                lineHeight: '1.7',
-                color: '#666666',
-                marginBottom: '2rem'
-              }}>
-                Every piece begins in silence—in those sacred pauses where the soul speaks louder than words. 
-                We write not from a place of having all the answers, but from the honest acknowledgment of our questions, 
-                our longings, and our discoveries along the way.
-              </p>
-              <p style={{
-                fontFamily: 'Georgia, serif',
-                fontSize: '1.1rem',
-                lineHeight: '1.7',
-                color: '#666666',
-                marginBottom: '2rem'
-              }}>
-                Drawing deeply from the Psalms—those ancient songs of lament and praise—we explore themes of 
-                grief and gratitude, doubt and faith, isolation and communion. Each reflection is an invitation 
-                to pause, to breathe, to remember that we are not alone in our spiritual journey.
-              </p>
-            </div>
-          </div>
-        </div>
-      </section>
 
       {/* Subscribe Section */}
       <section style={{ padding: '5rem 2rem', background: '#f8f9fa', textAlign: 'center' }}>

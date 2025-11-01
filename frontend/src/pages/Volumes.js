@@ -69,7 +69,7 @@ const Volumes = () => {
       if (response.data.message && response.data.message.includes('already subscribed')) {
         setSignupMessage('📬 You are already subscribed! Thank you for your continued support.');
       } else {
-        setSignupMessage('🎉 Success! Thank you for signing up for volume updates. You\'ll be the first to know when the seven new SELAH collections are released.');
+        setSignupMessage('🎉 Success! Thank you for signing up for volume updates. You\'ll be the first to know when the five new SELAH collections are released.');
       }
       setSignupForm({ name: '', email: '', message: '' });
     } catch (error) {
@@ -134,18 +134,18 @@ const Volumes = () => {
               color: '#000000',
               lineHeight: '1.1',
               letterSpacing: '-0.02em',
-              textShadow: '2px 2px 4px rgba(255,255,255,0.8)'
+              textShadow: '2px 2px 4px rgba(255,255,255,0.9)'
             }}>SELAH</h1>
             <p style={{
               fontFamily: 'Georgia, serif',
               fontSize: '1rem',
               fontWeight: 'normal',
               marginBottom: '0',
-              color: '#DAA520',
+              color: '#8B4513',
               maxWidth: '600px',
               margin: '0 auto',
               lineHeight: '1.6',
-              textShadow: '1px 1px 2px rgba(0,0,0,0.5)'
+              textShadow: '2px 2px 4px rgba(255,255,255,0.9)'
             }}>Poetry born from the sacred pause between heartbreak and healing, where silence becomes song.</p>
           </motion.div>
         </div>
@@ -217,7 +217,7 @@ const Volumes = () => {
             color: '#2c2c2c',
             marginBottom: '1rem',
             lineHeight: '1.2'
-          }}>Seven New Volumes Coming Soon</h2>
+          }}>Five New Volumes Coming Soon</h2>
           <p style={{
             fontFamily: 'Georgia, serif',
             fontSize: '1.1rem',
@@ -227,7 +227,7 @@ const Volumes = () => {
             maxWidth: '600px',
             margin: '0 auto 2rem'
           }}>
-            We're preparing seven new poetry collections that will take you deeper into the sacred pause of SELAH. Be the first to know when they're released.
+            We're preparing five new poetry collections that will take you deeper into the sacred pause of SELAH. Be the first to know when they're released.
           </p>
           <form onSubmit={handleSignupSubmit} style={{
             display: 'flex',

@@ -70,18 +70,18 @@ const Contact = () => {
               color: '#000000',
               lineHeight: '1.1',
               letterSpacing: '-0.02em',
-              textShadow: '2px 2px 4px rgba(255,255,255,0.8)'
+              textShadow: '2px 2px 4px rgba(255,255,255,0.9)'
             }}>Connect</h1>
             <p style={{
               fontFamily: 'Georgia, serif',
               fontSize: '1rem',
               fontWeight: 'normal',
               marginBottom: '0',
-              color: '#DAA520',
+              color: '#8B4513',
               maxWidth: '600px',
               margin: '0 auto',
               lineHeight: '1.6',
-              textShadow: '1px 1px 2px rgba(0,0,0,0.5)'
+              textShadow: '2px 2px 4px rgba(255,255,255,0.9)'
             }}>We welcome your thoughts, questions, and the stories that shape your spiritual journey.</p>
           </motion.div>
         </div>

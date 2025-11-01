@@ -51,7 +51,8 @@ const Header = () => {
                   borderRadius: '50%',
                   objectFit: 'cover',
                   border: 'none',
-                  boxShadow: 'none'
+                  boxShadow: '0 2px 8px rgba(0,0,0,0.3)',
+                  filter: 'brightness(1.1) contrast(1.1)'
                 }}
               />
             </div>

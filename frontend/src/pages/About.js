@@ -37,18 +37,18 @@ const About = () => {
               marginBottom: '30px',
               lineHeight: '1.2',
               letterSpacing: '-0.5px',
-              textShadow: '2px 2px 4px rgba(255,255,255,0.8)'
+              textShadow: '2px 2px 4px rgba(255,255,255,0.9)'
             }}>
               About Uzo
             </h1>
             <p style={{
               fontFamily: 'Georgia, serif',
               fontSize: '20px',
-              color: '#DAA520',
+              color: '#8B4513',
               lineHeight: '1.6',
               fontWeight: 'normal',
               fontStyle: 'italic',
-              textShadow: '1px 1px 2px rgba(0,0,0,0.5)'
+              textShadow: '2px 2px 4px rgba(255,255,255,0.9)'
             }}>
               Founder of Abba's Whispers, poet, mother, and seeker of sacred conversations
             </p>
@@ -289,6 +289,85 @@ const About = () => {
                 It invites us to stop, breathe deeply, and allow the words to settle into our souls. 
                 In our hurried world, SELAH reminds us that healing happens in the pauses, 
                 in the sacred spaces between words.
+              </p>
+            </div>
+
+            {/* The Heart Behind Our Words */}
+            <div style={{ marginBottom: '60px' }}>
+              <h2 style={{
+                fontFamily: 'Georgia, serif',
+                fontSize: '28px',
+                fontWeight: 'normal',
+                color: '#2c2c2c',
+                marginBottom: '30px',
+                lineHeight: '1.3'
+              }}>
+                The Heart Behind Our Words
+              </h2>
+              
+              <p style={{
+                fontFamily: 'Georgia, serif',
+                fontSize: '16px',
+                lineHeight: '1.8',
+                color: '#666666',
+                marginBottom: '25px',
+                fontWeight: 'normal'
+              }}>
+                Each reflection shared here emerges from the sacred intersection of scripture and lived experience. 
+                These writings are born from quiet moments of prayer, seasons of questioning, and the gentle whispers 
+                that come when we dare to listen with our whole hearts.
+              </p>
+              
+              <p style={{
+                fontFamily: 'Georgia, serif',
+                fontSize: '16px',
+                lineHeight: '1.8',
+                color: '#666666',
+                marginBottom: '25px',
+                fontWeight: 'normal'
+              }}>
+                We believe that in sharing our spiritual journey—the struggles alongside the victories—we create 
+                space for others to find their own path to healing and hope.
+              </p>
+            </div>
+
+            {/* Our Writing Process */}
+            <div style={{ marginBottom: '60px' }}>
+              <h2 style={{
+                fontFamily: 'Georgia, serif',
+                fontSize: '28px',
+                fontWeight: 'normal',
+                color: '#2c2c2c',
+                marginBottom: '30px',
+                lineHeight: '1.3'
+              }}>
+                Our Writing Process
+              </h2>
+              
+              <p style={{
+                fontFamily: 'Georgia, serif',
+                fontSize: '16px',
+                lineHeight: '1.8',
+                color: '#666666',
+                marginBottom: '25px',
+                fontWeight: 'normal'
+              }}>
+                Every piece begins in silence—in those sacred pauses where the soul speaks louder than words. 
+                We write not from a place of having all the answers, but from the honest acknowledgment of our questions, 
+                our longings, and our discoveries along the way.
+              </p>
+              
+              <p style={{
+                fontFamily: 'Georgia, serif',
+                fontSize: '16px',
+                lineHeight: '1.8',
+                color: '#666666',
+                marginBottom: '25px',
+                fontWeight: 'normal'
+              }}>
+                Drawing deeply from the Psalms—those ancient songs of lament and praise—we explore themes of 
+                grief and gratitude, doubt and faith, isolation and communion. Each reflection is an invitation 
+                to pause, to breathe, to remember that we are not alone in our spiritual journey.
               </p>
             </div>
 
