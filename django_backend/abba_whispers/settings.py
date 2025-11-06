@@ -8,7 +8,7 @@ SECRET_KEY = config('SECRET_KEY')
 DEBUG = config('DEBUG', default=False, cast=bool)
 ALLOWED_HOSTS = config('ALLOWED_HOSTS', default='localhost,127.0.0.1').split(',')
 if not DEBUG:
-    ALLOWED_HOSTS.extend(['*.herokuapp.com', '*.railway.app', '*.render.com'])
+    ALLOWED_HOSTS.extend(['abbaswhispers.com', 'www.abbaswhispers.com', '46.202.141.138'])
 
 INSTALLED_APPS = [
     'django.contrib.admin',
@@ -114,7 +114,7 @@ SIMPLE_JWT = {
 }
 
 # CORS Configuration
-CORS_ALLOWED_ORIGINS = config('CORS_ALLOWED_ORIGINS', default='http://localhost:3000').split(',')
+CORS_ALLOWED_ORIGINS = config('CORS_ALLOWED_ORIGINS', default='http://localhost:3000,https://abbaswhispers.com,https://www.abbaswhispers.com').split(',')
 CORS_ALLOW_ALL_ORIGINS = config('DEBUG', default=False, cast=bool)
 CORS_ALLOW_CREDENTIALS = True
 CORS_ALLOWED_HEADERS = [
