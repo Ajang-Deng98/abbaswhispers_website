@@ -67,6 +67,7 @@ const About = () => {
               <img 
                 src="/GCQ28999-Edit.jpg" 
                 alt="Uzo in contemplation"
+                className="about-image-float"
                 style={{
                   float: 'right',
                   width: '300px',
@@ -178,7 +179,7 @@ const About = () => {
             </div>
 
             {/* Image Gallery */}
-            <div style={{
+            <div className="about-image-gallery" style={{
               display: 'grid',
               gridTemplateColumns: window.innerWidth <= 768 ? '1fr' : 'repeat(3, 1fr)',
               gap: '20px',
