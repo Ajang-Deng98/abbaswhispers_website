@@ -34,20 +34,20 @@ pip install gunicorn
 # Setup PostgreSQL database
 sudo -u postgres psql << EOF
 CREATE DATABASE abba_whispers;
-CREATE USER abba_user WITH PASSWORD 'secure_password_123';
-GRANT ALL PRIVILEGES ON DATABASE abba_whispers TO abba_user;
-ALTER USER abba_user CREATEDB;
+CREATE USER postgres WITH PASSWORD 'Ajangdeng98%';
+GRANT ALL PRIVILEGES ON DATABASE abba_whispers TO postgres;
+ALTER USER postgres CREATEDB;
 \q
 EOF
 
 # Create production environment file
 cat > .env << EOF
-SECRET_KEY=your_secret_key_here_change_this_in_production
+SECRET_KEY=b09d71b806c624a2aad97d875b1588ced8cbd2651da71dd181dffd528c06b9cb088f57251968243695df891187c3287a93dcf848a3010e226c563dfc18cd7dd1
 DEBUG=False
 ALLOWED_HOSTS=abbaswhispers.com,www.abbaswhispers.com,46.202.141.138
 DB_NAME=abba_whispers
-DB_USER=abba_user
-DB_PASSWORD=secure_password_123
+DB_USER=postgres
+DB_PASSWORD=Ajangdeng98%
 DB_HOST=localhost
 DB_PORT=5432
 CORS_ALLOWED_ORIGINS=https://abbaswhispers.com,https://www.abbaswhispers.com
