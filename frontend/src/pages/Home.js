@@ -228,6 +228,7 @@ const Home = () => {
                   borderRadius: '4px'
                 }}
                 loading="lazy"
+                decoding="async"
               />
             </ScrollAnimatedSection>
           </div>
