@@ -1,12 +1,24 @@
 #!/bin/bash
 
-# Nginx optimization for faster image loading
-echo "🚀 Optimizing nginx for faster image loading..."
+echo "Applying nginx optimization configuration..."
 
-# Update nginx configuration
-sudo tee /etc/nginx/sites-available/abbaswhispers << 'EOF'
+# Backup current nginx config
+sudo cp /etc/nginx/sites-available/abbaswhispers /etc/nginx/sites-available/abbaswhispers.backup
+
+# Create optimized nginx config
+sudo tee /etc/nginx/sites-available/abbaswhispers > /dev/null <<'EOF'
 server {
-    server_name abbaswhispers.com www.abbaswhispers.com 46.202.141.138;
+    listen 80;
+    server_name abbaswhispers.com www.abbaswhispers.com;
+    return 301 https://$server_name$request_uri;
+}
+
+server {
+    listen 443 ssl http2;
+    server_name abbaswhispers.com www.abbaswhispers.com;
+
+    ssl_certificate /etc/letsencrypt/live/abbaswhispers.com/fullchain.pem;
+    ssl_certificate_key /etc/letsencrypt/live/abbaswhispers.com/privkey.pem;
 
     # Gzip compression
     gzip on;
@@ -19,84 +31,75 @@ server {
         text/css
         text/xml
         text/javascript
+        application/json
         application/javascript
         application/xml+rss
-        application/json
+        application/atom+xml
         image/svg+xml;
 
-    location = /favicon.ico {
-        access_log off;
-        log_not_found off;
+    # Static files with long-term caching
+    location ~* \.(jpg|jpeg|png|gif|ico|css|js|woff|woff2|ttf|svg)$ {
+        root /var/www/abbaswhispers/frontend/dist;
+        expires 1y;
+        add_header Cache-Control "public, immutable";
+        add_header Vary Accept-Encoding;
+        try_files $uri $uri/ =404;
     }
 
-    # Static files with long cache
+    # Frontend static files
+    location / {
+        root /var/www/abbaswhispers/frontend/dist;
+        try_files $uri $uri/ /index.html;
+        
+        # Cache HTML files for shorter time
+        location ~* \.html$ {
+            expires 1h;
+            add_header Cache-Control "public";
+        }
+    }
+
+    # API requests
+    location /api/ {
+        proxy_pass http://127.0.0.1:8000;
+        proxy_set_header Host $host;
+        proxy_set_header X-Real-IP $remote_addr;
+        proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+        proxy_set_header X-Forwarded-Proto $scheme;
+    }
+
+    # Django admin
+    location /admin/ {
+        proxy_pass http://127.0.0.1:8000;
+        proxy_set_header Host $host;
+        proxy_set_header X-Real-IP $remote_addr;
+        proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+        proxy_set_header X-Forwarded-Proto $scheme;
+    }
+
+    # Django static files
     location /static/ {
         alias /var/www/abbaswhispers/django_backend/staticfiles/;
         expires 1y;
         add_header Cache-Control "public, immutable";
-        add_header Vary Accept-Encoding;
     }
 
-    # Media files with long cache
+    # Django media files
     location /media/ {
         alias /var/www/abbaswhispers/django_backend/media/;
         expires 1y;
         add_header Cache-Control "public, immutable";
-        add_header Vary Accept-Encoding;
     }
-
-    # Image files with aggressive caching
-    location ~* \.(jpg|jpeg|png|gif|ico|svg|webp)$ {
-        root /var/www/abbaswhispers/frontend/dist;
-        expires 1y;
-        add_header Cache-Control "public, immutable";
-        add_header Vary Accept-Encoding;
-        try_files $uri =404;
-    }
-
-    # API endpoints
-    location /api/ {
-        include proxy_params;
-        proxy_pass http://unix:/var/www/abbaswhispers/abbaswhispers.sock;
-    }
-
-    # Admin panel
-    location /admin/ {
-        include proxy_params;
-        proxy_pass http://unix:/var/www/abbaswhispers/abbaswhispers.sock;
-    }
-
-    # Frontend files
-    location / {
-        root /var/www/abbaswhispers/frontend/dist;
-        try_files $uri $uri/ /index.html;
-        expires 1h;
-        add_header Cache-Control "public";
-    }
-
-    listen 443 ssl;
-    ssl_certificate /etc/letsencrypt/live/abbaswhispers.com/fullchain.pem;
-    ssl_certificate_key /etc/letsencrypt/live/abbaswhispers.com/privkey.pem;
-    include /etc/letsencrypt/options-ssl-nginx.conf;
-    ssl_dhparam /etc/letsencrypt/ssl-dhparams.pem;
-}
-
-server {
-    if ($host = www.abbaswhispers.com) {
-        return 301 https://$host$request_uri;
-    }
-
-    if ($host = abbaswhispers.com) {
-        return 301 https://$host$request_uri;
-    }
-
-    listen 80;
-    server_name abbaswhispers.com www.abbaswhispers.com 46.202.141.138;
-    return 404;
 }
 EOF
 
-# Test and restart nginx
-sudo nginx -t && sudo systemctl restart nginx
+echo "Testing nginx configuration..."
+sudo nginx -t
 
-echo "✅ Nginx optimized for faster image loading!"
+if [ $? -eq 0 ]; then
+    echo "Reloading nginx..."
+    sudo systemctl reload nginx
+    echo "Nginx optimization applied successfully!"
+else
+    echo "Nginx configuration error. Restoring backup..."
+    sudo cp /etc/nginx/sites-available/abbaswhispers.backup /etc/nginx/sites-available/abbaswhispers
+fi
