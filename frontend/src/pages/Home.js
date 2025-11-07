@@ -49,6 +49,10 @@ const Home = () => {
         <meta name="twitter:description" content="Poetry inspired by the Psalms, born from a journey through grief and grace" />
         <meta name="twitter:image" content="https://abbaswhispers.com/hero-image-homepage.JPG" />
         <link rel="canonical" href="https://abbaswhispers.com" />
+        <link rel="preload" as="image" href="/hero-image-aboutpage.JPG" />
+        <link rel="preload" as="image" href="/heroimage-volumepage.JPG" />
+        <link rel="preload" as="image" href="/backgroundtextimage2.JPG" />
+        <link rel="preload" as="image" href="/backgroundtextimage3.JPG" />
       </Helmet>
 
       {/* Hero Section */}

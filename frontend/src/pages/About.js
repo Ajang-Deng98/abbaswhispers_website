@@ -68,6 +68,8 @@ const About = () => {
                 src="/GCQ28999-Edit.jpg" 
                 alt="Uzo in contemplation"
                 className="about-image-float"
+                loading="lazy"
+                decoding="async"
                 style={{
                   float: 'right',
                   width: '300px',
@@ -188,6 +190,8 @@ const About = () => {
               <img 
                 src="/GCQ29069-Edit.jpg" 
                 alt="Contemplative moment"
+                loading="lazy"
+                decoding="async"
                 style={{
                   width: '100%',
                   height: '200px',
@@ -199,6 +203,8 @@ const About = () => {
               <img 
                 src="/GCQ29078-Edit.jpg" 
                 alt="Peaceful reflection"
+                loading="lazy"
+                decoding="async"
                 style={{
                   width: '100%',
                   height: '200px',
@@ -210,6 +216,8 @@ const About = () => {
               <img 
                 src="/GCQ29088-Edit.jpg" 
                 alt="Sacred space"
+                loading="lazy"
+                decoding="async"
                 style={{
                   width: '100%',
                   height: '200px',
