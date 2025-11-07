@@ -2,20 +2,7 @@ User-agent: *
 Allow: /
 
 # Sitemap
-Sitemap: https://abbawhispers.com/sitemap.xml
+Sitemap: https://abbaswhispers.com/sitemap.xml
 
-# Disallow admin and private areas
-Disallow: /admin/
-Disallow: /api/
-Disallow: /private/
-
-# Allow important pages
-Allow: /
-Allow: /about
-Allow: /blog
-Allow: /volumes
-Allow: /prayer-request
-Allow: /contact
-
-# Crawl delay (optional)
+# Crawl-delay
 Crawl-delay: 1

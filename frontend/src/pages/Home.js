@@ -38,7 +38,17 @@ const Home = () => {
       <Helmet>
         <title>Abba's Whispers - Christian Poetry & Spiritual Healing | SELAH Series</title>
         <meta name="description" content="Discover healing through poetry inspired by the Psalms. Join Uzo's transformative journey from grief to grace with the acclaimed SELAH series." />
-        <meta name="keywords" content="Christian poetry, Psalms inspiration, spiritual healing, grief recovery, faith poetry, SELAH series" />
+        <meta name="keywords" content="Abba's Whispers, abbaswhispers, Christian poetry, Psalms inspiration, spiritual healing, grief recovery, faith poetry, SELAH series, Uzo poet, Christian writer" />
+        <meta property="og:title" content="Abba's Whispers - Christian Poetry & Spiritual Healing" />
+        <meta property="og:description" content="Poetry inspired by the Psalms, born from a journey through grief and grace" />
+        <meta property="og:url" content="https://abbaswhispers.com" />
+        <meta property="og:type" content="website" />
+        <meta property="og:image" content="https://abbaswhispers.com/hero-image-homepage.JPG" />
+        <meta name="twitter:card" content="summary_large_image" />
+        <meta name="twitter:title" content="Abba's Whispers - Christian Poetry & Spiritual Healing" />
+        <meta name="twitter:description" content="Poetry inspired by the Psalms, born from a journey through grief and grace" />
+        <meta name="twitter:image" content="https://abbaswhispers.com/hero-image-homepage.JPG" />
+        <link rel="canonical" href="https://abbaswhispers.com" />
       </Helmet>
 
       {/* Hero Section */}
