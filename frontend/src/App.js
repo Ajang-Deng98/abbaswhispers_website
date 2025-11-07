@@ -10,8 +10,8 @@ import BlogPost from './pages/BlogPost';
 import Contact from './pages/Contact';
 import PrayerRequest from './pages/PrayerRequest';
 import Volumes from './pages/Volumes';
-import PrivacyPolicy from './pages/PrivacyPolicy';
-import TermsOfService from './pages/TermsOfService';
+import Privacy from './pages/Privacy';
+import Terms from './pages/Terms';
 import ErrorBoundary from './components/ErrorBoundary';
 import './styles/App.css';
 
@@ -31,8 +31,8 @@ function App() {
               <Route path="/contact" element={<Contact />} />
               <Route path="/prayer-request" element={<PrayerRequest />} />
               <Route path="/volumes" element={<Volumes />} />
-              <Route path="/privacy-policy" element={<PrivacyPolicy />} />
-              <Route path="/terms-of-service" element={<TermsOfService />} />
+              <Route path="/privacy" element={<Privacy />} />
+              <Route path="/terms" element={<Terms />} />
             </Routes>
           </main>
           <Footer />

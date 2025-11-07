@@ -120,7 +120,7 @@ const Volumes = () => {
         display: 'flex',
         alignItems: 'center'
       }}>
-        <div style={{ maxWidth: '800px', margin: '0 auto' }}>
+        <div className="hero-text-container" style={{ maxWidth: '800px', margin: '0 auto' }}>
           <motion.div
             initial={{ opacity: 0, y: 30 }}
             animate={{ opacity: 1, y: 0 }}

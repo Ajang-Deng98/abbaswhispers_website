@@ -43,7 +43,7 @@ const Home = () => {
 
       {/* Hero Section */}
       <section style={{
-        background: `url('/hero-image-homepage.JPG')`,
+        background: `linear-gradient(rgba(0, 0, 0, 0.3), rgba(0, 0, 0, 0.3)), url('/hero-image-homepage.JPG')`,
         backgroundSize: 'cover',
         backgroundPosition: 'center',
         backgroundRepeat: 'no-repeat',
@@ -58,28 +58,60 @@ const Home = () => {
           textAlign: 'center',
           color: 'white',
           zIndex: 1,
-          maxWidth: '800px',
+          maxWidth: '900px',
           padding: '0 2rem'
         }}>
+
           <h1 style={{
             fontFamily: 'Georgia, serif',
-            fontSize: 'clamp(2rem, 4vw, 3rem)',
+            fontSize: 'clamp(2.5rem, 5vw, 4rem)',
             fontWeight: 'normal',
-            marginBottom: '2rem',
+            marginBottom: '1rem',
             letterSpacing: '-0.02em',
             lineHeight: '1.1',
-            color: '#000000',
-            textShadow: '2px 2px 4px rgba(255,255,255,0.9)'
+            color: 'white'
           }}>Abba's Whispers</h1>
           <p style={{
             fontFamily: 'Georgia, serif',
-            fontSize: 'clamp(1.2rem, 3vw, 1.8rem)',
-            fontWeight: 'bold',
+            fontSize: 'clamp(1rem, 2vw, 1.4rem)',
+            fontWeight: 'normal',
             lineHeight: '1.5',
-            marginBottom: '3rem',
-            color: '#000000',
-            textShadow: '2px 2px 4px rgba(255,255,255,0.9)'
+            marginBottom: '2.5rem',
+            color: 'rgba(255, 255, 255, 0.9)',
+            fontStyle: 'italic'
           }}>Poetry inspired by the Psalms</p>
+          <div style={{
+            display: 'flex',
+            gap: '1.5rem',
+            justifyContent: 'center',
+            flexWrap: 'wrap'
+          }}>
+            <a href="/volumes" style={{
+              fontFamily: 'Inter, sans-serif',
+              padding: '1rem 2.5rem',
+              background: 'rgba(255, 255, 255, 0.1)',
+              color: 'white',
+              border: '2px solid white',
+              borderRadius: '50px',
+              textDecoration: 'none',
+              fontSize: '1rem',
+              fontWeight: '500',
+              transition: 'all 0.3s ease',
+              backdropFilter: 'blur(10px)'
+            }}>Explore Poetry</a>
+            <a href="/about" style={{
+              fontFamily: 'Inter, sans-serif',
+              padding: '1rem 2.5rem',
+              background: 'transparent',
+              color: 'white',
+              border: '2px solid rgba(255, 255, 255, 0.5)',
+              borderRadius: '50px',
+              textDecoration: 'none',
+              fontSize: '1rem',
+              fontWeight: '500',
+              transition: 'all 0.3s ease'
+            }}>Meet Uzo</a>
+          </div>
         </div>
       </section>
 

@@ -28,7 +28,7 @@ const About = () => {
           background: 'url("/hero-image-aboutpage.JPG") center/cover no-repeat',
           backgroundAttachment: 'fixed'
         }}>
-          <div style={{ maxWidth: '800px', margin: '0 auto', padding: '0 2rem' }}>
+          <div className="hero-text-container" style={{ maxWidth: '800px', margin: '0 auto', padding: '0 2rem' }}>
             <h1 style={{
               fontFamily: 'Georgia, serif',
               fontSize: '48px',
